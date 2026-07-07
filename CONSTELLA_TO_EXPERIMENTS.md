@@ -31,10 +31,15 @@ Words the sandbox can already produce, with their current tier:
 - **CONFIRMED (base ecology — earned, usable now):** *carrying-capacity*, *predation*,
   *thermal-death*, *selection*. (From the validated exp0 + the exp5 extraction:
   predation & thermal death recur across seeds.)
-- **SPECULATIVE (Constella-target — claims, not yet words):** *civic-floor*,
-  *diversity-preservation*, *cultural-transmission*, *parasitism* (only 4/5 seeds),
-  *anticipation*, *arms-race*. These become vocabulary ONLY when a seeded run at scale
-  confirms them.
+- **CONFIRMED (civic floor — earned 2026-07, Rust multi-seed; see consolidated section below):**
+  *civic-floor* (→ resilience); *dignity-floor* vs *diversity-maintenance-pulse* (two distinct
+  mechanisms); *diversity-reserve* (a targeted floor lets a preserved minority become the winner
+  when conditions shift — fires reproducibly, robustness bounded). Plus negatives:
+  *unconditional-floor → stasis* and *accountability-as-survival-drain → collapse*.
+- **SPECULATIVE (Constella-target — claims, not yet words):** *diversity-preservation* (Python
+  exp9 only), *cultural-transmission* (failed 2/4), *parasitism* (only 4/5 seeds), *anticipation*
+  (Python exp3, not yet Rust-hardened), *arms-race*. These become vocabulary ONLY when a seeded
+  run at scale confirms them.
 - **The rule FAITHH obeys:** it may reason WITH a confirmed term as a lens; a speculative
   term must be spoken as "this looks like X (unconfirmed)" — never as fact. And any
   mapping to *humans* stays speculative regardless (a sim word is not a human truth).
@@ -83,6 +88,44 @@ collapse?"). This is a deeper *health* hypothesis:
 
 **Tier:** speculative until run seeded at scale. If confirmed, it's the strongest possible
 bottom-up evidence for the UCF — and a genuine, non-obvious finding worth publishing.
+
+## ★ THE CIVIC FLOOR EXPERIMENT — consolidated result (2026-07)
+The first Constella concept taken to CONFIRMED. The detailed run log (FIRST–SEVENTH RESULTS below)
+is the receipts; this is the single finding they add up to.
+
+**Question tested:** does a civic floor improve whole-system health under shocks, and is a
+*diversity reserve* the mechanism? (Jonathan's core speculation, above.)
+
+**Confirmed (Rust, bit-exact, multi-seed):**
+1. **Floor → resilience.** With a floor the system survives shocks reliably (5/5 seeds); without
+   it, survival is a gamble (extinct 3/5). The floor is insurance. (v1)
+2. **Two floors, not one.** A *dignity/survival floor* (unconditional by right, but funded &
+   bounded) is a DIFFERENT mechanism from a *diversity-maintenance pulse* (targeted, threshold-
+   activated). Conflating them causes every unconditional-floor failure → split into `ucf.md`. (v3)
+3. **Unconditional floor → stasis/collapse.** Rescuing everyone freezes the composition (Rust:
+   787/43 forever) or, with an adaptive predator, collapses it (Python exp6, tick 7,410). (v3)
+4. **The targeted floor FIRES the reserve.** Under a directional shock, a floor that protects only
+   the under-represented lets a preserved minority *become the winner* when its regime returns
+   (reproducible across 3/5 seeds, up to 5 turnovers in one). Adaptation via the reserve is REAL —
+   the thing the unconditional floor never does (0/9). (v4)
+5. **Accountability must throttle growth, not survival.** A cap implemented as a survival drain
+   collapses the system (5/5); it must limit reproduction/advantage, never existence — the Astris
+   vs dignity-floor separation, confirmed empirically. (v5–v6)
+
+**Frontier (NOT achieved — this is v8, a separate model):** a *robust* stable-AND-adaptive floor.
+The targeted floor's turnover is fragile (survives 3/5) because of a **structural turnover
+bottleneck** — at each regime flip the dominant group crashes while the thin reserve rebuilds from
+a handful (pop 2–5). Softer shocks trade adaptation for survival; larger founding populations wash
+out; a share-based accountability cap makes it worse (v5–v7). Cracking it needs a richer model
+(continuous reserve replenishment, higher carrying capacity, or more strategies) — a NEW experiment.
+
+**Vocabulary earned:** *civic-floor*, *dignity-floor* / *diversity-maintenance-pulse*,
+*diversity-reserve* (fires; robustness bounded), and the negatives *unconditional-floor→stasis* and
+*accountability-as-survival-drain→collapse*. First bottom-up, reproducible evidence for a Constella
+mechanism.
+
+---
+### Detailed run log (the receipts for the consolidated finding above)
 
 ## FIRST RESULT — UCF floor experiment (Rust, 2026-07)
 Built in alife-core (`run ... ucf <seed> <ticks>`): FLOOR vs NO-FLOOR arms, same seed,
