@@ -2,6 +2,7 @@
 // The determinism-critical part is the RNG consumption order at init (see README spec).
 
 use crate::rng::PyRandom;
+use crate::agent::Agent;
 
 // From config.py (verified 2026-07 — the world.py docstring's "160x120" is stale).
 pub const GRID_WIDTH: i32 = 480;
@@ -16,6 +17,7 @@ pub const ENERGY_MAX: i32 = 255;
 pub const WAVE_SPEED_C: f64 = 0.8;
 pub const WAVE_SPEED_VARIANCE: f64 = 0.05;
 pub const STEALTH_WAVE_PROBABILITY: f64 = 0.3;
+pub const THERMAL_DRAIN_RATE: f64 = 0.2;
 
 /// A propagating predator wave (exp3). Direction is left→right only until exp4.
 pub struct WaveState {
@@ -162,6 +164,17 @@ impl World {
                 cell.energy = 50 + (light as f64 * 0.8) as i32;
             }
         }
+    }
+
+    /// exp3: fractional thermal drain from the agent's cell light. Disruption phenotype
+    /// (SENSE_LIGHT in S0|S1 AND ACT_SHIELD in A0|A1) absorbs 70% less. Returns the drain;
+    /// the harness applies it via agent.apply_drain (energy is f64 for this reason).
+    pub fn apply_thermal_drain(&self, a: &Agent) -> f64 {
+        let cell_light = self.light_at(a.x, a.y) as f64;
+        let base_drain = (cell_light / 255.0) * THERMAL_DRAIN_RATE;
+        let has_disruption = (a.genome[0] == 0x02 || a.genome[1] == 0x02)
+            && (a.genome[5] == 0x03 || a.genome[6] == 0x03);
+        if has_disruption { base_drain * 0.3 } else { base_drain }
     }
 
     /// exp3: spawn a predator wave. RNG order: gauss (speed) then random() (stealth) — must

@@ -137,7 +137,7 @@ impl Simulation {
                 if !agents[idx].alive {
                     let protect = if (agents[idx].genome[7] & 7) >= 4 { prot_g1 } else { prot_g0 };
                     if let Some(f) = floor {
-                        if protect { agents[idx].alive = true; agents[idx].energy = f; rescues += 1; }
+                        if protect { agents[idx].alive = true; agents[idx].energy = f as f64; rescues += 1; }
                         else { deaths += 1; continue; }
                     } else { deaths += 1; continue; }
                 }
@@ -148,7 +148,7 @@ impl Simulation {
                 if !agents[idx].alive {
                     let protect = if (agents[idx].genome[7] & 7) >= 4 { prot_g1 } else { prot_g0 };
                     if let Some(f) = floor {
-                        if protect { agents[idx].alive = true; agents[idx].energy = f; rescues += 1; }
+                        if protect { agents[idx].alive = true; agents[idx].energy = f as f64; rescues += 1; }
                         else { deaths += 1; continue; }
                     } else { deaths += 1; continue; }
                 }
@@ -181,7 +181,7 @@ impl Simulation {
             if !self.agents[pidx].alive { continue; }
             let over = if (self.agents[pidx].genome[7] & 7) >= 4 { cap_g1 } else { cap_g0 };
             let effective = base_effective + if over { CAP_REPRO_SURCHARGE } else { 0 };
-            if self.agents[pidx].energy < effective { continue; }
+            if self.agents[pidx].energy < effective as f64 { continue; }
             let (px, py) = (self.agents[pidx].x, self.agents[pidx].y);
             let spawn = find_empty_nearby(&self.world, px, py, 3, &mut self.rng);
             let (cx, cy) = match spawn { Some(p) => p, None => continue };
@@ -190,9 +190,9 @@ impl Simulation {
             self.next_id += 1;
             let cid = self.next_id;
             let cgen = self.agents[pidx].generation + 1;
-            self.agents[pidx].energy -= REPRODUCTION_COST;
+            self.agents[pidx].energy -= REPRODUCTION_COST as f64;
             let mut child = Agent::new(cid, cx, cy, child_genome);
-            child.energy = REPRODUCTION_COST;
+            child.energy = REPRODUCTION_COST as f64;
             child.generation = cgen;
             // add_agent: place if empty (find_empty already ensured)
             if self.world.grid[cy as usize][cx as usize].occupant.is_none() {
@@ -252,7 +252,7 @@ fn execute_genome(a: &mut Agent, w: &mut World) -> bool {
     let pcodes = [p0, p1];
     let mut fired = [false, false];
     for i in 0..2 {
-        let sval = if i < sv.len() { sv[i] } else { 0 };
+        let sval = if i < sv.len() { sv[i] } else { 0.0 };
         if ops::process_op(pcodes[i], sval, a, w) {
             fired[i] = true;
             let pcost = (PROCESS_COSTS[(pcodes[i] & 7) as usize] + cost_modifier).max(0);

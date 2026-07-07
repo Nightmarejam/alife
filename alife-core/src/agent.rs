@@ -25,10 +25,10 @@ pub struct Agent {
     pub x: i32,
     pub y: i32,
     pub genome: [u8; GENOME_LENGTH],
-    pub energy: i32,
+    pub energy: f64, // f64 for exp3 fractional thermal drain; integer-valued in base (hash casts to i32)
     pub alive: bool,
     pub age: i32,
-    pub memory: Vec<i32>,
+    pub memory: Vec<f64>, // sense values (f64: sense_self can be fractional in exp3)
     pub pattern_memory: Vec<(i32, i32)>,
     pub shield_active: bool,
     pub signaling: bool,
@@ -46,7 +46,7 @@ pub struct Agent {
 impl Agent {
     pub fn new(id: u64, x: i32, y: i32, genome: [u8; GENOME_LENGTH]) -> Self {
         Agent {
-            id, generation: 0, x, y, genome, energy: INITIAL_ENERGY, alive: true,
+            id, generation: 0, x, y, genome, energy: INITIAL_ENERGY as f64, alive: true,
             age: 0, memory: Vec::new(), pattern_memory: Vec::new(),
             shield_active: false, signaling: false, toxin_active: false,
             op_usage: Vec::new(), reproduction_cooldown: 0, wave_arrival_times: Vec::new(),
@@ -62,11 +62,16 @@ impl Agent {
     pub fn regulate_op(&self) -> u8 { self.genome[7] }
 
     pub fn apply_energy_cost(&mut self, cost: i32) {
-        self.energy -= cost;
-        if self.energy <= 0 { self.energy = 0; self.alive = false; }
+        self.energy -= cost as f64;
+        if self.energy <= 0.0 { self.energy = 0.0; self.alive = false; }
+    }
+    /// exp3: apply a fractional (thermal) drain directly.
+    pub fn apply_drain(&mut self, drain: f64) {
+        self.energy -= drain;
+        if self.energy <= 0.0 { self.energy = 0.0; self.alive = false; }
     }
     pub fn add_energy(&mut self, amount: i32) {
-        self.energy = (self.energy + amount).min(ENERGY_MAX);
+        self.energy = (self.energy + amount as f64).min(ENERGY_MAX as f64);
     }
     pub fn tick_age(&mut self) { self.age += 1; }
     pub fn reset_tick_state(&mut self) {
@@ -112,7 +117,7 @@ pub fn population_hash(agents: &[Agent]) -> u64 {
     for a in agents {
         feed(a.x, &mut h); feed(a.y, &mut h);
         for &g in &a.genome { feed(g as i32, &mut h); }
-        feed(a.energy, &mut h); feed(a.generation, &mut h); feed(a.age, &mut h);
+        feed(a.energy as i32, &mut h); feed(a.generation, &mut h); feed(a.age, &mut h);
     }
     h
 }

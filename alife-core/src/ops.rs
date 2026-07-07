@@ -6,8 +6,11 @@ use crate::world::World;
 const SIGNAL_ACTIVE: bool = false; // base sim (exp0); set true only in exp5
 const TOXIN_ACTIVE: bool = false;
 
-// ---- SENSE (agent, world) -> i32 ----
-pub fn sense_op(code: u8, a: &Agent, w: &World) -> i32 {
+// ---- SENSE (agent, world) -> f64 (sense_self carries fractional energy in exp3) ----
+pub fn sense_op(code: u8, a: &Agent, w: &World) -> f64 {
+    if code & 0x07 == 5 { a.energy.min(255.0) } else { sense_op_int(code, a, w) as f64 }
+}
+fn sense_op_int(code: u8, a: &Agent, w: &World) -> i32 {
     match code & 0x07 {
         0 => w.energy_at(a.x, a.y),
         1 => w.threat_at(a.x, a.y), // exp0: no waves -> cell threat (0)
@@ -29,7 +32,7 @@ pub fn sense_op(code: u8, a: &Agent, w: &World) -> i32 {
             }}
             (count * 28).min(255)
         }
-        5 => a.energy.min(255),
+        5 => a.energy.min(255.0) as i32, // unused (sense_op intercepts 5); kept for completeness
         6 => { // gradient: dir*32 of best adjacent energy, 255 if flat
             let mut best_dir = 255;
             let mut best_e = w.energy_at(a.x, a.y);
@@ -48,24 +51,24 @@ pub fn sense_op(code: u8, a: &Agent, w: &World) -> i32 {
 }
 
 // ---- PROCESS (sense_value, agent, world) -> bool ----
-pub fn process_op(code: u8, sv: i32, a: &Agent, _w: &World) -> bool {
+pub fn process_op(code: u8, sv: f64, a: &Agent, _w: &World) -> bool {
     match code & 0x07 {
-        0 => sv > 128,
+        0 => sv > 128.0,
         1 => sv > a.energy,
         2 => a.memory.last().map_or(false, |&m| sv > m),
         3 => a.memory.len() >= 2 && a.memory[a.memory.len()-1] > a.memory[a.memory.len()-2],
         4 => false, // predict: wave_arrival_times empty in exp0
-        5 => sv > 128, // beat: exp0 fallback (no waves) -> sense>128
+        5 => sv > 128.0, // beat: exp0 fallback (no waves) -> sense>128
         6 => { // average
-            if a.memory.is_empty() { sv > 128 }
-            else { (a.memory.iter().sum::<i32>() as f64 / a.memory.len() as f64) > 128.0 }
+            if a.memory.is_empty() { sv > 128.0 }
+            else { (a.memory.iter().sum::<f64>() / a.memory.len() as f64) > 128.0 }
         }
-        _ => sv < 64, // invert
+        _ => sv < 64.0, // invert
     }
 }
 
 // ---- MEMORY (agent, sense_value) mutates ----
-pub fn memory_op(code: u8, a: &mut Agent, sv: i32) {
+pub fn memory_op(code: u8, a: &mut Agent, sv: f64) {
     match code & 0x07 {
         0 => a.memory.clear(),
         1 => a.memory = vec![sv],
@@ -73,8 +76,8 @@ pub fn memory_op(code: u8, a: &mut Agent, sv: i32) {
         3 => { a.memory.push(sv); if a.memory.len() > 8 { a.memory.remove(0); } }
         4 => if a.memory.is_empty() || sv > a.memory[0] { a.memory = vec![sv]; },
         5 => if a.memory.is_empty() || sv < a.memory[0] { a.memory = vec![sv]; },
-        6 | 7 => if sv > 128 { // pattern / dual (same for exp0)
-            a.pattern_memory.push((a.age, sv));
+        6 | 7 => if sv > 128.0 { // pattern / dual (same for exp0)
+            a.pattern_memory.push((a.age, sv as i32));
             if a.pattern_memory.len() > 4 { a.pattern_memory.remove(0); }
         },
         _ => {}
@@ -107,7 +110,7 @@ pub fn act_op(code: u8, a: &mut Agent, w: &mut World) -> bool {
         }
         3 => a.shield_active = true,
         4 => { // reproduce: request if eligible
-            return a.reproduction_cooldown == 0 && a.energy >= REPRODUCTION_THRESHOLD;
+            return a.reproduction_cooldown == 0 && a.energy >= REPRODUCTION_THRESHOLD as f64;
         }
         5 => if SIGNAL_ACTIVE { a.signaling = true; },
         6 => if TOXIN_ACTIVE { a.toxin_active = true; },
@@ -129,12 +132,12 @@ pub fn act_op(code: u8, a: &mut Agent, w: &mut World) -> bool {
 pub fn regulate_op(code: u8, a: &Agent) -> (bool, i32) {
     match code & 0x07 {
         0 => (false, 0),
-        1 => if a.energy < CRITICAL_LOW_ENERGY { (true, -1) } else { (false, 0) },
-        2 => if a.energy > BURST_THRESHOLD { (true, 0) } else { (false, 0) },
+        1 => if a.energy < CRITICAL_LOW_ENERGY as f64 { (true, -1) } else { (false, 0) },
+        2 => if a.energy > BURST_THRESHOLD as f64 { (true, 0) } else { (false, 0) },
         3 => (true, 0),                 // cycle: always has behavior_mode key
         4 => (true, 0),                 // learn: always has op_discounts key
-        5 => if a.energy < CRITICAL_LOW_ENERGY / 2 { (true, 0) } else { (false, 0) },
+        5 => if a.energy < (CRITICAL_LOW_ENERGY / 2) as f64 { (true, 0) } else { (false, 0) },
         6 => (true, 0),                 // prioritize: always nonempty
-        _ => (true, if a.energy < CRITICAL_LOW_ENERGY { -1 } else { 0 }), // adaptive
+        _ => (true, if a.energy < CRITICAL_LOW_ENERGY as f64 { -1 } else { 0 }), // adaptive
     }
 }
