@@ -246,3 +246,35 @@ the reserve AND accountability to cap incumbent runaway.
 unconditional). *stable adaptive floor* — NOT YET (overshoot→collapse; needs floor + accountability).
 Honest: the mechanism is real but only half-built. **v5: add the majority cap (the Astris/Auctor
 accountability analog) and re-test.**
+
+## FOURTH RESULT — HARDENED (multi-seed, 2026-07-07)
+Ran the three arms across 5 seeds (42, 7, 100, 123, 2024), 20k ticks each. The multi-seed sweep
+REVISES the single-seed (42) v4 conclusion:
+
+| seed | NO-FLOOR | FLOOR (uncond) | PULSE (targeted) |
+|---|---|---|---|
+| 42 | lone survivor | frozen 774/56 | reserve fired 1x → extinct @4102 |
+| 7 | lone survivor | frozen 787/43 | reserve fired 2x → survived |
+| 100 | lone survivor | frozen 578/40 | no fire → survived |
+| 123 | extinct @2068 | frozen 804/27 | reserve fired 5x → survived |
+| 2024 | extinct @4073 | frozen 800/30 | no fire → extinct @2061 |
+
+**Revised finding (multi-seed changes the story):**
+- FLOOR (unconditional): frozen composition in ALL 5 seeds — stasis is robust/reproducible.
+- NO-FLOOR: fragile — 2/5 hard-extinct; the rest reduced to a lone monoculture survivor.
+- PULSE (targeted): the reserve mechanism FIRES in 3/5 seeds (1x, 2x, 5x) — so "the targeted
+  floor lets a preserved minority become the winner" is REPRODUCIBLE across seeds, not a
+  seed-42 fluke. Seed 123 shows the GOAL reached: 5 turnovers WITH survival (sustained
+  adaptation, no fatal overshoot). But survival is only 3/5 and highly variable; the bare pulse
+  still overshoots to extinction in 2/5.
+
+**Honest correction:** the single-seed v4 write-up ("fires then overshoots → extinct")
+over-generalized from seed 42, which happened to be a failure case. Multi-seed: the mechanism is
+real and reproducible, and CAN produce sustained adaptive turnover (seed 123), but the bare
+targeted pulse is UNSTABLE (high variance, fatal overshoot 2/5).
+
+**Tier:** *targeted-floor fires the reserve (adaptive turnover)* — CONFIRMED reproducible (3/5
+seeds). *targeted-floor is stable/robust* — NOT YET (survives 3/5, overshoot fatal 2/5). v5 =
+add the accountability cap to damp overshoot and make turnover reliable. (Metric caveat:
+NO-FLOOR "survived" = a lone survivor, effectively dead; a finer liveness metric would score
+it worse.)
