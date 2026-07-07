@@ -315,3 +315,37 @@ cap that *kills* is a category error. This is exactly the constitution's separat
 **Tier:** *accountability-as-survival-drain* — FALSIFIED (5/5 collapse). *stable adaptive floor* —
 still open. v6: implement the cap as a REPRODUCTION throttle on the over-represented group (slow
 runaway growth, never threaten survival) and/or engage only after the founding window.
+
+## SIXTH RESULT — accountability cap redesigned (v6): still FALSIFIED; it's a BOTTLENECK, not runaway
+After v5 (survival-drain) collapsed, v6 rebuilt the cap as a REPRODUCTION THROTTLE — an
+over-represented group (share > 0.70) pays a surcharge on its reproduction threshold: slows
+growth, never threatens survival (fixing v5's category error). Tested surcharge 60, 20, and
+founding-gated 40 (engage only after tick 1800, per "tolerate founding consolidation"). Multi-seed:
+
+| cap variant | survives (of 5) | vs bare pulse (3/5) |
+|---|---|---|
+| v6 throttle 60 | 0/5 | worse |
+| v6.1 throttle 20 | 1/5 (lone survivor) | worse |
+| v6.2 founding-gated 40 | 2/5 (tiny survivors) | worse |
+
+**Finding: NO accountability-cap variant beats the bare targeted floor.** v6's throttle did fix
+v5's founding-collapse (it survives the founding phase now), but every configuration — gentle,
+harsh, founding-gated — still drops survival below the bare pulse and yields sicker, near-dead
+survivors. The share-based accountability cap is FALSIFIED as the stabilizer in this sandbox.
+
+**Why (the reinterpretation that matters):** the v4 pulse's overshoot-death is NOT "runaway a cap
+can prevent." At a regime flip the former-dominant group crashes AND the newly-favored group
+hasn't yet built up — a TURNOVER BOTTLENECK. Capping the winner makes the bottleneck *worse*
+(fewer winners too). The cap targets the wrong failure mode.
+
+**Constitutional read:** the sandbox is saying the THREE-mechanism system (founding diversity +
+targeted floor + tolerance) matters more than bolting on a 4th accountability lever — consistent
+with evidence_mapping ("all three together produced the only stable run, Exp 9"). Our seeded
+near-monoculture (genome[5]/[6] fixed) gives THIN founding diversity, so every turnover is a
+knife-edge.
+
+**Tier:** *targeted-floor fires reserve* — CONFIRMED (v4). *accountability-cap stabilizes it* —
+FALSIFIED across 4 variants (v5, v6, v6.1, v6.2). *stable adaptive regime* — still open; the
+evidence now points to **founding diversity (mechanism #1)**, not accountability, as the next
+lever. v7: increase founding diversity (stop seeding a monoculture) and/or soften the shock, then
+re-test the bare pulse.
