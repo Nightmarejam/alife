@@ -278,3 +278,40 @@ seeds). *targeted-floor is stable/robust* — NOT YET (survives 3/5, overshoot f
 add the accountability cap to damp overshoot and make turnover reliable. (Metric caveat:
 NO-FLOOR "survived" = a lone survivor, effectively dead; a finer liveness metric would score
 it worse.)
+
+## FIFTH RESULT — accountability cap (v5): a survival-drain cap COLLAPSES the system
+Built `dmech <seed> <ticks> capped`: the v4 targeted pulse PLUS an accountability cap — an
+over-represented trait-group (share > 0.70) pays an entrenchment energy drain/tick ("keep the
+strong removable"). Tested CAP_PENALTY = 6 and 2, 5 seeds each.
+
+| seed | PULSE (v4) | PULSE+CAP 6/tick | PULSE+CAP 2/tick |
+|---|---|---|---|
+| 42 | rd1, ext@4102 | ext@173 | ext@460 |
+| 7 | rd2, surv | ext@154 | ext@313 |
+| 100 | rd2, surv | ext@136 | ext@350 |
+| 123 | rd5, surv | ext@242 | rd1, ext@4070 |
+| 2024 | rd0, ext@2061 | ext@145 | ext@304 |
+
+**Finding (honest NEGATIVE): a cap implemented as a SURVIVAL DRAIN collapses the system at every
+magnitude** — 5/5 extinct, mostly BEFORE the first shock (tick ~150–460), because the cap fires
+during normal early consolidation (the growing population naturally drifts one group past 70%)
+and drains the majority to death. The pulse floor can't save it: the floor protects the
+under-represented, but the cap kills the over-represented — and "over-represented" is *most of the
+population* during founding.
+
+**Two constitution principles reproduced:**
+1. *Accountability must not outpace adaptation* (exp5 complexity/adaptation ratio; the Astris
+   decay-rate rule): a 6- or even 2-energy/tick cap outpaces adaptation → collapse.
+2. *Tolerate early consolidation during the founding window* (evidence_mapping mechanism #3): the
+   cap punishes the healthy founding majority, killing the system before it can stabilize.
+
+**The deeper lesson (the Astris ↔ dignity-floor separation, empirically):** you cannot implement
+accountability as a **survival threat** — it collides with the floor's job (guarantee existence).
+Accountability must throttle **growth/influence** (reproduction, advantage), never existence. A
+cap that *kills* is a category error. This is exactly the constitution's separation — Astris
+(merit, decays/capped) vs dignity floor (survival, inviolable). The sandbox merged them
+(cap = survival drain) and collapsed, confirming they must stay separate.
+
+**Tier:** *accountability-as-survival-drain* — FALSIFIED (5/5 collapse). *stable adaptive floor* —
+still open. v6: implement the cap as a REPRODUCTION throttle on the over-represented group (slow
+runaway growth, never threaten survival) and/or engage only after the founding window.

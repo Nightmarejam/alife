@@ -11,6 +11,10 @@ const SLOT_MUTATION_RATES: [f64; 8] = [0.001, 0.001, 0.010, 0.010, 0.005, 0.001,
 // regulate op (genome[7]&7): group = op>=4. Regime flips each shock, so the favored group
 // alternates — a previously-disfavored variant can become the winner (the reserve's moment).
 const DIRECTIONAL_PENALTY: i32 = 3;
+// Accountability cap (v5): an over-represented trait-group pays this entrenchment drain per tick
+// while its share exceeds cap_threshold — keeps the dominant incumbent removable so turnover
+// can't run away to monoculture. The Astris-decay / "keep the strong removable" analog.
+const CAP_PENALTY: i32 = 2;
 
 pub struct Simulation {
     pub world: World,
@@ -26,6 +30,7 @@ pub struct Simulation {
     pub floor_rescues: u64,          // how many times the floor prevented a death
     pub directional: bool,           // shock flips which trait-group is favored (mechanism test)
     pub pulse_threshold: Option<f64>,// targeted floor (Exp 9): rescue only under-represented group
+    pub cap_threshold: Option<f64>,  // accountability cap (v5): drain over-represented group
 }
 
 impl Simulation {
@@ -35,7 +40,7 @@ impl Simulation {
         Simulation { world, agents: Vec::new(), rng, next_id: 0,
                      total_ticks: 0, total_reproductions: 0, total_deaths: 0,
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
-                     directional: false, pulse_threshold: None }
+                     directional: false, pulse_threshold: None, cap_threshold: None }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -89,17 +94,23 @@ impl Simulation {
         let floor = self.floor_energy;
         let directional = self.directional;
         let regime = self.world.regime;
-        // Targeted pulse (Exp 9): a group is "protected" only while its share is below the
-        // threshold. None => unconditional (every group protected). This preserves the
-        // under-represented reserve WITHOUT shielding the dominant incumbent from selection.
+        // Group shares (computed once, needed by the targeted pulse and/or the accountability cap).
+        let (g0_share, g1_share) = if self.pulse_threshold.is_some() || self.cap_threshold.is_some() {
+            let total = self.agents.len().max(1) as f64;
+            let g1 = self.agents.iter().filter(|a| (a.genome[7] & 7) >= 4).count();
+            ((self.agents.len() - g1) as f64 / total, g1 as f64 / total)
+        } else { (1.0, 1.0) };
+        // Pulse (Exp 9): a group is "protected" only while its share is below the threshold.
+        // None => unconditional (every group protected). Preserves the under-represented reserve
+        // WITHOUT shielding the dominant incumbent from selection.
         let (prot_g0, prot_g1) = match self.pulse_threshold {
             None => (true, true),
-            Some(thr) => {
-                let total = self.agents.len().max(1) as f64;
-                let g1 = self.agents.iter().filter(|a| (a.genome[7] & 7) >= 4).count();
-                let g0 = self.agents.len() - g1;
-                ((g0 as f64 / total) < thr, (g1 as f64 / total) < thr)
-            }
+            Some(thr) => (g0_share < thr, g1_share < thr),
+        };
+        // Cap (v5): a group is penalized while its share is ABOVE the cap threshold.
+        let (cap_g0, cap_g1) = match self.cap_threshold {
+            None => (false, false),
+            Some(cap) => (g0_share > cap, g1_share > cap),
         };
         let n = self.agents.len();
         let mut order: Vec<usize> = (0..n).collect();
@@ -119,6 +130,11 @@ impl Simulation {
                 // DIRECTIONAL selection: the disfavored trait-group bleeds energy this tick.
                 if directional && ((agents[idx].regulate_op() & 7 >= 4) as u8) != regime {
                     agents[idx].apply_energy_cost(DIRECTIONAL_PENALTY);
+                }
+                // ACCOUNTABILITY CAP (v5): an over-represented group pays an entrenchment drain,
+                // keeping the dominant incumbent removable (prevents runaway to monoculture).
+                if if (agents[idx].genome[7] & 7) >= 4 { cap_g1 } else { cap_g0 } {
+                    agents[idx].apply_energy_cost(CAP_PENALTY);
                 }
                 // FLOOR: rescue from death to guaranteed minimum (UCF)
                 if !agents[idx].alive {
