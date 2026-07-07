@@ -206,6 +206,19 @@ fn main() {
         }
         return;
     }
+    if std::env::args().any(|a| a == "gradienttest") {
+        // Stage 1: validate initialize_light_gradient by hashing the post-gradient grid vs Python.
+        let mut r = PyRandom::seed(42);
+        let mut w = World::new(&mut r);
+        w.initialize_light_gradient();
+        let mut h: u64 = 0xcbf29ce484222325;
+        let mut feed = |v: i32, h: &mut u64| { for b in v.to_le_bytes() { *h ^= b as u64; *h = h.wrapping_mul(0x100000001b3); } };
+        for row in &w.grid { for c in row { feed(c.energy, &mut h); feed(c.light, &mut h); } }
+        println!("rust gradient grid hash (seed 42): {:016x}", h);
+        let c = &w.grid[180][240]; println!("  center(240,180): light={} energy={}", c.light, c.energy);
+        let e = &w.grid[0][0];     println!("  corner(0,0):     light={} energy={}", e.light, e.energy);
+        return;
+    }
     if std::env::args().any(|a| a == "wavetest") {
         // Stage 1: validate spawn_wave (gauss speed + random stealth) bit-for-bit vs Python.
         let mut throwaway = PyRandom::seed(1);

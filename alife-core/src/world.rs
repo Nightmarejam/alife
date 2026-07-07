@@ -146,6 +146,24 @@ impl World {
         }
     }
 
+    /// exp3: overwrite light+energy with a center-out gradient (deterministic, no RNG). Called
+    /// AFTER World::new (which consumes the random-grid RNG, same as base), matching Python.
+    pub fn initialize_light_gradient(&mut self) {
+        let hw = self.width / 2;  // 240
+        let hh = self.height / 2; // 180
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let cx = (x - hw).abs() as f64 / hw as f64;
+                let cy = (y - hh).abs() as f64 / hh as f64;
+                let dist = ((cx + cy) / 2.0).min(1.0);
+                let light = (50.0 + 205.0 * (1.0 - dist)) as i32; // int() truncation == `as i32` (positive)
+                let cell = &mut self.grid[y as usize][x as usize];
+                cell.light = light;
+                cell.energy = 50 + (light as f64 * 0.8) as i32;
+            }
+        }
+    }
+
     /// exp3: spawn a predator wave. RNG order: gauss (speed) then random() (stealth) — must
     /// match Python spawn_wave exactly. Called every PREDATOR_WAVE_INTERVAL ticks by the harness.
     pub fn spawn_wave(&self, current_tick: u64, rng: &mut PyRandom) -> WaveState {
