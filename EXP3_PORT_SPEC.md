@@ -42,7 +42,15 @@ gap = last_shield_activation - detection_tick
 Requires agent state: `last_shield_activation`, `wave_detected` (key), `wave_detection_tick`,
 `anticipation_gaps: Vec<i64>`, `wave_arrival_times`.
 
-## The bit-exactness risk (READ THIS FIRST)
+## The bit-exactness risk — RESOLVED (kept for the record)
+
+**RESOLVED 2026-07 (Stage 1).** Tested directly: CPython `gauss` and `spawn_wave` (speed + stealth)
+reproduce **bit-for-bit** in Rust `f64` on the Mac dev machine (shared libm) — 6/6 draws identical.
+The wave layer stays FULLY bit-exact; the statistical fallback below is **not needed** (kept only
+for a future cross-machine/Linux case where libm could differ). Receipts: `alife-core gausstest`
+and `alife-core wavetest` vs Python. The original risk analysis follows.
+
+
 
 `world.py:spawn_wave` sets `speed = WAVE_SPEED_C * (1 + random.gauss(0, WAVE_SPEED_VARIANCE))`,
 clamped to [0.4, 1.6]. **`random.gauss` uses transcendentals (`log`, `cos`, `sin`, `sqrt`) and a

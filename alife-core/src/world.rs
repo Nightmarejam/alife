@@ -12,6 +12,29 @@ pub const ENERGY_SOURCE_STRENGTH: i32 = 10;
 pub const ENERGY_REGEN_RATE: i32 = 1;
 pub const REGEN_INTERVAL: u64 = 5;
 pub const ENERGY_MAX: i32 = 255;
+// exp3 wave parameters (from config.py)
+pub const WAVE_SPEED_C: f64 = 0.8;
+pub const WAVE_SPEED_VARIANCE: f64 = 0.05;
+pub const STEALTH_WAVE_PROBABILITY: f64 = 0.3;
+
+/// A propagating predator wave (exp3). Direction is left→right only until exp4.
+pub struct WaveState {
+    pub start_tick: u64,
+    pub speed: f64,    // columns per tick
+    pub active: bool,
+    pub stealth: bool, // undetectable via SENSE_THREAT, instant-lethal
+}
+
+impl WaveState {
+    /// Leading edge in column units. Matches Python front_position (L→R).
+    pub fn front_position(&self, current_tick: u64) -> f64 {
+        (current_tick - self.start_tick) as f64 * self.speed
+    }
+    /// Has the front crossed the whole world?
+    pub fn is_complete(&self, current_tick: u64) -> bool {
+        self.front_position(current_tick) >= GRID_WIDTH as f64
+    }
+}
 
 pub struct Cell {
     pub energy: i32,
@@ -121,6 +144,15 @@ impl World {
             let y = rng.randbelow(GRID_HEIGHT as u32) as i32;
             self.energy_sources.push((x, y));
         }
+    }
+
+    /// exp3: spawn a predator wave. RNG order: gauss (speed) then random() (stealth) — must
+    /// match Python spawn_wave exactly. Called every PREDATOR_WAVE_INTERVAL ticks by the harness.
+    pub fn spawn_wave(&self, current_tick: u64, rng: &mut PyRandom) -> WaveState {
+        let mut speed = WAVE_SPEED_C * (1.0 + rng.gauss(0.0, WAVE_SPEED_VARIANCE));
+        speed = speed.min(1.6).max(0.4); // Python: max(0.4, min(1.6, speed))
+        let stealth = rng.random() < STEALTH_WAVE_PROBABILITY;
+        WaveState { start_tick: current_tick, speed, active: true, stealth }
     }
 
     fn regen_rate(&self, x: i32, y: i32) -> i32 {

@@ -196,6 +196,28 @@ fn main() {
         }
         return;
     }
+    if std::env::args().any(|a| a == "gausstest") {
+        // Stage 1 crux: does CPython's gauss reproduce bit-for-bit in Rust f64?
+        let mut r = PyRandom::seed(42);
+        println!("rust gauss(0,0.05) seed 42 — raw f64 bits:");
+        for _ in 0..6 {
+            let v = r.gauss(0.0, 0.05);
+            println!("  {:016x}  {:.17e}", v.to_bits(), v);
+        }
+        return;
+    }
+    if std::env::args().any(|a| a == "wavetest") {
+        // Stage 1: validate spawn_wave (gauss speed + random stealth) bit-for-bit vs Python.
+        let mut throwaway = PyRandom::seed(1);
+        let w = World::new(&mut throwaway);       // world grid built with a separate stream
+        let mut rng = PyRandom::seed(42);          // clean stream for the wave draws only
+        println!("rust spawn_wave x6 (seed 42): speed_bits speed stealth");
+        for i in 0..6u64 {
+            let wave = w.spawn_wave(i, &mut rng);
+            println!("  {:016x}  {:.9}  {}", wave.speed.to_bits(), wave.speed, wave.stealth);
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "shuffle") {
         let mut r = PyRandom::seed(42);
         let mut x: Vec<i32> = (0..10).collect();

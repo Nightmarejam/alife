@@ -15,12 +15,13 @@ const LOWER_MASK: u32 = 0x7fffffff;
 pub struct PyRandom {
     mt: [u32; N],
     mti: usize,
+    gauss_next: Option<f64>, // CPython caches the 2nd gaussian; must replicate for exact draws
 }
 
 impl PyRandom {
     /// Matches Python's `random.seed(n)` for a non-negative int seed (n < 2^32).
     pub fn seed(n: u32) -> Self {
-        let mut r = PyRandom { mt: [0; N], mti: N + 1 };
+        let mut r = PyRandom { mt: [0; N], mti: N + 1, gauss_next: None };
         r.init_by_array(&[n]);
         r
     }
@@ -112,6 +113,22 @@ impl PyRandom {
     /// Python's `randrange(n)` / `randint(0, n-1)`.
     pub fn randrange(&mut self, n: u32) -> u32 {
         self.randbelow(n)
+    }
+
+    /// CPython's `random.gauss(mu, sigma)` — consumes TWO random() when uncached, caches the
+    /// second value (so alternating calls consume 2,0,2,0...). This is the FIRST transcendental
+    /// in the port (log/cos/sin/sqrt); bit-exactness across languages is NOT guaranteed — Stage 1
+    /// tests it directly.
+    pub fn gauss(&mut self, mu: f64, sigma: f64) -> f64 {
+        if let Some(z) = self.gauss_next.take() {
+            return mu + z * sigma;
+        }
+        let twopi = 2.0 * std::f64::consts::PI;
+        let x2pi = self.random() * twopi;
+        let g2rad = (-2.0 * (1.0 - self.random()).ln()).sqrt();
+        let z = x2pi.cos() * g2rad;
+        self.gauss_next = Some(x2pi.sin() * g2rad);
+        mu + z * sigma
     }
 
     /// Python 3.11+ `random.shuffle` — Fisher-Yates using randbelow(i+1), in place.
