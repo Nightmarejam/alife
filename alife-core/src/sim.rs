@@ -35,7 +35,8 @@ pub struct Simulation {
     pub floor_rescues: u64,          // how many times the floor prevented a death
     pub directional: bool,           // shock flips which trait-group is favored (mechanism test)
     pub pulse_threshold: Option<f64>,// targeted floor (Exp 9): rescue only under-represented group
-    pub cap_threshold: Option<f64>,  // accountability cap (v5): drain over-represented group
+    pub cap_threshold: Option<f64>,  // accountability cap (v6): reproduction throttle on over-rep group
+    pub dir_penalty: i32,            // directional shock strength (v7: tunable to test the bottleneck)
 }
 
 impl Simulation {
@@ -45,7 +46,8 @@ impl Simulation {
         Simulation { world, agents: Vec::new(), rng, next_id: 0,
                      total_ticks: 0, total_reproductions: 0, total_deaths: 0,
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
-                     directional: false, pulse_threshold: None, cap_threshold: None }
+                     directional: false, pulse_threshold: None, cap_threshold: None,
+                     dir_penalty: DIRECTIONAL_PENALTY }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -98,6 +100,7 @@ impl Simulation {
 
         let floor = self.floor_energy;
         let directional = self.directional;
+        let dir_pen = self.dir_penalty;
         let regime = self.world.regime;
         // Targeted pulse (Exp 9): a group is "protected" only while its share is below the
         // threshold. None => unconditional (every group protected). Preserves the under-represented
@@ -128,7 +131,7 @@ impl Simulation {
                 agents[idx].apply_energy_cost(BASELINE_DRAIN);
                 // DIRECTIONAL selection: the disfavored trait-group bleeds energy this tick.
                 if directional && ((agents[idx].regulate_op() & 7 >= 4) as u8) != regime {
-                    agents[idx].apply_energy_cost(DIRECTIONAL_PENALTY);
+                    agents[idx].apply_energy_cost(dir_pen);
                 }
                 // FLOOR: rescue from death to guaranteed minimum (UCF)
                 if !agents[idx].alive {

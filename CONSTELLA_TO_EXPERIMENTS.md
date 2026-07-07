@@ -349,3 +349,33 @@ FALSIFIED across 4 variants (v5, v6, v6.1, v6.2). *stable adaptive regime* — s
 evidence now points to **founding diversity (mechanism #1)**, not accountability, as the next
 lever. v7: increase founding diversity (stop seeding a monoculture) and/or soften the shock, then
 re-test the bare pulse.
+
+## SEVENTH RESULT — v7: shock-softening and founding-population both fail to give stable+adaptive
+Made shock strength (DIR_PENALTY) and founding population (POP) runtime knobs (experiment-only;
+base sim still bit-exact a2bb005395f79766). Bare pulse, verified against the v4 hardening baseline
+(seed 42 ext@4102, seed 2024 ext@2061 — reproduced exactly, so the code is consistent).
+
+**Lever 1 — softer shock (DIR_PENALTY 3→2→1):** the fatal seeds (42, 2024) now SURVIVE — but with
+reserve-fires = 0. Softening the shock trades adaptation for survival: too harsh → turnover +
+bottleneck death; too gentle → survival + stasis. Neither extreme is stable-AND-adaptive.
+
+**Lever 2 — larger founding population (POP 50→150→300):** does NOT help. Under the harsh shock,
+POP=150 still collapses at the SAME turnover bottleneck (necks to pop=2 at first recovery, extinct
+@4068 vs POP=50's @4102). Initial count washes out; the bottleneck is structural.
+
+**Process note (caught a false positive):** an earlier POP sweep reported "survived" for POP=50
+under harsh shock, contradicting the verified baseline. Re-running without the `timeout` wrapper
+showed the real result (extinct @4102) — the timeout had truncated output before the EXTINCT line.
+The false positive was discarded; the verified numbers above stand.
+
+**Diagnosis:** the turnover bottleneck is structural to this two-group directional design — at each
+regime flip the whole previously-dominant group crashes while the thin reserve must rebuild from a
+handful (pop 2–5), and with a marginal carrying capacity it usually can't. Bigger founding numbers
+wash out; gentler shocks remove the turnover entirely.
+
+**Tier:** *stable adaptive regime* — NOT ACHIEVED by shock-softening or founding-population. The
+two-group model may be too brittle for a clean stable-adaptive regime. v8 candidates: continuous
+reserve replenishment (higher genome[7] mutation, experiment-gated), higher carrying capacity (so
+the thin reserve is still dozens not 2), or a richer multi-strategy environment. The verified core
+finding stands: the TARGETED FLOOR fires the reserve (v4, 3/5) — adaptation is real but fragile;
+robustness needs a thicker reserve at the moment of turnover, which neither v7 lever supplied.

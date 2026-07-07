@@ -134,15 +134,17 @@ fn main() {
         let capped_on = args.iter().any(|a| a == "capped");
         let pulse_on = capped_on || args.iter().any(|a| a == "pulse");
         let floor_on = pulse_on || !args.iter().any(|a| a == "nofloor");
-        let shock = 2000u64;
-        let recovery = 1500u64; // give the newly-favored group time to take over
+        let shock: u64 = std::env::var("SHOCK").ok().and_then(|v| v.parse().ok()).unwrap_or(2000);
+        let recovery = shock * 3 / 4; // give the newly-favored group time to take over
         let mut s = Simulation::new(seed);
         s.floor_energy = if floor_on { Some(30) } else { None };
         s.pulse_threshold = if pulse_on { Some(0.30) } else { None };
-        s.cap_threshold = if capped_on { Some(0.70) } else { None }; // v5: cap runaway majority
+        s.cap_threshold = if capped_on { Some(0.70) } else { None };
+        s.dir_penalty = std::env::var("DIR_PENALTY").ok().and_then(|v| v.parse().ok()).unwrap_or(3); // v7 knob
         s.shock_interval = Some(shock);
         s.directional = true;
-        s.initialize_population(50, true);
+        let pop: usize = std::env::var("POP").ok().and_then(|v| v.parse().ok()).unwrap_or(50); // v7 founding knob
+        s.initialize_population(pop, true);
         let group = |g: [u8; 8]| -> u8 { ((g[7] & 7) >= 4) as u8 };
         let mut pre: Vec<([u8; 8], usize)> = Vec::new();
         let mut pre_dom: Option<[u8; 8]> = None;
