@@ -36,6 +36,11 @@ pub struct Agent {
     pub op_usage: Vec<(u8, i32)>, // insertion-ordered (reg_learn iterates it)
     pub reproduction_cooldown: i32,
     pub wave_arrival_times: Vec<i32>, // empty in exp0
+    // exp3 (anticipation) state — all inert unless waves run (base hash unaffected)
+    pub last_shield_activation: Option<u64>, // tick the shield last fired
+    pub wave_detected: Option<u64>,          // start_tick of the wave already detected (key)
+    pub wave_detection_tick: Option<u64>,    // tick this agent first sensed the current wave
+    pub anticipation_gaps: Vec<i64>,         // shield_tick - detection_tick; <0 = anticipatory
 }
 
 impl Agent {
@@ -45,6 +50,8 @@ impl Agent {
             age: 0, memory: Vec::new(), pattern_memory: Vec::new(),
             shield_active: false, signaling: false, toxin_active: false,
             op_usage: Vec::new(), reproduction_cooldown: 0, wave_arrival_times: Vec::new(),
+            last_shield_activation: None, wave_detected: None, wave_detection_tick: None,
+            anticipation_gaps: Vec::new(),
         }
     }
     // genome slot accessors

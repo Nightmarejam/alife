@@ -281,6 +281,8 @@ fn execute_genome(a: &mut Agent, w: &mut World) -> bool {
             6 => a.toxin_active,
             _ => a.x != ox || a.y != oy, // flee
         };
+        // exp3: record the tick a shield actually fired (inert in base — no energy/RNG effect)
+        if (code & 7) == 3 && action_fired { a.last_shield_activation = Some(w.tick); }
         if action_fired {
             let acost = (ACT_COSTS[(code & 7) as usize] + cost_modifier).max(0);
             a.apply_energy_cost(acost);
