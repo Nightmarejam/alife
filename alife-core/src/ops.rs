@@ -1,7 +1,7 @@
 // The 40 ops — verbatim port of ops.py, exp0 (no-wave) paths. All deterministic.
 use crate::agent::{Agent, CONSUME_AMOUNT, CRITICAL_LOW_ENERGY, BURST_THRESHOLD,
                    REPRODUCTION_THRESHOLD};
-use crate::world::World;
+use crate::world::{World, SENSE_THREAT_RANGE};
 
 const SIGNAL_ACTIVE: bool = false; // base sim (exp0); set true only in exp5
 const TOXIN_ACTIVE: bool = false;
@@ -13,7 +13,7 @@ pub fn sense_op(code: u8, a: &Agent, w: &World) -> f64 {
 fn sense_op_int(code: u8, a: &Agent, w: &World) -> i32 {
     match code & 0x07 {
         0 => w.energy_at(a.x, a.y),
-        1 => w.threat_at(a.x, a.y), // exp0: no waves -> cell threat (0)
+        1 => sense_threat(a, w), // exp3: wave-front proximity (falls back to cell threat when no wave)
         2 => w.light_at(a.x, a.y),
         3 => { // neighbor: avg of 8-adjacent cell energy (// count)
             let (mut total, mut count) = (0, 0);
@@ -50,14 +50,45 @@ fn sense_op_int(code: u8, a: &Agent, w: &World) -> i32 {
     }
 }
 
+/// exp3: threat = wave-front proximity (0 far → 255 at/past agent). Stealth waves read 0
+/// (undetectable — only prediction survives them). Falls back to cell threat when no wave.
+fn sense_threat(a: &Agent, w: &World) -> i32 {
+    if let Some(wave) = &w.current_wave {
+        if wave.active && !wave.stealth {
+            let front = wave.front_position(w.tick);
+            let distance = front - a.x as f64; // negative => wave hasn't reached agent yet (L→R)
+            if distance >= 0.0 {
+                return 255; // wave at or past the agent
+            }
+            let proximity = SENSE_THREAT_RANGE as f64 + distance;
+            if proximity > 0.0 {
+                let threat = ((proximity / SENSE_THREAT_RANGE as f64) * 255.0) as i32;
+                if threat > 0 { return threat; }
+            }
+        }
+    }
+    w.threat_at(a.x, a.y) // fallback (0 in base/exp0)
+}
+
 // ---- PROCESS (sense_value, agent, world) -> bool ----
-pub fn process_op(code: u8, sv: f64, a: &Agent, _w: &World) -> bool {
+pub fn process_op(code: u8, sv: f64, a: &Agent, w: &World) -> bool {
     match code & 0x07 {
         0 => sv > 128.0,
         1 => sv > a.energy,
         2 => a.memory.last().map_or(false, |&m| sv > m),
         3 => a.memory.len() >= 2 && a.memory[a.memory.len()-1] > a.memory[a.memory.len()-2],
-        4 => false, // predict: wave_arrival_times empty in exp0
+        4 => { // predict: fire when the next wave (extrapolated from arrival history) is within horizon
+            if a.wave_arrival_times.len() < 2 { false }
+            else {
+                let t = &a.wave_arrival_times;
+                let mut sum = 0i64;
+                for i in 1..t.len() { sum += (t[i] - t[i - 1]) as i64; }
+                let avg_interval = sum as f64 / (t.len() - 1) as f64;
+                let predicted_next = *t.last().unwrap() as f64 + avg_interval;
+                let ticks_until = predicted_next - w.tick as f64;
+                0.0 < ticks_until && ticks_until < (SENSE_THREAT_RANGE * 3) as f64
+            }
+        }
         5 => sv > 128.0, // beat: exp0 fallback (no waves) -> sense>128
         6 => { // average
             if a.memory.is_empty() { sv > 128.0 }

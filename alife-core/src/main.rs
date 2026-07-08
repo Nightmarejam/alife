@@ -196,6 +196,29 @@ fn main() {
         }
         return;
     }
+    if std::env::args().any(|a| a == "predicttest") {
+        // Stage 3: sense_threat (wave proximity) + proc_predict (anticipation) vs Python formulas.
+        let mut r = PyRandom::seed(1);
+        let mut w = World::new(&mut r);
+        let ag = agent::Agent::new(1, 100, 50, [0u8; 8]);
+        println!("sense_threat (agent x=100, wave speed 1.0 from t0):");
+        for &tick in &[90u64, 96, 97, 100, 102] {
+            w.tick = tick;
+            w.current_wave = Some(world::WaveState { start_tick: 0, speed: 1.0, active: true, stealth: false });
+            println!("  tick={} threat={}", tick, ops::sense_op(0x01, &ag, &w));
+        }
+        w.tick = 97;
+        w.current_wave = Some(world::WaveState { start_tick: 0, speed: 1.0, active: true, stealth: true });
+        println!("  tick=97 STEALTH threat={}", ops::sense_op(0x01, &ag, &w));
+        let mut a2 = agent::Agent::new(2, 100, 50, [0u8; 8]);
+        a2.wave_arrival_times = vec![100, 300, 500];
+        println!("proc_predict (arrivals [100,300,500], interval 200, predicted_next=700, horizon 15):");
+        for &tick in &[680u64, 690, 700, 701] {
+            w.tick = tick;
+            println!("  tick={} fires={}", tick, ops::process_op(0x04, 0.0, &a2, &w));
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);

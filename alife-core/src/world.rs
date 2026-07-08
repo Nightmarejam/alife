@@ -20,8 +20,10 @@ pub const STEALTH_WAVE_PROBABILITY: f64 = 0.3;
 pub const THERMAL_DRAIN_RATE: f64 = 0.2;
 pub const PREDATOR_DAMAGE: i32 = 200;      // normal wave contact (survivable only above ~200 energy)
 pub const STEALTH_WAVE_DAMAGE: i32 = 999;  // stealth wave = instant death regardless of energy
+pub const SENSE_THREAT_RANGE: i32 = 5;     // detection range; proc_predict horizon = 3x this
 
 /// A propagating predator wave (exp3). Direction is left→right only until exp4.
+#[derive(Clone, Copy)]
 pub struct WaveState {
     pub start_tick: u64,
     pub speed: f64,    // columns per tick
@@ -54,6 +56,7 @@ pub struct World {
     pub grid: Vec<Vec<Cell>>, // grid[y][x]
     pub energy_sources: Vec<(i32, i32)>,
     pub regime: u8, // directional shock: which trait-group the environment currently favors (0/1)
+    pub current_wave: Option<WaveState>, // exp3: the active wave (None in base — sensing falls back)
 }
 
 impl World {
@@ -79,7 +82,8 @@ impl World {
             let y = rng.randbelow(GRID_HEIGHT as u32) as i32;
             energy_sources.push((x, y));
         }
-        World { width: GRID_WIDTH, height: GRID_HEIGHT, tick: 0, grid, energy_sources, regime: 0 }
+        World { width: GRID_WIDTH, height: GRID_HEIGHT, tick: 0, grid, energy_sources, regime: 0,
+                current_wave: None }
     }
 
     pub fn in_bounds(&self, x: i32, y: i32) -> bool {

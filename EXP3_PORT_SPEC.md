@@ -86,10 +86,16 @@ gauss/wave/gradient bit-exact, base hashes intact — see VALIDATION.md). **Next
 - **Stage 2 — wave damage.** `apply_wave_damage`: front-band `abs(agent.x-front)<1.0`, record
   `wave_arrival_times` (dedup >10 ticks, keep last 8), shield check (`genome[5|6]==ACT_SHIELD`),
   stealth = instant death. Gate: population/deaths trajectory vs Python.
-- **Stage 3 — memory + prediction ops.** Turn memory ON (undo the `MEMORY_ENABLED=false` /
-  `memory_op→0` we set for the base). Transcribe EXACTLY (read then port): `ops.py:298 mem_pattern`
-  and `ops.py:159 proc_predict` + the agent wave-timing inheritance (`agent.py:142`). Gate: agent
-  memory-state hash vs Python on a fixed short run.
+- **Stage 3 — prediction + wave-aware sensing (memory stays OFF). ✅ DONE.**
+  **CORRECTION to the original plan:** exp3 does NOT enable memory. `MEMORY_ENABLED=false` holds even
+  in exp3 and gates *only* the memory op (agent.py:90 → MEM_NONE); `mem_pattern` is dormant. So we do
+  NOT touch `memory_op → 0` (keeps base bit-exact AND matches exp3). Anticipation runs on
+  `wave_arrival_times` (populated by wave *contact* in Stage 2) read by `proc_predict` (a *process*
+  op, ungated). Ported + validated (`predicttest`, bit-exact vs Python; base hash intact):
+  (a) `World.current_wave`; (b) wave-aware `sense_threat` = front proximity 0→255, stealth=0 (the
+  reactive baseline: SENSE_THREAT→THRESHOLD→SHIELD); (c) `proc_predict` (process arm 4): extrapolate
+  next arrival from history, fire within horizon = 3× SENSE_THREAT_RANGE. **Emergence signal is now
+  crisp:** a reactive agent turns anticipatory by mutating P1 `PROC_THRESHOLD`(0)→`PROC_PREDICT`(4).
 - **Stage 4 — detection + gap measurement.** `check_wave_detection` +
   `calculate_anticipation_gap`. Gate: gap distribution vs Python.
 - **Stage 5 — harness + two arms.** exp3 loop (spawn on interval, process wave, thermal, tick),
