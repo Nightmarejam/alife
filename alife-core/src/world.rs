@@ -18,6 +18,8 @@ pub const WAVE_SPEED_C: f64 = 0.8;
 pub const WAVE_SPEED_VARIANCE: f64 = 0.05;
 pub const STEALTH_WAVE_PROBABILITY: f64 = 0.3;
 pub const THERMAL_DRAIN_RATE: f64 = 0.2;
+pub const PREDATOR_DAMAGE: i32 = 200;      // normal wave contact (survivable only above ~200 energy)
+pub const STEALTH_WAVE_DAMAGE: i32 = 999;  // stealth wave = instant death regardless of energy
 
 /// A propagating predator wave (exp3). Direction is left→right only until exp4.
 pub struct WaveState {

@@ -196,6 +196,27 @@ fn main() {
         }
         return;
     }
+    if std::env::args().any(|a| a == "wavedamagetest") {
+        // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
+        let mut s = Simulation::new(42);
+        s.agents.clear();
+        // (id, shield-gene in slot A1, shield_active, energy)
+        let cases = [(1u64, 0x03u8, true, 200.0f64), (2, 0x03, false, 200.0), (3, 0x00, false, 200.0), (4, 0x00, false, 255.0)];
+        for &(id, sg, sa, e) in &cases {
+            let mut g = [0u8; 8]; g[6] = sg;
+            let mut a = agent::Agent::new(id, 100, 50, g);
+            a.shield_active = sa; a.energy = e;
+            s.agents.push(a);
+        }
+        s.world.tick = 100;
+        let wave = world::WaveState { start_tick: 0, speed: 1.0, active: true, stealth: false };
+        let (kills, shielded) = s.apply_wave_damage(&wave);
+        println!("wave damage @front=100: kills={} shielded={} (expect kills=2 shielded=1)", kills, shielded);
+        for a in &s.agents {
+            println!("  id={} alive={} energy={} arrivals={:?}", a.id, a.alive, a.energy, a.wave_arrival_times);
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "gausstest") {
         // Stage 1 crux: does CPython's gauss reproduce bit-for-bit in Rust f64?
         let mut r = PyRandom::seed(42);

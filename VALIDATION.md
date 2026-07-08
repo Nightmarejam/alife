@@ -28,7 +28,8 @@ knobs and the exp3 f64-energy refactor.
 | 1 | `initialize_light_gradient` | `b295c06633458b3c` | `alife-core gradienttest` | ✅ both langs |
 | 1 | f64 energy refactor | base hashes unchanged | `run 42 100` + `pop` | ✅ behavior-preserving |
 | 1 | `apply_thermal_drain` | formula-identical (0.2 @ light 255) | (integrated at Stage 5) | pending Stage 5 |
-| 2–5 | wave damage → memory → gap → two-arm harness | — | — | pending |
+| 2 | `apply_wave_damage` | damage/shield/death/arrival logic (kills=2, shielded=1) | `alife-core wavedamagetest` | ✅ deterministic; trajectory at Stage 5 |
+| 3–5 | memory/predict → gap → two-arm harness | — | — | pending |
 
 ## Note on platform
 The transcendental bit-exactness (Stage 1 gauss) holds on the Mac dev machine (shared libm).

@@ -1,7 +1,7 @@
 // Simulation — the tick loop, execute_genome, reproduction, mutation.
 // Base sim (experiment 0, no predator waves). Ported to match Python Simulation.tick().
 use crate::rng::PyRandom;
-use crate::world::World;
+use crate::world::{World, WaveState, PREDATOR_DAMAGE, STEALTH_WAVE_DAMAGE};
 use crate::agent::*;
 use crate::ops;
 
@@ -84,6 +84,40 @@ impl Simulation {
             }
             attempts += 1;
         }
+    }
+
+    /// exp3 Stage 2: apply a wave's damage at its current front. Agents in the 1-column front band
+    /// die (unless shielded); stealth waves are instant death. Records wave arrival times (dedup
+    /// >10 ticks, keep last 8) for the prediction layer. Deterministic (no RNG). Returns (kills,
+    /// shielded_contacts). The exp3 harness must call cleanup_dead() after, matching Python's
+    /// remove-after-damage timing (so dead agents don't linger on the grid into the tick).
+    pub fn apply_wave_damage(&mut self, wave: &WaveState) -> (u64, u64) {
+        const ACT_SHIELD: u8 = 0x03;
+        const MIN_ARRIVAL_GAP: i32 = 10;
+        let ct = self.world.tick;
+        let front = wave.front_position(ct);
+        let (mut kills, mut shielded) = (0u64, 0u64);
+        for a in self.agents.iter_mut() {
+            if !a.alive { continue; }
+            if (a.x as f64 - front).abs() < 1.0 {
+                // record arrival (dedup: push if empty or >MIN_ARRIVAL_GAP since last; keep last 8)
+                if a.wave_arrival_times.last().map_or(true, |&last| ct as i32 - last > MIN_ARRIVAL_GAP) {
+                    a.wave_arrival_times.push(ct as i32);
+                    let n = a.wave_arrival_times.len();
+                    if n > 8 { a.wave_arrival_times.drain(0..n - 8); }
+                }
+                let has_shield = a.genome[5] == ACT_SHIELD || a.genome[6] == ACT_SHIELD;
+                if has_shield && a.shield_active {
+                    shielded += 1;
+                } else {
+                    let damage = if wave.stealth { STEALTH_WAVE_DAMAGE } else { PREDATOR_DAMAGE };
+                    a.energy -= damage as f64;
+                    if a.energy <= 0.0 { a.energy = 0.0; a.alive = false; kills += 1; }
+                }
+            }
+        }
+        self.total_deaths += kills;
+        (kills, shielded)
     }
 
     pub fn tick(&mut self) {
