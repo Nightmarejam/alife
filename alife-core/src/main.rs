@@ -175,7 +175,7 @@ fn main() {
                     let from_reserve = dom_favored && shifted && !pre_grp_favored;
                     if from_reserve { reserve_hits += 1; }
                     events += 1;
-                    let g1 = s.agents.iter().filter(|a| (a.genome[7] & 7) >= 4).count();
+                    let g1 = s.agents.iter().filter(|a| (a.genome[0] & 7) >= 4).count();
                     let g0 = s.agents.len() - g1;
                     let fav_share = if favored == 1 { g1 } else { g0 } as f64 / s.agents.len() as f64;
                     println!("flip@{:>5} recover@{:>5}: pop={:>4} div={:>3} favored-grp={} | grp0={:>4} grp1={:>4} favored-share={:.0}% | winner-grp={} reserve-driven:{}",
@@ -346,6 +346,13 @@ fn main() {
         // FLOOR arm: guaranteed minimum energy (UCF) — rescues an agent from winter death to `floor`.
         // The civic test under seasons: does a lean-season safety net convert collapse into survival?
         let floor: Option<i32> = std::env::var("FLOOR").ok().and_then(|v| v.parse().ok());
+        // FLIP arm (Step 4): the favored trait-group (regulate op ≥4 vs <4) flips every HALF-period —
+        // a direction-flipping cycle (oscillating OPTIMUM), unlike Steps 1-3 which only varied
+        // intensity. Tests diversify-vs-converge: does a flipping cycle MAINTAIN diversity (each group
+        // wins its half → the reserve is load-bearing) where the intensity cycle CONVERGED? The
+        // disfavored group bleeds DIRP energy/tick (reuses the directional-shock penalty machinery).
+        let flip: bool = std::env::var("FLIP").ok().map_or(false, |v| v == "1" || v == "true");
+        let dirp: i32 = std::env::var("DIRP").ok().and_then(|v| v.parse().ok()).unwrap_or(3);
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.world.season_amp = amp;
@@ -353,18 +360,28 @@ fn main() {
         s.density_onset = cap;
         s.density_div = div;
         s.floor_energy = floor;
+        s.directional = flip;
+        s.dir_penalty = dirp;
+        // Flip splits on a COST-NEUTRAL locus (sense slot 0, SENSE_COSTS all 0) so the two strategies
+        // are metabolically equal — distinguished ONLY by which regime favors them. (Grouping on the
+        // regulate gene collapses to op-5 crit-cut, the free metabolic attractor → false convergence.)
+        s.dir_locus = 0;
         s.initialize_population(100, true);
-        println!("=== SEASONS {} (seed {}, {} ticks | amp {} period {} cap {} div {}) ===",
-            floor.map_or("baseline".into(), |f| format!("FLOOR={}", f)), seed, ticks, amp, period, cap, div);
+        println!("=== SEASONS {}{} (seed {}, {} ticks | amp {} period {} cap {} div {}) ===",
+            floor.map_or("baseline".into(), |f| format!("FLOOR={}", f)),
+            if flip { format!(" +FLIP(dirp {})", dirp) } else { String::new() },
+            seed, ticks, amp, period, cap, div);
         println!("    deep-winter drain ~{:.1}/tick vs summer 0 | passive gain ≤5, baseline 1", amp);
         let sample_start = (ticks as u64).saturating_sub(4 * period);
         let (mut bpop, mut bene, mut bn) = ([0f64; 8], [0f64; 8], [0u64; 8]);
-        let mut bbirth = [0u64; 8];
+        let (mut bbirth, mut bg1) = ([0u64; 8], [0f64; 8]);
         let (mut min_pop, mut max_pop) = (100usize, 100usize);
         let mut extinct_at: Option<u64> = None;
         let mut last_repro = s.total_reproductions;
+        let half = (period / 2).max(1);
         for t in 0..ticks {
             let tt = t as u64;
+            if flip && tt > 0 && tt % half == 0 { s.world.regime ^= 1; } // seasonal direction flip
             s.apply_thermal_drain_all();
             s.cleanup_dead();
             s.tick();
@@ -377,6 +394,8 @@ fn main() {
                 bpop[b] += p as f64;
                 bene[b] += s.agents.iter().map(|a| a.energy).sum::<f64>() / p as f64;
                 bbirth[b] += s.total_reproductions - last_repro;
+                let g1 = s.agents.iter().filter(|a| (a.genome[0] & 7) >= 4).count();
+                bg1[b] += g1 as f64 / p as f64; // group-1 share this tick
                 bn[b] += 1;
             }
             last_repro = s.total_reproductions;
@@ -408,6 +427,19 @@ fn main() {
                 // not clean adaptive phenology — this ratio is confounded by the density cap.
                 println!("REPRO TIMING  warm-half births {} vs cold-half {}  (ratio {:.1}× — confounded by density, not phenology)",
                     warm, cold, warm as f64 / cold.max(1) as f64);
+                if flip {
+                    let shares: Vec<f64> = (0..8).filter(|&b| bn[b] > 0).map(|b| bg1[b] / bn[b] as f64).collect();
+                    let (smax, smin) = (shares.iter().cloned().fold(0.0f64, f64::max),
+                                        shares.iter().cloned().fold(1.0f64, f64::min));
+                    let both = smin > 0.05 && smax < 0.95; // both groups persist through the whole cycle
+                    print!("FLIP  group-1 share by phase:");
+                    for b in 0..8 { if bn[b] > 0 { print!(" p{}:{:.0}%", b, bg1[b] / bn[b] as f64 * 100.0); } }
+                    println!();
+                    println!("  share swings {:.0}%→{:.0}% across the cycle | DIVERSITY {} ({} — each group holds its half if maintained)",
+                        smax * 100.0, smin * 100.0,
+                        if both { "MAINTAINED" } else { "COLLAPSED to one group" },
+                        if both { "reserve rides the cycle" } else { "converged" });
+                }
                 let names = ["none","low-cut","burst","cycle","learn","crit-cut","prioritize","adaptive"];
                 let mut rc = [0usize; 8];
                 for a in &s.agents { rc[(a.genome[7] & 7) as usize] += 1; }

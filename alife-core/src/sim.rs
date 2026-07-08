@@ -39,6 +39,7 @@ pub struct Simulation {
     pub dir_penalty: i32,            // directional shock strength (v7: tunable to test the bottleneck)
     pub density_onset: i32,          // pop at which the reproduction density-penalty begins (150 = base)
     pub density_div: i32,            // density-penalty steepness divisor (5 = base; lower = harder cap)
+    pub dir_locus: usize,            // genome slot the directional split reads (7=regulate, base; 0=neutral sense)
 }
 
 impl Simulation {
@@ -49,7 +50,7 @@ impl Simulation {
                      total_ticks: 0, total_reproductions: 0, total_deaths: 0,
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
                      directional: false, pulse_threshold: None, cap_threshold: None,
-                     dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5 }
+                     dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5, dir_locus: 7 }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -165,6 +166,7 @@ impl Simulation {
         let floor = self.floor_energy;
         let directional = self.directional;
         let dir_pen = self.dir_penalty;
+        let dir_locus = self.dir_locus;
         let regime = self.world.regime;
         // Targeted pulse (Exp 9): a group is "protected" only while its share is below the
         // threshold. None => unconditional (every group protected). Preserves the under-represented
@@ -194,7 +196,7 @@ impl Simulation {
                 agents[idx].reset_tick_state();
                 agents[idx].apply_energy_cost(BASELINE_DRAIN);
                 // DIRECTIONAL selection: the disfavored trait-group bleeds energy this tick.
-                if directional && ((agents[idx].regulate_op() & 7 >= 4) as u8) != regime {
+                if directional && ((agents[idx].genome[dir_locus] & 7 >= 4) as u8) != regime {
                     agents[idx].apply_energy_cost(dir_pen);
                 }
                 // FLOOR: rescue from death to guaranteed minimum (UCF)

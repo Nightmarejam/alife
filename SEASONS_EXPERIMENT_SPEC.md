@@ -75,7 +75,7 @@ just trivially track (no interesting strategy), that's a real result too.
 1. Oscillating thermal (triangle factor) + base-hash check (amp=0 unchanged). ✅ **DONE** (see below)
 2. Baseline seasonal run + readouts (regulate dist, energy-before-winter, repro-timing). ✅ **DONE**
 3. Floor vs no-floor seasonal arm. ✅ **DONE** (see below)
-4. Diversity-vs-convergence arm.
+4. Diversity-vs-convergence arm. ✅ **DONE** (see below)
 5. (v2) season-clock sensing + anticipatory-seasons.
 
 ---
@@ -189,3 +189,40 @@ as a clean positive**; the honest artifact is the boundary.
 
 Runs: `FLOOR=<e> AMP=<a> PERIOD=<p> alife-core seasons <seed> <ticks>`; sweeps in `/tmp/floor_sweep.sh`,
 `/tmp/floor_slow.sh`.
+
+---
+
+## Step 4 results (2026-07) — direction-flipping cycle: cycles CONVERGE, they don't diversify
+Added `FLIP` arm: the favored trait-group flips every half-period (env `FLIP=1`, penalty `DIRP`,
+reusing the directional-penalty machinery). Split on a **cost-neutral locus** (`dir_locus`, set to sense
+slot 0; default stays 7=regulate so `dmech`/`ucf` are bit-identical — base hash `a2bb005395f79766`
+verified) so the two strategies aren't separated by metabolic cost. Prediction going in (from the
+design): a flipping cycle should *reward diversity* (each group wins its half), completing the V3 story.
+
+**It does the opposite — the cycle CONVERGES.**
+- **No floor → monoculture.** Pure periodic flips collapse to one group (share 0%) at every period and
+  penalty tested. The intrinsically-stronger strategy wins (no locus is truly neutral — sense ops still
+  differ in foraging), and a strong-enough flip to overcome that (dirp 3) is simply *lethal* over a
+  half-cycle → extinction.
+- **Floor preserves a reserve, but it is NOT load-bearing.** A mild flip (dirp 1) + `FLOOR=30` holds a
+  ~5% minority of the disfavored group alive across the cycle (period 400–800) where no-floor converges —
+  consistent with the confirmed `diversity-reserve`. **But** the share sits *flat at ~5%*, it does not
+  oscillate: the reserve never rises to dominance in its favored half (a 5% group can't take over a
+  400–800-tick half against the intrinsic asymmetry). Preserved, not firing.
+
+**Unified read of the whole seasons experiment — CONVERGENCE is the attractor under cyclical pressure.**
+Intensity cycle (Steps 1-3) → converge on the all-weather cheap strategy. Direction-flip cycle (Step 4)
+→ converge on the stronger strategy; a floor preserves a reserve but doesn't make it load-bearing.
+This *refines* diversify-vs-converge with a candidate governing variable — **predictability / niche
+structure:**
+> A **predictable cycle** rewards a single robust/adaptive strategy → *converge*. Diversity becomes
+> load-bearing only under an **abrupt, unpredictable shift that opens a genuine new niche** — which is
+> exactly what the confirmed `dmech` result had (regime flip **+ food relocation** giving the reserve a
+> real advantage), and what the pure penalty-flip here lacks.
+
+Status: **honest partial-negative / boundary**, not a new confirmed word. The naive "diversify under
+cycles" prediction is **refuted for smooth periodic flips**; the artifact is the convergence result +
+the predictability hypothesis (itself untested — would need random-vs-periodic flips and a
+niche-structured regime to confirm).
+
+Runs: `FLIP=1 DIRP=<d> AMP=<a> PERIOD=<p> [FLOOR=<e>] alife-core seasons <seed> <ticks>`.
