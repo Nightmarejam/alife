@@ -71,8 +71,12 @@ hit test → cascade. So the integer-exact strategy that validated the base sim 
 
 ## Port stages (each gated by a validation before the next)
 
-**Status 2026-07: Stages 0–5 DONE.** exp3 anticipation emergence RAN — honest result: PROC_PREDICT substrate evolves unseeded (4/5) but functional anticipation fires only 2/5 → NOT confirmed at strict-emergence; refutes the "89.2%" claim (see CONSTELLA_TO_EXPERIMENTS.md). Earlier note: (waves, gradient, thermal, f64 energy;
-gauss/wave/gradient bit-exact, base hashes intact — see VALIDATION.md). **Next: Stage 2.**
+**Status 2026-07: Stages 0–5 DONE.** exp3 anticipation emergence RAN. Honest result: the
+`PROC_PREDICT` substrate **evolves unseeded (4/5 seeds)** but functional anticipation (negative
+gaps) fires only **2/5** → **NOT confirmed** at the strict-emergence bar; refutes the unbacked
+"89.2%" claim. Per-stage pieces bit-exact (VALIDATION.md); full result in
+CONSTELLA_TO_EXPERIMENTS.md. **Next (v2): global waves crossing the full world + a MOVE op so
+agents migrate → real non-local selection pressure for anticipation.**
 
 
 - **Stage 0 — agent state + shield timing.** Add the fields above; record `last_shield_activation`
