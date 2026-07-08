@@ -71,7 +71,7 @@ hit test → cascade. So the integer-exact strategy that validated the base sim 
 
 ## Port stages (each gated by a validation before the next)
 
-**Status 2026-07: Stages 0 and 1 are DONE + validated** (waves, gradient, thermal, f64 energy;
+**Status 2026-07: Stages 0–5 DONE.** exp3 anticipation emergence RAN — honest result: PROC_PREDICT substrate evolves unseeded (4/5) but functional anticipation fires only 2/5 → NOT confirmed at strict-emergence; refutes the "89.2%" claim (see CONSTELLA_TO_EXPERIMENTS.md). Earlier note: (waves, gradient, thermal, f64 energy;
 gauss/wave/gradient bit-exact, base hashes intact — see VALIDATION.md). **Next: Stage 2.**
 
 

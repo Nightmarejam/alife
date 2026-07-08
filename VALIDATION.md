@@ -31,7 +31,7 @@ knobs and the exp3 f64-energy refactor.
 | 2 | `apply_wave_damage` | damage/shield/death/arrival logic (kills=2, shielded=1) | `alife-core wavedamagetest` | ✅ deterministic; trajectory at Stage 5 |
 | 3 | `sense_threat` (wave proximity) + `proc_predict` (anticipation) | proximity 0/51/102/255, stealth 0; predict fires only in horizon | `alife-core predicttest` | ✅ vs Python formulas (memory stays OFF — see spec) |
 | 4 | `check_wave_detection` (the anticipation-gap instrument) | gap=−5 anticipatory / 0 / none / excluded; neg_gaps=1 | `alife-core gaptest` | ✅ vs Python |
-| 5 | two-arm emergence harness (reactive-only vs seeded) | — | — | pending (the experiment) |
+| 5 | two-arm emergence harness (reactive-only vs seeded) | — | — | DONE: Arm B confirms instrument (1906 gaps); Arm A reactive-only = PROC_PREDICT evolves 4/5, fires 2/5 -> NOT confirmed (honest) |
 
 ## Note on platform
 The transcendental bit-exactness (Stage 1 gauss) holds on the Mac dev machine (shared libm).

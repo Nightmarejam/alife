@@ -36,10 +36,14 @@ Words the sandbox can already produce, with their current tier:
   mechanisms); *diversity-reserve* (a targeted floor lets a preserved minority become the winner
   when conditions shift — fires reproducibly, robustness bounded). Plus negatives:
   *unconditional-floor → stasis* and *accountability-as-survival-drain → collapse*.
+- **PARTIAL / honest-negative (Rust-tested 2026-07):** *anticipation* — the PROC_PREDICT substrate
+  **EVOLVES unseeded (4/5 seeds)**, but functional foresight (negative gaps) fires only **2/5** →
+  **NOT confirmed** at the strict-emergence bar (≥3/5). Refutes the unbacked "89.2%" claim. The
+  *capacity* emerges; the *function* is rare/local (see exp3 Stage 5 result below). v2: global waves
+  + mobility.
 - **SPECULATIVE (Constella-target — claims, not yet words):** *diversity-preservation* (Python
-  exp9 only), *cultural-transmission* (failed 2/4), *parasitism* (only 4/5 seeds), *anticipation*
-  (Python exp3, not yet Rust-hardened), *arms-race*. These become vocabulary ONLY when a seeded
-  run at scale confirms them.
+  exp9 only), *cultural-transmission* (failed 2/4), *parasitism* (only 4/5 seeds), *arms-race*.
+  These become vocabulary ONLY when a seeded run at scale confirms them.
 - **The rule FAITHH obeys:** it may reason WITH a confirmed term as a lens; a speculative
   term must be spoken as "this looks like X (unconfirmed)" — never as fact. And any
   mapping to *humans* stays speculative regardless (a sim word is not a human truth).
