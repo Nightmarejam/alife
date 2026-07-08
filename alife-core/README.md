@@ -21,8 +21,9 @@ Python's exact RNG rather than using Rust's.
   4. `initialize_light_gradient` is NOT called by the base sim — random cell values stand.
   Validate: hash the energy grid after init; Rust hash must equal Python's.
 - ✅ **Agent + population** — genome, energy, spawn. **VALIDATED**: seed 42 →
-  `2c9aa438ca75cf3f` both langs (full chain seed→World→50 agents matches bit-for-bit).
-  Remaining: the per-tick genome *execution* logic (sense/act/reproduce/mutate).
+  `2f59d3550af7cf2f` both langs (full chain seed→World→50 agents matches bit-for-bit;
+  re-confirmed 2026-07 on the canonical `Simulation::initialize_population` path). The earlier
+  `2c9aa438ca75cf3f` was a pre-seed-genome value, now superseded. See VALIDATION.md.
 - ✅ **Simulation (tick loop)** — **DONE & VALIDATED bit-for-bit.** Full port: all 40
   ops, _execute_genome orchestration, reproduction, mutation, death. Rust==Python at
   ticks 1/10/50/100 (pop grows 61→64→117→177 identically). **~70× faster** (500 ticks:

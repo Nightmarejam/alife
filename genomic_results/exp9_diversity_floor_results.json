@@ -1,0 +1,42 @@
+{
+  "experiment": 9,
+  "condition": "diversity_floor",
+  "collapsed": false,
+  "collapse_tick": null,
+  "final_population": 879,
+  "wave_count": 0,
+  "predator_kills": 0,
+  "thermal_deaths": 3,
+  "first_parasite_tick": null,
+  "first_toxin_tick": null,
+  "total_reproduction_events": 0,
+  "strategy_escape_tick": null,
+  "floor_activations": 0,
+  "floor_events": [],
+  "max_adapt_reached": 0.0,
+  "population_timeline": [
+    {
+      "tick": 0,
+      "phase": "A",
+      "pop": 343,
+      "defenders": 174,
+      "naked": 169,
+      "gamers": 0,
+      "floor_active": false,
+      "naked_fraction": 0.5,
+      "adapt": 0.0,
+      "shield_eff_pct": 100,
+      "avg_energy": 119
+    }
+  ],
+  "final_strategy": {
+    "DEFENDER": {
+      "count": 535,
+      "pct": 60.9
+    },
+    "NAKED": {
+      "count": 344,
+      "pct": 39.1
+    }
+  }
+}

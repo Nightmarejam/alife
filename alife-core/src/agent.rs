@@ -83,32 +83,12 @@ impl Agent {
     }
 }
 
-/// initialize_population — validated bit-for-bit (hash 2c9aa438ca75cf3f).
-pub fn initialize_population(
-    world: &mut World, rng: &mut PyRandom, count: usize, seed_reproduce: bool,
-) -> Vec<Agent> {
-    let mut agents: Vec<Agent> = Vec::new();
-    let mut next_id: u64 = 0;
-    let (mut spawned, mut attempts) = (0usize, 0usize);
-    let max_attempts = count * 10;
-    while spawned < count && attempts < max_attempts {
-        let x = rng.randbelow(world.width as u32) as i32;
-        let y = rng.randbelow(world.height as u32) as i32;
-        next_id += 1;
-        let mut genome = [0u8; GENOME_LENGTH];
-        for g in genome.iter_mut() { *g = rng.randbelow(8) as u8; }
-        if seed_reproduce { genome[5] = 0x04; genome[6] = 0x02; }
-        let cell = &mut world.grid[y as usize][x as usize];
-        if cell.occupant.is_none() {
-            cell.occupant = Some(next_id);
-            agents.push(Agent::new(next_id, x, y, genome));
-            spawned += 1;
-        }
-        attempts += 1;
-    }
-    agents
-}
+// (Removed the standalone `initialize_population` free fn 2026-07: it duplicated
+// Simulation::initialize_population — the only real init path — and was used solely by the `pop`
+// test, which now calls the canonical method. One init path, no drift.)
 
+/// Population hash — canonical path validated bit-for-bit both langs: `2f59d3550af7cf2f`
+/// (seed 42, 50 agents; Rust == Python 2026-07). Also folded into `Simulation::state_hash`.
 pub fn population_hash(agents: &[Agent]) -> u64 {
     let mut h: u64 = 0xcbf29ce484222325;
     let mut feed = |v: i32, h: &mut u64| {

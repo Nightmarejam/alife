@@ -34,13 +34,13 @@ fn main() {
         return;
     }
     if std::env::args().any(|a| a == "pop") {
-        let mut r = PyRandom::seed(42);
-        let mut w = World::new(&mut r);
-        let agents = agent::initialize_population(&mut w, &mut r, 50, true);
-        println!("seed 42 population: {} agents", agents.len());
-        let a0 = &agents[0];
+        // canonical path: the same Simulation::initialize_population every real mode uses
+        let mut s = Simulation::new(42);
+        s.initialize_population(50, true);
+        println!("seed 42 population: {} agents", s.agents.len());
+        let a0 = &s.agents[0];
         println!("agent0: pos=({},{}) genome={:?} energy={}", a0.x, a0.y, a0.genome, a0.energy);
-        println!("population_hash: {:016x}", agent::population_hash(&agents));
+        println!("population_hash: {:016x}", agent::population_hash(&s.agents));
         return;
     }
     if let Some(pos) = args.iter().position(|a| a == "ucf") {

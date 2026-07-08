@@ -71,6 +71,10 @@ hit test → cascade. So the integer-exact strategy that validated the base sim 
 
 ## Port stages (each gated by a validation before the next)
 
+**Status 2026-07: Stages 0 and 1 are DONE + validated** (waves, gradient, thermal, f64 energy;
+gauss/wave/gradient bit-exact, base hashes intact — see VALIDATION.md). **Next: Stage 2.**
+
+
 - **Stage 0 — agent state + shield timing.** Add the fields above; record `last_shield_activation`
   when `ACT_SHIELD` fires in `execute_genome`. Gate: base sim still `a2bb005395f79766` (fields
   unused when no waves).
