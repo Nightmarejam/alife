@@ -1,7 +1,7 @@
 // Simulation — the tick loop, execute_genome, reproduction, mutation.
 // Base sim (experiment 0, no predator waves). Ported to match Python Simulation.tick().
 use crate::rng::PyRandom;
-use crate::world::{World, WaveState, PREDATOR_DAMAGE, STEALTH_WAVE_DAMAGE};
+use crate::world::{World, WaveState, PREDATOR_DAMAGE, STEALTH_WAVE_DAMAGE, SENSE_THREAT_RANGE};
 use crate::agent::*;
 use crate::ops;
 
@@ -118,6 +118,34 @@ impl Simulation {
         }
         self.total_deaths += kills;
         (kills, shielded)
+    }
+
+    /// exp3 Stage 4: the measurement instrument. On each agent's FIRST detection of a wave (front
+    /// within SENSE_THREAT_RANGE), record the anticipation gap = last_shield_activation −
+    /// detection_tick, IF the shield fired during this wave's window. gap < 0 = ANTICIPATORY
+    /// (shield before the wave was sensable). Deterministic (no RNG). Returns the count of new
+    /// negative gaps this call.
+    pub fn check_wave_detection(&mut self, wave: &WaveState) -> u64 {
+        if !wave.active { return 0; }
+        let ct = self.world.tick;
+        let front = wave.front_position(ct);
+        let mut neg_gaps = 0u64;
+        for a in self.agents.iter_mut() {
+            if !a.alive { continue; }
+            let detectable_column = a.x as f64 - SENSE_THREAT_RANGE as f64;
+            if front >= detectable_column && a.wave_detected != Some(wave.start_tick) {
+                a.wave_detected = Some(wave.start_tick);
+                a.wave_detection_tick = Some(ct);
+                if let Some(shield_tick) = a.last_shield_activation {
+                    if shield_tick >= wave.start_tick {
+                        let gap = shield_tick as i64 - ct as i64; // <0 = shield fired before detection
+                        a.anticipation_gaps.push(gap);
+                        if gap < 0 { neg_gaps += 1; }
+                    }
+                }
+            }
+        }
+        neg_gaps
     }
 
     pub fn tick(&mut self) {

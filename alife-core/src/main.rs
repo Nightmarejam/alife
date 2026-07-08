@@ -196,6 +196,26 @@ fn main() {
         }
         return;
     }
+    if std::env::args().any(|a| a == "gaptest") {
+        // Stage 4: anticipation-gap measurement. Agent x=100, SENSE_THREAT_RANGE=5 -> detectable
+        // col 95; wave start_tick=50 speed 1.0 -> front=95 at tick 145 (first detection).
+        let mut s = Simulation::new(1);
+        s.agents.clear();
+        let cases: [(u64, Option<u64>); 4] = [(1, Some(140)), (2, Some(145)), (3, None), (4, Some(40))];
+        for (id, lsa) in cases {
+            let mut a = agent::Agent::new(id, 100, 50, [0u8; 8]);
+            a.last_shield_activation = lsa;
+            s.agents.push(a);
+        }
+        s.world.tick = 145;
+        let wave = world::WaveState { start_tick: 50, speed: 1.0, active: true, stealth: false };
+        let neg = s.check_wave_detection(&wave);
+        println!("neg_gaps={} (expect 1: only the agent that shielded before detection)", neg);
+        for a in &s.agents {
+            println!("  id={} last_shield={:?} gaps={:?} det_tick={:?}", a.id, a.last_shield_activation, a.anticipation_gaps, a.wave_detection_tick);
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "predicttest") {
         // Stage 3: sense_threat (wave proximity) + proc_predict (anticipation) vs Python formulas.
         let mut r = PyRandom::seed(1);
