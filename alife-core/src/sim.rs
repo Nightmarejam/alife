@@ -37,6 +37,8 @@ pub struct Simulation {
     pub pulse_threshold: Option<f64>,// targeted floor (Exp 9): rescue only under-represented group
     pub cap_threshold: Option<f64>,  // accountability cap (v6): reproduction throttle on over-rep group
     pub dir_penalty: i32,            // directional shock strength (v7: tunable to test the bottleneck)
+    pub density_onset: i32,          // pop at which the reproduction density-penalty begins (150 = base)
+    pub density_div: i32,            // density-penalty steepness divisor (5 = base; lower = harder cap)
 }
 
 impl Simulation {
@@ -47,7 +49,7 @@ impl Simulation {
                      total_ticks: 0, total_reproductions: 0, total_deaths: 0,
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
                      directional: false, pulse_threshold: None, cap_threshold: None,
-                     dir_penalty: DIRECTIONAL_PENALTY }
+                     dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5 }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -227,7 +229,7 @@ impl Simulation {
 
     fn process_reproductions(&mut self, queue: &[usize]) {
         let current_pop = self.agents.len() as i32;
-        let density_penalty = (current_pop - 150).max(0) / 5;
+        let density_penalty = (current_pop - self.density_onset).max(0) / self.density_div.max(1);
         let base_effective = REPRODUCTION_THRESHOLD + density_penalty;
         // v6 accountability cap: over-represented group (share > cap) pays a reproduction surcharge
         // — slows its growth without ever threatening survival.

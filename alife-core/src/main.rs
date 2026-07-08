@@ -339,12 +339,18 @@ fn main() {
         let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(20000);
         let amp: f64 = std::env::var("AMP").ok().and_then(|v| v.parse().ok()).unwrap_or(6.0);
         let period: u64 = std::env::var("PERIOD").ok().and_then(|v| v.parse().ok()).unwrap_or(2000);
+        // CAP lowers the density-penalty onset (default 150) so the equilibrium sits lower and winter
+        // culls show up in HEADCOUNT, not just mean energy. 150 = base carrying capacity.
+        let cap: i32 = std::env::var("CAP").ok().and_then(|v| v.parse().ok()).unwrap_or(150);
+        let div: i32 = std::env::var("DIV").ok().and_then(|v| v.parse().ok()).unwrap_or(5);
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.world.season_amp = amp;
         s.world.season_period = period;
+        s.density_onset = cap;
+        s.density_div = div;
         s.initialize_population(100, true);
-        println!("=== SEASONS baseline (seed {}, {} ticks | amp {} period {}) ===", seed, ticks, amp, period);
+        println!("=== SEASONS baseline (seed {}, {} ticks | amp {} period {} cap {} div {}) ===", seed, ticks, amp, period, cap, div);
         println!("    deep-winter drain ~{:.1}/tick vs summer 0 | passive gain ≤5, baseline 1", amp);
         let sample_start = (ticks as u64).saturating_sub(4 * period);
         let (mut bpop, mut bene, mut bn) = ([0f64; 8], [0f64; 8], [0u64; 8]);
@@ -384,6 +390,19 @@ fn main() {
                     println!("  {:>5} {:>8.0} {:>8.1} {:>9.3}{}",
                         b, bpop[b]/bn[b] as f64, bene[b]/bn[b] as f64, bbirth[b] as f64/bn[b] as f64, tag);
                 }
+                // Quantify the cycle: energy swing (buffering) + warm/cold birth ratio (phenology).
+                let live: Vec<f64> = (0..8).filter(|&b| bn[b] > 0).map(|b| bene[b]/bn[b] as f64).collect();
+                let (emax, emin) = (live.iter().cloned().fold(0.0f64, f64::max), live.iter().cloned().fold(999.0f64, f64::min));
+                let livep: Vec<f64> = (0..8).filter(|&b| bn[b] > 0).map(|b| bpop[b]/bn[b] as f64).collect();
+                let (pmax, pmin) = (livep.iter().cloned().fold(0.0f64, f64::max), livep.iter().cloned().fold(1e9f64, f64::min));
+                let warm: u64 = [6usize,7,0,1].iter().map(|&b| bbirth[b]).sum();
+                let cold: u64 = [2usize,3,4,5].iter().map(|&b| bbirth[b]).sum();
+                println!("\nCYCLE  energy swing: {:.0}→{:.0} (Δ{:.0}, {:.0}% of peak)  |  headcount swing: {:.0}→{:.0} ({:.0}%)",
+                    emax, emin, emax - emin, (emax - emin) / emax * 100.0, pmax, pmin, (pmax - pmin) / pmax * 100.0);
+                // NB: at carrying capacity, births are winter-REPLACEMENT (track deaths opening slots),
+                // not clean adaptive phenology — this ratio is confounded by the density cap.
+                println!("REPRO TIMING  warm-half births {} vs cold-half {}  (ratio {:.1}× — confounded by density, not phenology)",
+                    warm, cold, warm as f64 / cold.max(1) as f64);
                 let names = ["none","low-cut","burst","cycle","learn","crit-cut","prioritize","adaptive"];
                 let mut rc = [0usize; 8];
                 for a in &s.agents { rc[(a.genome[7] & 7) as usize] += 1; }
