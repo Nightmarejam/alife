@@ -506,3 +506,40 @@ unseeded and fires reproducibly (5/5) **under global/pervasive selection pressur
 episodic/boom-bust, extinction risk under stealth, high variance. **Conditional on global pressure;
 the original exp3's LOCAL design (V1) is why the unbacked "89.2%" was never reproducible.** Word #2,
 earned honestly, with its boundary conditions attached.
+
+## exp3 V3 — FIGHT-OR-FLIGHT: the open reaction repertoire
+Built the reactions OPEN (per Jonathan): the threat-response act-op (A1) is the repertoire —
+SHIELD(defend) / FLEE(flight) / IDLE(freeze) / TOXIN(fight). Made FLEE wave-aware (run right, ahead
+of an L→R front; agent speed 1 > wave 0.8 → can outrun). Modes: `open` (diverse A1 seeding +
+reaction-distribution readout), `allflee/allidle/alltoxin` (isolate one reaction). Extensible — a
+new reaction is just another op.
+
+**Single-reaction survival under GLOBAL waves (3 seeds):**
+| reaction | result |
+|---|---|
+| SHIELD (defend) | **robust** — 905/887/799 (3/3 survive healthy) |
+| FLEE (flight) | **viable but riskier** — 900/874 survive, 1 near-collapse (s42=1) |
+| IDLE (freeze) | marginal — survives some seeds, extinct others |
+| TOXIN (fight) | inert (TOXIN_ACTIVE=false; no effect on a wave) |
+
+→ **Both defense AND flight are viable strategies** (flight works by outrunning the wave); freeze is
+marginal; fight is useless against this threat. Foresight (predict) is a refinement of shield.
+
+**Diverse mix (`open`, 25% each) → MASS EXTINCTION (4/5 seeds; lone survivor = 3 shield agents).**
+NOT because flee/shield are bad (they survive alone) — because the ~50% weak-reaction founders
+(freeze/fight) can't survive the pervasive lethal waves, and their die-off drags the whole
+population below viability before selection can favor the good reactions.
+
+**The non-obvious finding (and a counterpoint to the diversity-reserve result):**
+- *Trait* diversity HELPS under **shifting** conditions (the civic-floor reserve — a rare variant
+  becomes the winner when the environment changes).
+- *Reaction* diversity HURTS under a **constant lethal** threat with a clear best answer — the
+  wrong-reaction majority dies fast and crashes the system before convergence.
+- So: **diversity is a reserve when the future is uncertain; it's a liability when the right answer
+  is known and being wrong is fatal.** When to converge vs. when to diversify is itself the design
+  question. (Directly relevant to the civic framework's floor/diversity balance.)
+
+**Tier:** *multiple viable defenses (shield ~ flee) under global waves* — SUPPORTED (single-reaction
+runs). *reaction-diversity is fatal under a constant lethal threat* — SUPPORTED (open-mix 4/5
+extinct). v3-next: mix ONLY viable reactions (shield+flee) to test flight-vs-foresight head-to-head
+without the freeze/fight drag; add a real MOVE-toward-safety so flight is less of a corner-trap.

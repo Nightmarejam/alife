@@ -145,12 +145,24 @@ pub fn act_op(code: u8, a: &mut Agent, w: &mut World) -> bool {
         }
         5 => if SIGNAL_ACTIVE { a.signaling = true; },
         6 => if TOXIN_ACTIVE { a.toxin_active = true; },
-        7 => { // flee: move opposite threat direction
-            if let Some((tx, ty)) = w.threat_direction(a.x, a.y) {
-                let fx = (a.x - (tx - a.x)).max(0).min(w.width - 1);
-                let fy = (a.y - (ty - a.y)).max(0).min(w.height - 1);
-                if !w.occupied(fx, fy) {
-                    if w.move_occupant(a.id, a.x, a.y, fx, fy) { a.x = fx; a.y = fy; }
+        7 => { // flee: run from an approaching wave (agent speed 1 > wave speed 0.8 → can outrun);
+               // falls back to cell-threat flee when no wave (base/exp0 behavior preserved)
+            let mut fled = false;
+            if let Some(wave) = w.current_wave {
+                if wave.active {
+                    let front = wave.front_position(w.tick);
+                    if front < a.x as f64 { // L→R wave approaching from the left → flee right
+                        let (nx, ny) = (a.x + 1, a.y);
+                        if w.in_bounds(nx, ny) && !w.occupied(nx, ny)
+                            && w.move_occupant(a.id, a.x, a.y, nx, ny) { a.x = nx; fled = true; }
+                    }
+                }
+            }
+            if !fled {
+                if let Some((tx, ty)) = w.threat_direction(a.x, a.y) {
+                    let fx = (a.x - (tx - a.x)).max(0).min(w.width - 1);
+                    let fy = (a.y - (ty - a.y)).max(0).min(w.height - 1);
+                    if !w.occupied(fx, fy) && w.move_occupant(a.id, a.x, a.y, fx, fy) { a.x = fx; a.y = fy; }
                 }
             }
         }

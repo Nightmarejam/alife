@@ -258,9 +258,21 @@ fn main() {
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.initialize_population(100, true);
+        // "open" reactions: A1 (threat-response slot) seeded diverse so the defense repertoire
+        // competes — SHIELD(defend) vs FLEE(flight) vs IDLE(freeze) vs TOXIN(fight/deter).
+        let open = args.iter().any(|a| a == "open");
+        let repertoire: [u8; 4] = [0x03, 0x07, 0x00, 0x06]; // shield, flee, idle, toxin
+        // uniform: seed ALL non-seeded agents with one reaction (isolate a single defense's fitness)
+        let uniform: Option<u8> = if args.iter().any(|a| a == "allflee") { Some(0x07) }
+            else if args.iter().any(|a| a == "allidle") { Some(0x00) }
+            else if args.iter().any(|a| a == "alltoxin") { Some(0x06) } else { None };
         let n_ant = if seeded { 10 } else { 0 };
         for (i, a) in s.agents.iter_mut().enumerate() {
             a.genome = if i < n_ant { anticipatory } else { reactive };
+            if i >= n_ant {
+                if let Some(u) = uniform { a.genome[6] = u; }
+                else if open { a.genome[6] = repertoire[i % 4]; }
+            }
         }
         println!("=== EXP3 anticipation — Arm {} (seed {}, {} ticks) ===",
                  if seeded { "B seeded" } else { "A reactive-only" }, seed, ticks);
@@ -301,6 +313,14 @@ fn main() {
         println!("final pop={} waves={} deaths={}", s.agents.len(), waves, s.total_deaths);
         println!("PROC_PREDICT (P1=4): now={} peak={} everAppeared={}", predictors_now, peak_predictors, ever_predictor);
         println!("CUMULATIVE negative-gap events (anticipation!): {} | first at tick {:?}", cum_neg, first_neg);
+        if open {
+            let names = ["idle/freeze", "move", "consume", "SHIELD", "reproduce", "signal", "toxin/fight", "FLEE"];
+            let mut rc = [0usize; 8];
+            for a in &s.agents { rc[(a.genome[6] & 7) as usize] += 1; }
+            print!("REACTION distribution among survivors (A1):");
+            for i in 0..8 { if rc[i] > 0 { print!("  {}={}", names[i], rc[i]); } }
+            println!();
+        }
         let verdict = if !seeded {
             if cum_neg > 0 { "✅ ANTICIPATION EMERGED — reactive-only produced negative gaps, UNSEEDED" }
             else if ever_predictor { "~ PROC_PREDICT evolved but never fired a negative gap" }
