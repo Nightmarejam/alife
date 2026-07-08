@@ -343,14 +343,19 @@ fn main() {
         // culls show up in HEADCOUNT, not just mean energy. 150 = base carrying capacity.
         let cap: i32 = std::env::var("CAP").ok().and_then(|v| v.parse().ok()).unwrap_or(150);
         let div: i32 = std::env::var("DIV").ok().and_then(|v| v.parse().ok()).unwrap_or(5);
+        // FLOOR arm: guaranteed minimum energy (UCF) — rescues an agent from winter death to `floor`.
+        // The civic test under seasons: does a lean-season safety net convert collapse into survival?
+        let floor: Option<i32> = std::env::var("FLOOR").ok().and_then(|v| v.parse().ok());
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.world.season_amp = amp;
         s.world.season_period = period;
         s.density_onset = cap;
         s.density_div = div;
+        s.floor_energy = floor;
         s.initialize_population(100, true);
-        println!("=== SEASONS baseline (seed {}, {} ticks | amp {} period {} cap {} div {}) ===", seed, ticks, amp, period, cap, div);
+        println!("=== SEASONS {} (seed {}, {} ticks | amp {} period {} cap {} div {}) ===",
+            floor.map_or("baseline".into(), |f| format!("FLOOR={}", f)), seed, ticks, amp, period, cap, div);
         println!("    deep-winter drain ~{:.1}/tick vs summer 0 | passive gain ≤5, baseline 1", amp);
         let sample_start = (ticks as u64).saturating_sub(4 * period);
         let (mut bpop, mut bene, mut bn) = ([0f64; 8], [0f64; 8], [0u64; 8]);
@@ -380,8 +385,8 @@ fn main() {
         match extinct_at {
             Some(t) => println!("\n💀 EXTINCT at tick {} — the population could not ride the cycle at amp {}.", t, amp),
             None => {
-                println!("\nfinal pop={} | winter-trough(min)={} summer-peak(max)={} | births={} deaths={}",
-                    s.agents.len(), min_pop, max_pop, s.total_reproductions, s.total_deaths);
+                println!("\nfinal pop={} | winter-trough(min)={} summer-peak(max)={} | births={} deaths={} rescues={}",
+                    s.agents.len(), min_pop, max_pop, s.total_reproductions, s.total_deaths, s.floor_rescues);
                 println!("\nPhase profile (final 4 years; phase 0=midsummer, 4=deep winter):");
                 println!("  {:>5} {:>8} {:>8} {:>9}", "phase", "pop", "meanE", "births/t");
                 for b in 0..8 {

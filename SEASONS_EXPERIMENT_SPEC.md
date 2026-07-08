@@ -74,7 +74,7 @@ just trivially track (no interesting strategy), that's a real result too.
 ## Build order (low → high cost)
 1. Oscillating thermal (triangle factor) + base-hash check (amp=0 unchanged). ✅ **DONE** (see below)
 2. Baseline seasonal run + readouts (regulate dist, energy-before-winter, repro-timing). ✅ **DONE**
-3. Floor vs no-floor seasonal arm.
+3. Floor vs no-floor seasonal arm. ✅ **DONE** (see below)
 4. Diversity-vs-convergence arm.
 5. (v2) season-clock sensing + anticipatory-seasons.
 
@@ -149,3 +149,43 @@ across 6 seeds: **survive {42, 123, 2026}, extinct {1, 7, 999}**. That is the fl
 killing the metabolic-thrift signal?* (Slow-season alt: `amp 2 / period 2000`, also knife-edge.)
 
 Run: `AMP=4 PERIOD=300 alife-core seasons <seed> 20000`.
+
+---
+
+## Step 3 results (2026-07) — the floor arm: a BOUNDARY on the civic-floor word (honest partial-negative)
+Wired the UCF floor into `seasons` (env `FLOOR=<energy>`, rescues a dying agent to that energy).
+Swept floor strength across **16 seeds** in two independent season shapes.
+
+**Sharp winter (amp 4 / period 300), survivors / 16 | mean surviving pop:**
+| floor | none | 20 | 40 | 60 | 80 | 120 |
+|---|---|---|---|---|---|---|
+| survivors | 11 | 8 | 12 | 10 | 12 | **15** |
+| mean pop | 840 | 751 | 739 | 565 | 559 | 725 |
+
+**Slow season (amp 2 / period 2000), survivors / 16 | mean surviving pop:**
+| floor | none | 30 | 60 | 120 |
+|---|---|---|---|---|
+| survivors | 11 | 12 | 9 | **15** |
+| mean pop | 501 | 780 | 475 | 921 |
+
+**Conclusion (regime-robust).** Under seasonal/cyclical pressure the floor is **not** the clean win it was
+under acute directional shocks:
+- **Moderate floors (20–80) give no detectable survival benefit** — 8–12/16 in both regimes, all within
+  binomial noise (±2) of the 11/16 baseline.
+- **Only the maximal floor (120 = `REPRODUCTION_THRESHOLD`) reliably helps** — 15/16 in *both* regimes
+  independently (combined 22/32 → 30/32, a real effect). But rescuing to full breeding energy essentially
+  **abolishes winter mortality** — that's deleting the lean season, not riding it out.
+- **Sharp-winter–specific mechanism:** moderate floors *lower* mean pop (840→559) — a food **overshoot**
+  (floor keeps a large weak crowd alive → depletes the larder → harder crash; seed 1 hit 74k births).
+  In slow seasons the floor inflates pop without catastrophe → the overshoot is sharp-winter-specific,
+  but the survival-null is general.
+
+**What it earns:** not a new confirmed word — a **boundary on `seasonal-floor` / the civic-floor word.**
+*The floor's benefit is context-dependent: it protects against adversity that REMOVES variation
+(directional shock → preserve the diversity reserve, confirmed), but is marginal-to-harmful against
+adversity that STARVES A CROWD (cyclical drain → feeds overshoot).* Directly grounds the topsoil/boom-bust
+concern: a naive lean-season safety net can worsen the bust. Candidate word `seasonal-floor` is **refuted
+as a clean positive**; the honest artifact is the boundary.
+
+Runs: `FLOOR=<e> AMP=<a> PERIOD=<p> alife-core seasons <seed> <ticks>`; sweeps in `/tmp/floor_sweep.sh`,
+`/tmp/floor_slow.sh`.

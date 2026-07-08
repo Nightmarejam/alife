@@ -36,6 +36,14 @@ Words the sandbox can already produce, with their current tier:
   mechanisms); *diversity-reserve* (a targeted floor lets a preserved minority become the winner
   when conditions shift — fires reproducibly, robustness bounded). Plus negatives:
   *unconditional-floor → stasis* and *accountability-as-survival-drain → collapse*.
+  **BOUNDARY (seasons arm, 2026-07, Rust 16-seed × 2 regimes):** the floor's benefit is
+  *context-dependent*. Under **cyclical/seasonal** drain (not acute directional shock), moderate
+  floors give **no** survival benefit (within noise of baseline in both sharp & slow seasons) and in
+  sharp winters *lower* mean population via food **overshoot** (feed a weak crowd → depleted larder →
+  harder crash). Only a *maximal* floor (= reproduction threshold, i.e. abolishing winter mortality)
+  reliably helps. → the floor protects against adversity that **removes variation**, but is
+  marginal-to-harmful against adversity that **starves a crowd.** `seasonal-floor` refuted as a clean
+  positive; the artifact is the boundary. (SEASONS_EXPERIMENT_SPEC.md, Step 3.)
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk
