@@ -246,7 +246,11 @@ fn main() {
         let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
         let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(50000);
         let seeded = args.iter().any(|a| a == "seeded");
-        const WAVE_INTERVAL: usize = 200;
+        // V1: interval 200 → single-wave overwrite → waves only sweep the left ~third.
+        // V2 "global": interval 1300 > max crossing time (480/0.4=1200) → every wave crosses the
+        // WHOLE world, so all agents face periodic waves (incl. stealth, survivable only by prediction).
+        let global = args.iter().any(|a| a == "global");
+        let wave_interval: usize = if global { 1300 } else { 200 };
         // S_SELF,S_THREAT,P_THRESH,P_THRESH,M_NONE,A_REPRO,A_SHIELD,R_NONE
         let reactive: [u8; 8] = [0x05, 0x01, 0x00, 0x00, 0x00, 0x04, 0x03, 0x00];
         // S_LIGHT,S_THREAT,P_THRESH,P_PREDICT,M_PATTERN,A_REPRO,A_SHIELD,R_NONE
@@ -259,7 +263,7 @@ fn main() {
             a.genome = if i < n_ant { anticipatory } else { reactive };
         }
         println!("=== EXP3 anticipation — Arm {} (seed {}, {} ticks) ===",
-                 if seeded { "B: 10 anticipatory + 90 reactive (diagnostic)" } else { "A: reactive-only (STRICT EMERGENCE)" }, seed, ticks);
+                 if seeded { "B seeded" } else { "A reactive-only" }, seed, ticks);
         // cumulative metrics (robust to agents dying and taking their gaps with them)
         let mut first_neg: Option<u64> = None;
         let mut cum_neg = 0u64;   // negative anticipation-gap events over the WHOLE run
@@ -268,7 +272,7 @@ fn main() {
         let mut peak_predictors = 0usize;
         for t in 0..ticks {
             let tt = t as u64;
-            if t > 0 && t % WAVE_INTERVAL == 0 {
+            if t > 0 && t % wave_interval == 0 {
                 let w = s.world.spawn_wave(tt, &mut s.rng);
                 s.world.current_wave = Some(w);
                 waves += 1;
