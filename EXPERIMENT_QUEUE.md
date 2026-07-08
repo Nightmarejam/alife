@@ -3,12 +3,49 @@
 *2026-07. What we can actually run in the sandbox (→ confirmed words for the FAITHH/Constella
 nomenclature), vs. what's banked for a proper lab. Focus here; bank the rest.*
 
+## 📍 RESUME POINT — stable state as of 2026-07-08
+*Read this first to continue cold. Everything below is committed; the tree is clean.*
+
+**Determinism anchor (never breaks):** base `run` `state_hash a2bb005395f79766`, `pop`
+`population_hash 2f59d3550af7cf2f`. Every experiment knob (seasons amp/period/cap/div, flip, floor,
+dir_locus) defaults to base-identical — verify these two hashes after any core change.
+
+**Words banked so far:**
+- **#1 `civic-floor`** — CONFIRMED (floor→resilience; dignity-vs-diversity split; targeted floor fires
+  the reserve). **+ NEW boundary (seasons Step 3):** the floor is *context-dependent* — marginal-to-
+  harmful under cyclical drain (feeds overshoot); helps only vs adversity that *removes variation*.
+- **#2 `anticipation`** — CONFIRMED conditionally (5/5 under GLOBAL waves; refuted under local waves;
+  episodic). See `CONSTELLA_TO_EXPERIMENTS.md`.
+- **`metabolic-thrift`** — NEW refinement (seasons Step 1): cyclical stress selects *cheap* regulation;
+  the active-"torpor" op is purged for costing more than it saves.
+
+**Experiments COMPLETE (closed, documented):**
+- **exp3 anticipation** (V1 local / V2 global / V3 open reactions) → `CONSTELLA_TO_EXPERIMENTS.md`.
+- **Seasons** (Steps 1–4) → `SEASONS_EXPERIMENT_SPEC.md`. Net finding: **convergence is the attractor
+  under *predictable* cyclical pressure** (both intensity- and direction-flip cycles converge). Open
+  hypothesis it raised: *predictability/niche-structure* is the governing variable for diversify-vs-
+  converge (untested).
+
+**The ONE clean unbuilt experiment (best resume target):** *interface → diversity.* Add wet/dry
+**zones** (a persistent spatial boundary that sweeps with the tide) to the Step-4 flip, and test
+whether a persistent interface *rescues the diversity the uniform flip destroyed* — closing Step 4's
+negative. Design + honest scope in `research-notes/bio-acoustics/interface-molecules-and-the-cycle-as-
+organizer.md` (the deeper amphiphile/self-assembly part is banked as beyond-tool, do NOT build it).
+
+**Everything speculative → `research-notes/`** (the holding pen), tier-tagged. Do not let it leak into
+confirmed reasoning.
+
+**To continue, pick one:** (a) interface→diversity kernel [closes Step 4]; (b) diversity-reserve v7;
+(c) entrainment (item 2 below); (d) cultural-transmission re-test.
+
+---
+
 ## ✅ RUN IN ALIFE (the sandbox — deterministic, bit-exact, reproducible)
 
-1. **exp3 — anticipation emergence (IN FLIGHT: Stages 0–4 done, Stage 5 remains).** The two-arm
-   run: reactive-only control (does `PROC_THRESHOLD`→`PROC_PREDICT` mutate + produce negative gaps
-   unseeded?) vs. seeded diagnostic. → earns **`anticipation`** as confirmed word #2, or refutes it.
-   **This is the immediate one — the instrument is built, just needs the harness + run.**
+1. ~~**exp3 — anticipation emergence.**~~ ✅ **DONE** — earned **`anticipation`** as confirmed word #2
+   (conditional on global pressure; V1 local refuted the "89.2%", V2 global confirmed 5/5, V3 mapped
+   the open reaction repertoire). Full log in `CONSTELLA_TO_EXPERIMENTS.md`. Seasons (Steps 1–4) also
+   complete — see the RESUME POINT above.
 
 2. **Evolution-as-entrainment (from the consolidated seeds — chronobiology-anchored).** Does a
    *periodic* environment select for traits that phase-lock with its rhythm (lower energy cost,
