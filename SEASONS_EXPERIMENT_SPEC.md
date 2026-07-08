@@ -72,8 +72,47 @@ deterministic receipt (same bar as the floor + anticipation). Honest negatives c
 just trivially track (no interesting strategy), that's a real result too.
 
 ## Build order (low → high cost)
-1. Oscillating thermal (triangle factor) + base-hash check (amp=0 unchanged). 
+1. Oscillating thermal (triangle factor) + base-hash check (amp=0 unchanged). ✅ **DONE** (see below)
 2. Baseline seasonal run + readouts (regulate dist, energy-before-winter, repro-timing).
 3. Floor vs no-floor seasonal arm.
 4. Diversity-vs-convergence arm.
 5. (v2) season-clock sensing + anticipatory-seasons.
+
+---
+
+## Step 1 results (2026-07, `seasons` mode) — mechanic built + first observations
+Mechanic: `world.seasonal_drain()` = `season_amp * (1 − |2·phase − 1|)` (triangle, 0 at midsummer →
+`amp` at deep winter) added into `apply_thermal_drain`; `amp=0` ⇒ untouched (base `run` hash still
+`a2bb005395f79766`, pop `2f59d3550af7cf2f`). Run mode `seasons <seed> <ticks>` (env `AMP`, `PERIOD`),
+no waves, 8-bucket phase profile over the final 4 years. Founding pop 100, period 2000.
+
+**Finding 1 — a survival phase-transition (~amp 1.2–1.5).** Winter amplitude vs survival across 6
+seeds {42,1,7,123,999,2026}:
+| amp | deep-winter net/tick | outcome across 6 seeds |
+|----|----|----|
+| 1   | ≈ +3 (still positive) | **6/6 survive** (final 478–890), stable |
+| 1.5 | ≈ +2.5 | knife-edge: 2 healthy, 2 collapse-to-1, 1 extinct, 1 ok |
+| 2   | ≈ +2 | mostly collapse: 2 healthy, 2 →1, 2 extinct |
+| 3–5 | ≤ +2 w/ depletion | collapse / extinction |
+The population rides a *gentle* cycle indefinitely but a harsh winter tips it past a threshold into
+runaway collapse (often to a single survivor or extinction). The threshold is sharp and seed-sensitive
+right at the edge — a genuine **resilience limit**, and it hands Step 3 its exact test regime.
+
+**Finding 2 — robust metabolic-thrift selection (NOT active torpor).** Where populations survive, the
+winning REGULATE op is *always* from the cheap set — `low-cut`(1, the real −1 cost-cutter), `crit-cut`(5),
+or `none`(0) — never a costly always-pay regulator. `REGULATE_COSTS=[0,0,1,1,1,0,1,2]`: ops 3/4/6 burn
+1/tick and op 7 (`adaptive`) burns 2/tick *every tick*. Selection purges them under the chronic winter
+squeeze. **Counterintuitive core result:** the intuitive "torpor" op (7 `adaptive`, cuts −1 when low)
+gets *eliminated* because its 2/tick base cost outweighs its discount — cheap **inaction/thrift** beats
+costly **active downregulation**. At amp 1 the genuine cost-cutter `low-cut` co-dominates with the
+zero-cost ops (seed 42: low-cut 465 / crit-cut 417; seed 999: low-cut 874). *Which* zero-cost op wins is
+drift; the *cheapness* is selected. Refines the candidate word: **torpor only pays if the regulation
+itself is nearly free.**
+
+**Finding 3 — cycle shows in energy, not (yet) in headcount.** At the survivable amp the population
+pins to carrying capacity (~880, flat across phases); the season reads as a mild mean-energy dip in deep
+winter (~250→235, ≈6%). A *population*-level boom-bust only appears at the collapse-prone amplitudes.
+→ Tension for Step 2/3: to see a headcount cycle without courting extinction, either lower the carrying
+cap (so winter culls show) or run at the knife-edge amp *with the floor* — which is precisely the
+Step-3 hypothesis: **does an energy floor convert chaotic-collapse (amp 1.5–2) into robust survival?**
+That is now the sharpest civic-floor test we can run, with the amplitude pre-located.

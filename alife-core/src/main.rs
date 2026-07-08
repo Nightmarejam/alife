@@ -330,6 +330,72 @@ fn main() {
         println!("VERDICT (Arm {}): {}", if seeded { "B" } else { "A" }, verdict);
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "seasons") {
+        // Seasons Step 1: cyclical thermal drain, NO waves. Per tick: seasonal thermal drain
+        // (+cleanup) → tick. amp=0 reproduces the exp0 economy; amp>0 adds a winter squeeze on a
+        // deterministic triangle over `period` ticks. Readout: an 8-bucket phase profile (pop, mean
+        // energy, births/tick) over the final years → reveals boom-bust, hoarding, and phenology.
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(20000);
+        let amp: f64 = std::env::var("AMP").ok().and_then(|v| v.parse().ok()).unwrap_or(6.0);
+        let period: u64 = std::env::var("PERIOD").ok().and_then(|v| v.parse().ok()).unwrap_or(2000);
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.world.season_amp = amp;
+        s.world.season_period = period;
+        s.initialize_population(100, true);
+        println!("=== SEASONS baseline (seed {}, {} ticks | amp {} period {}) ===", seed, ticks, amp, period);
+        println!("    deep-winter drain ~{:.1}/tick vs summer 0 | passive gain ≤5, baseline 1", amp);
+        let sample_start = (ticks as u64).saturating_sub(4 * period);
+        let (mut bpop, mut bene, mut bn) = ([0f64; 8], [0f64; 8], [0u64; 8]);
+        let mut bbirth = [0u64; 8];
+        let (mut min_pop, mut max_pop) = (100usize, 100usize);
+        let mut extinct_at: Option<u64> = None;
+        let mut last_repro = s.total_reproductions;
+        for t in 0..ticks {
+            let tt = t as u64;
+            s.apply_thermal_drain_all();
+            s.cleanup_dead();
+            s.tick();
+            let p = s.agents.len();
+            if p < min_pop { min_pop = p; }
+            if p > max_pop { max_pop = p; }
+            if tt >= sample_start && p > 0 {
+                let phase = (s.world.tick % period) as f64 / period as f64;
+                let b = ((phase * 8.0) as usize).min(7);
+                bpop[b] += p as f64;
+                bene[b] += s.agents.iter().map(|a| a.energy).sum::<f64>() / p as f64;
+                bbirth[b] += s.total_reproductions - last_repro;
+                bn[b] += 1;
+            }
+            last_repro = s.total_reproductions;
+            if p == 0 { extinct_at = Some(tt); break; }
+        }
+        match extinct_at {
+            Some(t) => println!("\n💀 EXTINCT at tick {} — the population could not ride the cycle at amp {}.", t, amp),
+            None => {
+                println!("\nfinal pop={} | winter-trough(min)={} summer-peak(max)={} | births={} deaths={}",
+                    s.agents.len(), min_pop, max_pop, s.total_reproductions, s.total_deaths);
+                println!("\nPhase profile (final 4 years; phase 0=midsummer, 4=deep winter):");
+                println!("  {:>5} {:>8} {:>8} {:>9}", "phase", "pop", "meanE", "births/t");
+                for b in 0..8 {
+                    if bn[b] == 0 { continue; }
+                    let tag = if b == 0 { "  ← summer" } else if b == 4 { "  ← WINTER" } else { "" };
+                    println!("  {:>5} {:>8.0} {:>8.1} {:>9.3}{}",
+                        b, bpop[b]/bn[b] as f64, bene[b]/bn[b] as f64, bbirth[b] as f64/bn[b] as f64, tag);
+                }
+                let names = ["none","low-cut","burst","cycle","learn","crit-cut","prioritize","adaptive"];
+                let mut rc = [0usize; 8];
+                for a in &s.agents { rc[(a.genome[7] & 7) as usize] += 1; }
+                print!("REGULATE distribution among survivors (R = genome[7]):");
+                for i in 0..8 { if rc[i] > 0 { print!("  {}={}", names[i], rc[i]); } }
+                println!();
+                println!("  torpor-capable (energy-conditional cost cuts low-cut/crit-cut/adaptive): {}/{}",
+                    rc[1] + rc[5] + rc[7], s.agents.len());
+            }
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);

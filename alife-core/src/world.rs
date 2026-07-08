@@ -57,6 +57,8 @@ pub struct World {
     pub energy_sources: Vec<(i32, i32)>,
     pub regime: u8, // directional shock: which trait-group the environment currently favors (0/1)
     pub current_wave: Option<WaveState>, // exp3: the active wave (None in base — sensing falls back)
+    pub season_amp: f64,    // seasons: extra global drain/tick at deep winter (0 = no seasons)
+    pub season_period: u64, // ticks per year
 }
 
 impl World {
@@ -83,7 +85,7 @@ impl World {
             energy_sources.push((x, y));
         }
         World { width: GRID_WIDTH, height: GRID_HEIGHT, tick: 0, grid, energy_sources, regime: 0,
-                current_wave: None }
+                current_wave: None, season_amp: 0.0, season_period: 2000 }
     }
 
     pub fn in_bounds(&self, x: i32, y: i32) -> bool {
@@ -177,10 +179,20 @@ impl World {
     /// the harness applies it via agent.apply_drain (energy is f64 for this reason).
     pub fn apply_thermal_drain(&self, a: &Agent) -> f64 {
         let cell_light = self.light_at(a.x, a.y) as f64;
-        let base_drain = (cell_light / 255.0) * THERMAL_DRAIN_RATE;
+        let base_drain = (cell_light / 255.0) * THERMAL_DRAIN_RATE + self.seasonal_drain();
         let has_disruption = (a.genome[0] == 0x02 || a.genome[1] == 0x02)
             && (a.genome[5] == 0x03 || a.genome[6] == 0x03);
         if has_disruption { base_drain * 0.3 } else { base_drain }
+    }
+
+    /// Seasons: a global extra drain that rides a deterministic triangle over `season_period` —
+    /// 0 at midsummer (phase 0/1), `season_amp` at deep winter (phase 0.5). amp=0 → no seasons.
+    /// The disruption phenotype's ×0.3 in apply_thermal_drain doubles as evolved winter-torpor.
+    pub fn seasonal_drain(&self) -> f64 {
+        if self.season_amp == 0.0 { return 0.0; }
+        let p = (self.tick % self.season_period) as f64 / self.season_period as f64; // [0,1)
+        let winter = 1.0 - (2.0 * p - 1.0).abs(); // triangle 0→1→0 (summer→winter→summer)
+        self.season_amp * winter
     }
 
     /// exp3: spawn a predator wave. RNG order: gauss (speed) then random() (stealth) — must
