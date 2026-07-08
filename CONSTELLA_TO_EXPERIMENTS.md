@@ -422,3 +422,44 @@ reserve replenishment (higher genome[7] mutation, experiment-gated), higher carr
 the thin reserve is still dozens not 2), or a richer multi-strategy environment. The verified core
 finding stands: the TARGETED FLOOR fires the reserve (v4, 3/5) — adaptation is real but fragile;
 robustness needs a thicker reserve at the moment of turnover, which neither v7 lever supplied.
+
+## exp3 — ANTICIPATION EMERGENCE (Stage 5 result, 2026-07)
+Full exp3 port complete (Stages 0–5; per-stage bit-exact vs Python, see VALIDATION.md). Two-arm
+emergence test: Arm A reactive-only (STRICT emergence — anticipation can only arise by mutating
+P1 PROC_THRESHOLD→PROC_PREDICT); Arm B seeded (10 anticipatory, diagnostic). Waves every 200 ticks.
+
+**Arm B (diagnostic — instrument CONFIRMED):** seeded anticipatory agents fired 1906 negative gaps
+(first t455). The instrument works — the anticipatory genome does produce shield-before-detection.
+
+**Arm A (reactive-only, 5 seeds, 40k ticks):**
+| seed | PROC_PREDICT evolved (peak) | negative-gap events (foresight fired) |
+|---|---|---|
+| 42 | peak 3 | 489 |
+| 7 | peak 2 | 0 |
+| 100 | never | 0 |
+| 123 | peak 2 | 0 |
+| 2024 | peak 1 | 68 |
+
+**Honest verdict — `anticipation` NOT confirmed at the strict-emergence bar:**
+- The anticipatory op (PROC_PREDICT) **EVOLVES unseeded in 4/5 seeds** — the genetic substrate for
+  foresight reliably arises from mutation. Real positive.
+- But **functional anticipation (negative gaps — shield fired BEFORE the wave was sensable) fires
+  in only 2/5 seeds**, always as a tiny minority (peak 1–3 of ~900). Bar was ≥3/5 → not met.
+- So: capacity-for-anticipation emerges reliably; functional anticipation is rare/seed-dependent;
+  it never sweeps.
+
+**Why (mechanistic):** faithful to exp3's design, waves sweep only the LEFT ~third (interval 200 <
+crossing-time 600 → single-wave overwrite) and the genomes have no MOVE op → agents don't migrate.
+Only a wave-zone minority feels selection for anticipation, and it's too weak/local to fire reliably
+or spread. **This REFUTES/reframes the asserted "89.2% predictive shielding"** (which had no
+receipt — the docs already flagged it): the real reproducible behavior is 4/5-evolve, 2/5-fire,
+never-dominant.
+
+**Tier:** *anticipation-capacity-emerges* — SUPPORTED (PROC_PREDICT evolves 4/5, unseeded).
+*anticipation (functional, strict-emergence)* — NOT CONFIRMED (2/5 fire; bar ≥3). Honest negative
+on the strong claim, real positive on the substrate. **v2 to test properly:** global waves (cross
+the full world) + a MOVE op so agents migrate → real non-local selection pressure for anticipation.
+
+**Validation note:** per-stage pieces are bit-exact vs Python; the Stage-5 harness is a faithful
+port of the Python exp3 loop and deterministic-in-Rust (reproducible receipt), but the full run has
+not itself been bit-exact-validated against a Python full run.

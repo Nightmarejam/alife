@@ -239,6 +239,73 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "exp3") {
+        // Stage 5: the anticipation emergence run. Per tick: spawn wave on interval →
+        // check_wave_detection (measure gaps) → apply_wave_damage (+cleanup) → thermal drain
+        // (+cleanup) → tick. Arm A (default) = reactive-only STRICT EMERGENCE; Arm B = "seeded".
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(50000);
+        let seeded = args.iter().any(|a| a == "seeded");
+        const WAVE_INTERVAL: usize = 200;
+        // S_SELF,S_THREAT,P_THRESH,P_THRESH,M_NONE,A_REPRO,A_SHIELD,R_NONE
+        let reactive: [u8; 8] = [0x05, 0x01, 0x00, 0x00, 0x00, 0x04, 0x03, 0x00];
+        // S_LIGHT,S_THREAT,P_THRESH,P_PREDICT,M_PATTERN,A_REPRO,A_SHIELD,R_NONE
+        let anticipatory: [u8; 8] = [0x02, 0x01, 0x00, 0x04, 0x07, 0x04, 0x03, 0x00];
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.initialize_population(100, true);
+        let n_ant = if seeded { 10 } else { 0 };
+        for (i, a) in s.agents.iter_mut().enumerate() {
+            a.genome = if i < n_ant { anticipatory } else { reactive };
+        }
+        println!("=== EXP3 anticipation — Arm {} (seed {}, {} ticks) ===",
+                 if seeded { "B: 10 anticipatory + 90 reactive (diagnostic)" } else { "A: reactive-only (STRICT EMERGENCE)" }, seed, ticks);
+        // cumulative metrics (robust to agents dying and taking their gaps with them)
+        let mut first_neg: Option<u64> = None;
+        let mut cum_neg = 0u64;   // negative anticipation-gap events over the WHOLE run
+        let mut waves = 0u64;
+        let mut ever_predictor = false; // did PROC_PREDICT (P1=4) ever evolve/exist?
+        let mut peak_predictors = 0usize;
+        for t in 0..ticks {
+            let tt = t as u64;
+            if t > 0 && t % WAVE_INTERVAL == 0 {
+                let w = s.world.spawn_wave(tt, &mut s.rng);
+                s.world.current_wave = Some(w);
+                waves += 1;
+            }
+            if let Some(w) = s.world.current_wave {
+                if w.active {
+                    let neg = s.check_wave_detection(&w);
+                    cum_neg += neg;
+                    if neg > 0 && first_neg.is_none() { first_neg = Some(tt); }
+                    s.apply_wave_damage(&w);
+                    s.cleanup_dead();
+                    if w.is_complete(tt) { s.world.current_wave = None; }
+                }
+            }
+            s.apply_thermal_drain_all();
+            s.cleanup_dead();
+            s.tick();
+            if t % 2000 == 0 {
+                let p = s.agents.iter().filter(|a| a.genome[3] == 0x04).count();
+                if p > 0 { ever_predictor = true; }
+                if p > peak_predictors { peak_predictors = p; }
+            }
+            if s.agents.is_empty() { println!("(population extinct at tick {})", tt); break; }
+        }
+        let predictors_now = s.agents.iter().filter(|a| a.genome[3] == 0x04).count();
+        println!("final pop={} waves={} deaths={}", s.agents.len(), waves, s.total_deaths);
+        println!("PROC_PREDICT (P1=4): now={} peak={} everAppeared={}", predictors_now, peak_predictors, ever_predictor);
+        println!("CUMULATIVE negative-gap events (anticipation!): {} | first at tick {:?}", cum_neg, first_neg);
+        let verdict = if !seeded {
+            if cum_neg > 0 { "✅ ANTICIPATION EMERGED — reactive-only produced negative gaps, UNSEEDED" }
+            else if ever_predictor { "~ PROC_PREDICT evolved but never fired a negative gap" }
+            else { "✗ no emergence (PROC_PREDICT never evolved)" }
+        } else if cum_neg > 0 { "✅ seeded anticipators fired negative gaps — instrument confirmed" }
+        else { "✗ even seeded fired none — wiring bug" };
+        println!("VERDICT (Arm {}): {}", if seeded { "B" } else { "A" }, verdict);
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);

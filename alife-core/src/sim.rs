@@ -266,7 +266,7 @@ impl Simulation {
         }
     }
 
-    fn cleanup_dead(&mut self) {
+    pub fn cleanup_dead(&mut self) {
         for a in self.agents.iter() {
             if !a.alive {
                 let c = &mut self.world.grid[a.y as usize][a.x as usize];
@@ -274,6 +274,21 @@ impl Simulation {
             }
         }
         self.agents.retain(|a| a.alive);
+    }
+
+    /// exp3: apply fractional thermal drain to every agent (cell-light based); returns deaths.
+    /// Split-borrow (world immutable, agents mutable) — the exp3 harness calls this each tick.
+    pub fn apply_thermal_drain_all(&mut self) -> u64 {
+        let world = &self.world;
+        let mut deaths = 0u64;
+        for a in self.agents.iter_mut() {
+            if !a.alive { continue; }
+            let drain = world.apply_thermal_drain(a);
+            a.apply_drain(drain);
+            if !a.alive { deaths += 1; }
+        }
+        self.total_deaths += deaths;
+        deaths
     }
 
     pub fn state_hash(&self) -> u64 {
