@@ -593,6 +593,69 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "b3") {
+        // B3 v0 — entrainment (pure NATURE). Endogenous clock: an agent PREPARES (shields, cost PREP)
+        // when its free-running clock hits a multiple of its genome-encoded period pg = 40+(genome[3]&7)*20.
+        // A periodic STRIKE every P ticks damages UNPREPARED agents. No sensing/calibration (pure nature).
+        // Q: does the population's internal period ENTRAIN to the environment period P — i.e. does
+        // genome[3] converge to the value with pg==P? (Phase is birth-set → expect period entrainment
+        // with phase fragility; adding sensing/calibration = the NURTURE arm, a later increment.)
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(50000);
+        let p: u32 = std::env::var("P").ok().and_then(|v| v.parse().ok()).unwrap_or(100);
+        let strike_dmg: f64 = std::env::var("DMG").ok().and_then(|v| v.parse().ok()).unwrap_or(60.0);
+        let prep_cost: i32 = std::env::var("PREP").ok().and_then(|v| v.parse().ok()).unwrap_or(2);
+        // CALIB=1 (NURTURE arm): agents reset their clock to 0 when they sense the strike — the external
+        // rhythm re-aligns the internal phase each cycle. CALIB=0 = pure NATURE (birth-set phase, drifts).
+        let calib: bool = std::env::var("CALIB").ok().map_or(false, |v| v == "1" || v == "true");
+        const PREP_WINDOW: u32 = 2; // shield the W ticks up to (and on) the internally-expected strike
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.initialize_population(150, true);
+        let pg_of = |g: &[u8; 8]| -> u32 { 40 + (g[3] as u32 & 7) * 20 }; // 40..180
+        let match_val = (p.saturating_sub(40) / 20).min(7); // genome[3] giving pg==P
+        println!("=== B3 entrainment — {} (seed {}, {} ticks | P {} → match genome[3]={} (pg={}) | dmg {}) ===",
+            if calib { "NURTURE (calibrated)" } else { "NATURE (endogenous)" },
+            seed, ticks, p, match_val, 40 + match_val * 20, strike_dmg);
+        let mut extinct_at: Option<u64> = None;
+        for t in 0..ticks {
+            let tt = t as u64;
+            // 1. prepare (shield the window up to the internally-expected strike) + advance clock
+            for a in s.agents.iter_mut() {
+                if !a.alive { continue; }
+                let pg = pg_of(&a.genome);
+                let ph = a.clock % pg;
+                let prep = ph == 0 || ph >= pg - PREP_WINDOW;
+                a.shield_active = prep;
+                if prep { a.apply_energy_cost(prep_cost); }
+                a.clock = a.clock.wrapping_add(1);
+            }
+            s.cleanup_dead();
+            // 2. periodic strike — the unprepared take damage; NURTURE arm recalibrates phase on it
+            if tt > 0 && tt % p as u64 == 0 {
+                for a in s.agents.iter_mut() {
+                    if !a.alive { continue; }
+                    if !a.shield_active { a.apply_drain(strike_dmg); }
+                    if calib && a.alive { a.clock = 0; } // sense the rhythm → reset internal phase
+                }
+                s.cleanup_dead();
+            }
+            s.tick();
+            if s.agents.is_empty() { extinct_at = Some(tt); break; }
+        }
+        let mut c = [0usize; 8];
+        for a in &s.agents { c[(a.genome[3] & 7) as usize] += 1; }
+        print!("final period-gene (genome[3]) distribution:");
+        for i in 0..8 { if c[i] > 0 { print!("  {}(pg={})={}", i, 40 + i * 20, c[i]); } }
+        println!();
+        match extinct_at {
+            Some(t) => println!("💀 EXTINCT at tick {}", t),
+            None => println!("survived pop={} | ENTRAINED (genome[3]={}, pg={}): {}/{} = {:.0}%",
+                s.agents.len(), match_val, 40 + match_val * 20, c[match_val as usize], s.agents.len(),
+                c[match_val as usize] as f64 / s.agents.len().max(1) as f64 * 100.0),
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);

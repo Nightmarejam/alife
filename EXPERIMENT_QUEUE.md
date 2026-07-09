@@ -103,11 +103,18 @@ diversity-maintenance floor; `targeted` uniquely holds the stable-adaptive regim
 Reproduces Python Exp 9 in bit-exact Rust → **word `targeted-floor` confirmed**; feeds UCF. First
 word-schema entry. See CONSTELLA_TO_EXPERIMENTS.md. **→ next is B4 (reuses this floor code).**
 
-**B3 — `entrainment` / rhythm-lock.** Does a *periodic* environment select traits that phase-lock to its
-rhythm (lower cost / higher fitness than non-locked)? Generalizes `anticipation` beyond waves (light/dark,
-tidal, seasonal). · word: `entrainment` · feeds: **Civic Tome** (anticipation family) · receipt:
-phase-locked genomes out-compete non-locked under periodic pressure, reproducibly. (Chronobiology-anchored;
-was queue item 2.)
+**B3 — `entrainment` / rhythm-lock.** 🔧 **IN PROGRESS (mechanic built, needs redesign — no clean result
+yet).** Built the `b3` mode: endogenous clock (period = `genome[3]`), periodic strike, `CALIB` flag for
+the nature(endogenous) vs nurture(calibrated) arms. **Honest diagnosis — a real design tension, not a
+tuning miss:** a strike weak enough to survive is *tankable* (energy recovers ~5·P between strikes → prep
+never selects); a strike lethal enough to select *kills newborns* (born at random phase → die at first
+strike before they can entrain) → collapse. No damage level cleanly selects entrainment with a
+damage-avoidance design. It *did* show the framing's core: **pure NATURE (endogenous clock) can't hold
+entrainment** — phase drifts across generations (nurture/calibration is needed to re-align). **Redesign
+for next session:** (a) make the periodic event a **RESOURCE pulse to harvest** — prepared agents gain,
+missing it lowers fitness *gradually* (no lethality, no newborn massacre → clean gradient selection);
+and/or (b) **inherit phase** (`child.clock = parent.clock`) so entrained lineages stay aligned. · word:
+`entrainment` (candidate, unearned) · feeds: **Civic Tome**.
 
 **B4 — `founding-diversity`.** ✅ **DONE (CONFIRMED, Rust 10-seed, reproduces Exp 8b).** diverse+targeted
 survives 8/10 (adapt low) vs mono+targeted 5/10 (adapt high — predator specializes despite the floor).

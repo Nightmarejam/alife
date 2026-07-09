@@ -41,6 +41,7 @@ pub struct Agent {
     pub wave_detected: Option<u64>,          // start_tick of the wave already detected (key)
     pub wave_detection_tick: Option<u64>,    // tick this agent first sensed the current wave
     pub anticipation_gaps: Vec<i64>,         // shield_tick - detection_tick; <0 = anticipatory
+    pub clock: u32,                          // B3 (entrainment): endogenous phase counter (0 in base/exp3)
 }
 
 impl Agent {
@@ -51,7 +52,7 @@ impl Agent {
             shield_active: false, signaling: false, toxin_active: false,
             op_usage: Vec::new(), reproduction_cooldown: 0, wave_arrival_times: Vec::new(),
             last_shield_activation: None, wave_detected: None, wave_detection_tick: None,
-            anticipation_gaps: Vec::new(),
+            anticipation_gaps: Vec::new(), clock: 0,
         }
     }
     // genome slot accessors
