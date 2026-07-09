@@ -74,6 +74,40 @@ confirmation, on a design that removes the crux run's caveats.*
 
 ---
 
+## 🎯 NEXT BATCH (toward the 20-confirmed-words goal) — set up 2026-07-08
+*A coherent set aimed at earning confirmed words that map to Constella mechanics (so each success
+flows straight into the evidence bridge). Run in this order — cost rises, and B2/B4 share the
+threshold-floor build. Each lists: hypothesis · candidate word · Constella mechanic it feeds · receipt.*
+
+**B1 — `metronome-vs-reprieve` confirmation.** (Design in ★NEXT above.) Single pulsed stressor,
+periodic vs random vs intermediate-variance, intensity sweep. · word: `metronome-vs-reprieve` ·
+feeds: Astris decay / stress-scheduling (regularity of adversity sets lethality) · receipt:
+`survival(random) − survival(periodic)` crosses zero as intensity rises, ≥12 seeds. **Cheapest; teed up.**
+
+**B2 — Targeted-floor direct test (the v4 the bridge itself flagged).** Add an **adaptive adversary** +
+a **threshold-activated (Exp 9-style) floor** to the Rust sim; test the *targeted* floor directly against
+the two extremes (unconditional / none). · word: `targeted-floor` → stable-adaptive regime ·
+feeds: **UCF (the core mechanism)** — turns the March Python Exp 9 result into a bit-exact Rust receipt ·
+receipt: targeted arm survives + retains diversity + adversary de-adapts where both extremes fail,
+multi-seed. **Highest constitutional value.** (New mechanic: adaptive adversary.)
+
+**B3 — `entrainment` / rhythm-lock.** Does a *periodic* environment select traits that phase-lock to its
+rhythm (lower cost / higher fitness than non-locked)? Generalizes `anticipation` beyond waves (light/dark,
+tidal, seasonal). · word: `entrainment` · feeds: **Civic Tome** (anticipation family) · receipt:
+phase-locked genomes out-compete non-locked under periodic pressure, reproducibly. (Chronobiology-anchored;
+was queue item 2.)
+
+**B4 — `diversity-reserve` v7 / founding-diversity.** Does *founding* diversity (stop seeding a
+monoculture) + a targeted floor reach the stable-adaptive "three-mechanism" regime? · word:
+`founding-diversity` (load-bearing) · feeds: **"Diversity Before Crisis"** principle + UCF · receipt:
+founding-diverse + targeted-floor stays adaptive where monoculture-founded doesn't. **Reuses B2's
+threshold-floor.**
+
+*Banked out of this batch (return later): interface→diversity (needs neutral-tag redesign),
+cultural-transmission re-test, Penumbra dissolution mechanic.*
+
+---
+
 ## ✅ RUN IN ALIFE (the sandbox — deterministic, bit-exact, reproducible)
 
 1. ~~**exp3 — anticipation emergence.**~~ ✅ **DONE** — earned **`anticipation`** as confirmed word #2
