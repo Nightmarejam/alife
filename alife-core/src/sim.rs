@@ -280,6 +280,19 @@ impl Simulation {
         self.agents.retain(|a| a.alive);
     }
 
+    /// B1 (metronome-vs-reprieve): apply a flat global drain to every live agent (a "drought/frost
+    /// pulse" — no cell/group dependence). Returns deaths. Mirrors apply_thermal_drain_all.
+    pub fn apply_flat_drain(&mut self, drain: f64) -> u64 {
+        let mut deaths = 0u64;
+        for a in self.agents.iter_mut() {
+            if !a.alive { continue; }
+            a.apply_drain(drain);
+            if !a.alive { deaths += 1; }
+        }
+        self.total_deaths += deaths;
+        deaths
+    }
+
     /// exp3: apply fractional thermal drain to every agent (cell-light based); returns deaths.
     /// Split-borrow (world immutable, agents mutable) — the exp3 harness calls this each tick.
     pub fn apply_thermal_drain_all(&mut self) -> u64 {

@@ -462,6 +462,58 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "pulse") {
+        // B1 — metronome-vs-reprieve. A single global ON/OFF stressor (drought/frost pulse): drain L
+        // per tick while ON, 0 while OFF. No groups, no waves. Same duty + mean bout lengths across
+        // TIMING regimes; only the VARIANCE of bout timing changes: periodic = fixed bouts (metronome)
+        // | random = geometric (high variance → reprieve windows) | inter = uniform ±50% (moderate).
+        // Claim: at harsh L, higher-variance timing → higher survival; reverses at mild L. Sweep L×timing.
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(20000);
+        let l: f64 = std::env::var("L").ok().and_then(|v| v.parse().ok()).unwrap_or(3.0);
+        let on_len: u64 = std::env::var("ON").ok().and_then(|v| v.parse().ok()).unwrap_or(100);
+        let off_len: u64 = std::env::var("OFF").ok().and_then(|v| v.parse().ok()).unwrap_or(100);
+        let timing = std::env::var("TIMING").unwrap_or_else(|_| "periodic".into());
+        let cap: i32 = std::env::var("CAP").ok().and_then(|v| v.parse().ok()).unwrap_or(150);
+        let div: i32 = std::env::var("DIV").ok().and_then(|v| v.parse().ok()).unwrap_or(5);
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.density_onset = cap;
+        s.density_div = div;
+        s.initialize_population(100, true);
+        let mut prng = PyRandom::seed(seed ^ 0x9111_5e);
+        // next bout length for the current phase, by timing regime (all share the same mean)
+        let next_bout = |on: bool, prng: &mut PyRandom| -> u64 {
+            let mean = if on { on_len } else { off_len }.max(1);
+            match timing.as_str() {
+                "random" => { let p = 1.0 / mean as f64; let mut n = 1u64; while prng.random() >= p { n += 1; } n }
+                "inter"  => (mean / 2).max(1) + prng.randbelow(mean as u32) as u64,
+                _        => mean, // periodic: fixed
+            }
+        };
+        println!("=== PULSE metronome-vs-reprieve (seed {}, {} ticks | L {} on {} off {} timing {} cap {} div {}) ===",
+            seed, ticks, l, on_len, off_len, timing, cap, div);
+        let mut pulse_on = false;
+        let mut ticks_left = next_bout(false, &mut prng); // start OFF
+        let mut on_ticks = 0u64;
+        let (mut min_pop, mut extinct_at) = (100usize, None::<u64>);
+        for t in 0..ticks {
+            let tt = t as u64;
+            if ticks_left == 0 { pulse_on = !pulse_on; ticks_left = next_bout(pulse_on, &mut prng); }
+            ticks_left -= 1;
+            if pulse_on { s.apply_flat_drain(l); s.cleanup_dead(); on_ticks += 1; }
+            s.tick();
+            let p = s.agents.len();
+            if p < min_pop { min_pop = p; }
+            if p == 0 { extinct_at = Some(tt); break; }
+        }
+        let duty = on_ticks as f64 / ticks as f64;
+        match extinct_at {
+            Some(t) => println!("💀 EXTINCT at tick {} | realized duty {:.2}", t, duty),
+            None => println!("survived | final pop={} min={} | realized duty {:.2}", s.agents.len(), min_pop, duty),
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);
