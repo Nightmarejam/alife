@@ -99,3 +99,37 @@ monotonically tune survival. No clean **word #3**.
 **Re-tier:** law *spine* (shifting → floor pays) = **supported** (now shown for cyclical flips too);
 *specific crux* (monotonic predictability tuning / floor-volatility coupling) = **refuted for survival**,
 replaced by the non-monotonic `metronome-vs-reprieve` refinement.
+
+## B1 (2026-07-09) — `metronome-vs-reprieve` REFUTED as general; the effect is STRUCTURE-dependent
+Confirmation experiment (`pulse` mode): a **single global ON/OFF stressor** (drain `L` when on, no
+groups, no waves), matched duty (0.5) + mean bout length (100), varying **only the timing variance** —
+periodic (fixed) / inter (uniform ±50%) / random (geometric). 14 seeds, survivors:
+
+| L | periodic | inter | random |
+|---|---|---|---|
+| 3.5 | 11 | 6 | 5 |
+| 4.0 | 10 | 6 | 1 |
+| 4.5 | 1 | 1 | 1 |
+| 5–6 | ~1 | 0 | ~0 |
+
+**The opposite of the crux, and monotonic.** For a *global* stressor, survival is `periodic > inter >
+random` across the entire survivable band — **more timing-variance is monotonically *worse*, with no
+harsh-side crossover.** Mechanism: a global stressor hits everyone at once, so an unusually long
+(geometric-tail) bout wipes the population **synchronously** — and unlike the directional flip, there is
+**no differentially-exposed reservoir** left to exploit a later reprieve.
+
+**Verdict — `metronome-vs-reprieve` REFUTED as a general claim:** its sign is not universal, it *reverses*
+with population structure. What the two experiments jointly establish:
+- **Uniform/global stress → regularity is SAFER; unpredictability monotonically hurts** (pulse, 14 seeds,
+  clean, no caveats). *This* is the reliable finding.
+- Differential/rotating stress → unpredictability *can* help at harsh intensity (flip crux — but carries
+  the group-asymmetry caveat).
+
+**The real principle (asserted, rests on both regimes): the value of unpredictability is
+STRUCTURE-DEPENDENT.** Variance helps only when a *differentially-exposed reservoir* survives each bout
+to exploit the reprieve; without structure (uniform stress) unpredictability just adds lethal long-tail
+bouts. **Population structure is the precondition for variance to ever help.**
+
+**Re-tier:** `metronome-vs-reprieve` → **refuted (general); bounded to differential stress.** New clean
+sub-finding: *regularity buffers uniform stress* (candidate — 14-seed monotonic, well-supported). New
+asserted principle: *unpredictability's value is structure-dependent* (rests on pulse + flip together).

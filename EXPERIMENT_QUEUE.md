@@ -18,9 +18,12 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   episodic). See `CONSTELLA_TO_EXPERIMENTS.md`.
 - **`metabolic-thrift`** — NEW refinement (seasons Step 1): cyclical stress selects *cheap* regulation;
   the active-"torpor" op is purged for costing more than it saves.
-- **`metronome-vs-reprieve`** — NEW candidate (crux test, `SYNTHESIS.md`): a *predictable relentless*
-  stressor can be **deadlier** than a *random* one of equal mean intensity — unpredictability's sign
-  flips with intensity (mild→random worse; harsh→random better). Needs its own confirmation run.
+- **`metronome-vs-reprieve`** — **REFUTED as general** (B1 pulse test, `SYNTHESIS.md`): under a *global*
+  stressor, timing-variance monotonically HURTS (periodic 11 > inter 6 > random 5 /14) — the effect's
+  sign *reverses* with population structure. Bounded to *differential* stress only.
+- **`unpredictability is structure-dependent`** — NEW asserted principle (B1 + flip crux): variance helps
+  only when a differentially-exposed *reservoir* survives each bout; uniform stress → variance only hurts.
+  Sub-finding *regularity-buffers-uniform-stress* is clean (14-seed monotonic).
 - **The predictability law** (`SYNTHESIS.md`, tier *asserted*): spine **supported** (shifting pressure →
   floor pays, now shown for cyclical flips too — floor took survival to 14/14 in every arm); the specific
   *monotonic* crux **refuted** for survival (→ metronome-vs-reprieve). Diversity half still **untested**
@@ -79,10 +82,11 @@ confirmation, on a design that removes the crux run's caveats.*
 flows straight into the evidence bridge). Run in this order — cost rises, and B2/B4 share the
 threshold-floor build. Each lists: hypothesis · candidate word · Constella mechanic it feeds · receipt.*
 
-**B1 — `metronome-vs-reprieve` confirmation.** (Design in ★NEXT above.) Single pulsed stressor,
-periodic vs random vs intermediate-variance, intensity sweep. · word: `metronome-vs-reprieve` ·
-feeds: Astris decay / stress-scheduling (regularity of adversity sets lethality) · receipt:
-`survival(random) − survival(periodic)` crosses zero as intensity rises, ≥12 seeds. **Cheapest; teed up.**
+**B1 — `metronome-vs-reprieve` confirmation.** ✅ **DONE (refuted-but-bounded).** Global pulse, 14 seeds:
+timing-variance monotonically *hurt* survival (periodic 11 > inter 6 > random 5) — no harsh-side
+crossover. The effect is **structure-dependent** (needs a differentially-exposed reservoir); refuted for
+uniform stress. Yielded the asserted principle *unpredictability's value is structure-dependent* +
+clean sub-finding *regularity-buffers-uniform-stress*. See `SYNTHESIS.md` B1. **→ next is B2.**
 
 **B2 — Targeted-floor direct test (the v4 the bridge itself flagged).** Add an **adaptive adversary** +
 a **threshold-activated (Exp 9-style) floor** to the Rust sim; test the *targeted* floor directly against
