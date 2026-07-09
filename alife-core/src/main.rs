@@ -536,11 +536,17 @@ fn main() {
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.initialize_population(150, true);
-        let repertoire = [0x03u8, 0x07, 0x06, 0x00]; // shield, flee, toxin, idle — founding diversity
-        for (i, a) in s.agents.iter_mut().enumerate() { a.genome[6] = repertoire[i % 4]; }
+        // B4: FOUND=diverse (spread across 4 defenses) vs mono (all shield). Tests whether the
+        // targeted floor needs PRE-EXISTING diversity (Exp 8b "diversity before crisis") or can
+        // bootstrap it from mutation after the adversary has already started specializing.
+        let found = std::env::var("FOUND").unwrap_or_else(|_| "diverse".into());
+        let repertoire = [0x03u8, 0x07, 0x06, 0x00]; // shield, flee, toxin, idle
+        for (i, a) in s.agents.iter_mut().enumerate() {
+            a.genome[6] = if found == "mono" { 0x03 } else { repertoire[i % 4] };
+        }
         let defense = |g: &[u8; 8]| -> usize { (g[6] & 7) as usize };
-        println!("=== B2 targeted-floor vs adaptive adversary — arm {} (seed {}, {} ticks | pred {} thresh {}) ===",
-            arm, seed, ticks, pred, thresh);
+        println!("=== B2/B4 targeted-floor vs adaptive adversary — arm {} found {} (seed {}, {} ticks | pred {} thresh {}) ===",
+            arm, found, seed, ticks, pred, thresh);
         let (mut adapt, mut target) = (0.0f64, 3usize); // start specialized on shield
         let mut min_pop = 150usize;
         let mut extinct_at: Option<u64> = None;
