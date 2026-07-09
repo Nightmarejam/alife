@@ -40,6 +40,7 @@ pub struct Simulation {
     pub density_onset: i32,          // pop at which the reproduction density-penalty begins (150 = base)
     pub density_div: i32,            // density-penalty steepness divisor (5 = base; lower = harder cap)
     pub dir_locus: usize,            // genome slot the directional split reads (7=regulate, base; 0=neutral sense)
+    pub inherit_clock: bool,         // B3: child inherits parent's endogenous clock phase (default false)
 }
 
 impl Simulation {
@@ -50,7 +51,8 @@ impl Simulation {
                      total_ticks: 0, total_reproductions: 0, total_deaths: 0,
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
                      directional: false, pulse_threshold: None, cap_threshold: None,
-                     dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5, dir_locus: 7 }
+                     dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5, dir_locus: 7,
+                     inherit_clock: false }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -260,6 +262,7 @@ impl Simulation {
             let mut child = Agent::new(cid, cx, cy, child_genome);
             child.energy = REPRODUCTION_COST as f64;
             child.generation = cgen;
+            if self.inherit_clock { child.clock = self.agents[pidx].clock; } // B3: heritable phase
             // add_agent: place if empty (find_empty already ensured)
             if self.world.grid[cy as usize][cx as usize].occupant.is_none() {
                 self.world.grid[cy as usize][cx as usize].occupant = Some(cid);

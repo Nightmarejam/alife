@@ -603,23 +603,34 @@ fn main() {
         let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
         let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(50000);
         let p: u32 = std::env::var("P").ok().and_then(|v| v.parse().ok()).unwrap_or(100);
-        let strike_dmg: f64 = std::env::var("DMG").ok().and_then(|v| v.parse().ok()).unwrap_or(60.0);
+        let harvest: f64 = std::env::var("HARVEST").ok().and_then(|v| v.parse().ok()).unwrap_or(50.0);
         let prep_cost: i32 = std::env::var("PREP").ok().and_then(|v| v.parse().ok()).unwrap_or(2);
-        // CALIB=1 (NURTURE arm): agents reset their clock to 0 when they sense the strike — the external
-        // rhythm re-aligns the internal phase each cycle. CALIB=0 = pure NATURE (birth-set phase, drifts).
+        // BGDRAIN: a background drain per tick. Set near passive gain (~5) so net income ≈ 0 WITHOUT the
+        // pulse — making the harvested pulse the dominant energy source → strong selection for entrainment.
+        let bgdrain: f64 = std::env::var("BGDRAIN").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0);
+        // Redesign: the periodic event is a RESOURCE PULSE — PREPARED agents harvest it (gain energy),
+        // the unprepared miss it. No lethality → gradient selection, newborns not massacred. Phase gets
+        // aligned two ways: CALIB=1 = NURTURE (reset phase on sensing the pulse); INHERIT=1 = heritable
+        // phase (child.clock = parent.clock — entrained lineages stay aligned).
         let calib: bool = std::env::var("CALIB").ok().map_or(false, |v| v == "1" || v == "true");
-        const PREP_WINDOW: u32 = 2; // shield the W ticks up to (and on) the internally-expected strike
+        let inherit: bool = std::env::var("INHERIT").ok().map_or(false, |v| v == "1" || v == "true");
+        const PREP_WINDOW: u32 = 2; // shield the W ticks up to (and on) the internally-expected pulse
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
+        s.inherit_clock = inherit;
         s.initialize_population(150, true);
         let pg_of = |g: &[u8; 8]| -> u32 { 40 + (g[3] as u32 & 7) * 20 }; // 40..180
         let match_val = (p.saturating_sub(40) / 20).min(7); // genome[3] giving pg==P
-        println!("=== B3 entrainment — {} (seed {}, {} ticks | P {} → match genome[3]={} (pg={}) | dmg {}) ===",
-            if calib { "NURTURE (calibrated)" } else { "NATURE (endogenous)" },
-            seed, ticks, p, match_val, 40 + match_val * 20, strike_dmg);
+        let mode = match (calib, inherit) { (true, true) => "BOTH (calib+inherit)", (true, false) => "NURTURE (calib)",
+            (false, true) => "NATURE (inherit phase)", (false, false) => "NEITHER (endogenous, birth phase)" };
+        println!("=== B3 entrainment [{}] (seed {}, {} ticks | P {} → match genome[3]={} (pg={}) | harvest {}) ===",
+            mode, seed, ticks, p, match_val, 40 + match_val * 20, harvest);
         let mut extinct_at: Option<u64> = None;
+        let mut total_harvest = 0u64;
+        let mut pulses = 0u64;
         for t in 0..ticks {
             let tt = t as u64;
+            if tt > 0 && tt % p as u64 == 0 { pulses += 1; }
             // 1. prepare (shield the window up to the internally-expected strike) + advance clock
             for a in s.agents.iter_mut() {
                 if !a.alive { continue; }
@@ -628,17 +639,17 @@ fn main() {
                 let prep = ph == 0 || ph >= pg - PREP_WINDOW;
                 a.shield_active = prep;
                 if prep { a.apply_energy_cost(prep_cost); }
+                if bgdrain > 0.0 { a.apply_drain(bgdrain); }
                 a.clock = a.clock.wrapping_add(1);
             }
             s.cleanup_dead();
-            // 2. periodic strike — the unprepared take damage; NURTURE arm recalibrates phase on it
+            // 2. periodic RESOURCE pulse — the PREPARED harvest it; NURTURE arm recalibrates phase on it
             if tt > 0 && tt % p as u64 == 0 {
                 for a in s.agents.iter_mut() {
                     if !a.alive { continue; }
-                    if !a.shield_active { a.apply_drain(strike_dmg); }
-                    if calib && a.alive { a.clock = 0; } // sense the rhythm → reset internal phase
+                    if a.shield_active { a.add_energy(harvest as i32); total_harvest += 1; } // harvested
+                    if calib { a.clock = 0; } // sense the pulse → reset internal phase
                 }
-                s.cleanup_dead();
             }
             s.tick();
             if s.agents.is_empty() { extinct_at = Some(tt); break; }
@@ -650,9 +661,14 @@ fn main() {
         println!();
         match extinct_at {
             Some(t) => println!("💀 EXTINCT at tick {}", t),
-            None => println!("survived pop={} | ENTRAINED (genome[3]={}, pg={}): {}/{} = {:.0}%",
-                s.agents.len(), match_val, 40 + match_val * 20, c[match_val as usize], s.agents.len(),
-                c[match_val as usize] as f64 / s.agents.len().max(1) as f64 * 100.0),
+            None => {
+                let pop = s.agents.len();
+                let mean_e: f64 = s.agents.iter().map(|a| a.energy).sum::<f64>() / pop.max(1) as f64;
+                // harvest efficiency: harvests per agent per pulse (1.0 = every agent catches every pulse)
+                let hpp = total_harvest as f64 / (pulses.max(1) * pop.max(1) as u64) as f64;
+                println!("survived pop={} | period-entrained (genome[3]={}): {:.0}% | HARVEST/agent/pulse {:.2} | meanE {:.0}",
+                    pop, match_val, c[match_val as usize] as f64 / pop.max(1) as f64 * 100.0, hpp, mean_e);
+            }
         }
         return;
     }
