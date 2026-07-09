@@ -514,6 +514,79 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "b2") {
+        // B2 — targeted-floor direct test (ports Python Exp 9's adaptive predator to Rust).
+        // Adaptive adversary: specializes against the DOMINANT defense (genome[6]&7), `adapt` rising
+        // while the target stays dominant (capped ADAPT_MAX), falling + retargeting when it changes.
+        // Predation drains adapt-target-defense users by PRED*adapt/tick (their defense is bypassed);
+        // other defenses are safe → being in the crowded strategy is dangerous → escape treadmill;
+        // a monoculture gets wiped when adapt maxes, diversity spreads the risk.
+        // Three arms (env FLOOR): none | uncond (rescue all) | targeted (rescue only MINORITY defenses,
+        // share < THRESH — the Exp 9 diversity floor). Q: does targeted survive + hold adapt low where
+        // none goes extinct and uncond stasis/collapses?
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(50000);
+        let arm = std::env::var("FLOOR").unwrap_or_else(|_| "none".into());
+        let pred: f64 = std::env::var("PRED").ok().and_then(|v| v.parse().ok()).unwrap_or(3.0);
+        let rise: f64 = std::env::var("RISE").ok().and_then(|v| v.parse().ok()).unwrap_or(0.003);
+        let fall: f64 = std::env::var("FALL").ok().and_then(|v| v.parse().ok()).unwrap_or(0.02);
+        let thresh: f64 = std::env::var("THRESH").ok().and_then(|v| v.parse().ok()).unwrap_or(0.15);
+        let floor_e: f64 = std::env::var("FLOORE").ok().and_then(|v| v.parse().ok()).unwrap_or(30.0);
+        const ADAPT_MAX: f64 = 1.5;
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.initialize_population(150, true);
+        let repertoire = [0x03u8, 0x07, 0x06, 0x00]; // shield, flee, toxin, idle — founding diversity
+        for (i, a) in s.agents.iter_mut().enumerate() { a.genome[6] = repertoire[i % 4]; }
+        let defense = |g: &[u8; 8]| -> usize { (g[6] & 7) as usize };
+        println!("=== B2 targeted-floor vs adaptive adversary — arm {} (seed {}, {} ticks | pred {} thresh {}) ===",
+            arm, seed, ticks, pred, thresh);
+        let (mut adapt, mut target) = (0.0f64, 3usize); // start specialized on shield
+        let mut min_pop = 150usize;
+        let mut extinct_at: Option<u64> = None;
+        let mut rescues = 0u64;
+        for t in 0..ticks {
+            let tt = t as u64;
+            // 1. defense counts + dominant
+            let n = s.agents.len();
+            let mut cnt = [0usize; 8];
+            for a in &s.agents { cnt[defense(&a.genome)] += 1; }
+            let dom = (0..8).max_by_key(|&d| cnt[d]).unwrap();
+            // 2. adapt update
+            if dom == target { adapt = (adapt + rise).min(ADAPT_MAX); }
+            else { adapt -= fall; if adapt <= 0.0 { adapt = 0.0; target = dom; } }
+            // 3. MAINTENANCE FLOOR (arm) — keep the diversity reserve alive BEFORE the pressures hit.
+            //    none: off | uncond: top up every low agent | targeted: only minority defenses (< THRESH)
+            if arm != "none" {
+                for a in s.agents.iter_mut() {
+                    if !a.alive { continue; }
+                    let share = cnt[defense(&a.genome)] as f64 / n.max(1) as f64;
+                    let protect = arm == "uncond" || share < thresh;
+                    if protect && a.energy < floor_e { a.energy = floor_e; rescues += 1; }
+                }
+            }
+            // 4. adaptive predation — drains the adapt-target defense; other defenses are safe
+            let dmg = pred * adapt;
+            if dmg > 0.0 {
+                for a in s.agents.iter_mut() {
+                    if a.alive && defense(&a.genome) == target { a.apply_drain(dmg); }
+                }
+                s.cleanup_dead();
+            }
+            s.tick();
+            let p = s.agents.len();
+            if p < min_pop { min_pop = p; }
+            if p == 0 { extinct_at = Some(tt); break; }
+        }
+        let ddiv = { let mut c = [0usize; 8]; for a in &s.agents { c[defense(&a.genome)] += 1; }
+            (0..8).filter(|&d| c[d] > 0).count() };
+        match extinct_at {
+            Some(t) => println!("💀 EXTINCT at tick {} | final adapt {:.2} rescues {}", t, adapt, rescues),
+            None => println!("survived | final pop={} min={} | adapt {:.2} | defense-diversity {}/8 | rescues {}",
+                s.agents.len(), min_pop, adapt, ddiv, rescues),
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);
