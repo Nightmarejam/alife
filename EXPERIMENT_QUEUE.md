@@ -28,6 +28,11 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`founding-diversity` (load-bearing)** — CONFIRMED (B4, Rust 10-seed, reproduces Python Exp 8b):
+  diverse-founded + targeted floor survives 8/10 (adapt low); mono-founded + same floor only 5/10 (adapt
+  high — predator specializes despite the floor). Diversity must be present at founding; a floor
+  preserves a reserve but can't reliably create one late. Boundary: occasionally bootstraps (not strictly
+  required). Pairs with `targeted-floor` (floor = maintenance, founding diversity = the substrate).
 - **The predictability law** (`SYNTHESIS.md`, tier *asserted*): spine **supported** (shifting pressure →
   floor pays, now shown for cyclical flips too — floor took survival to 14/14 in every arm); the specific
   *monotonic* crux **refuted** for survival (→ metronome-vs-reprieve). Diversity half still **untested**
@@ -104,11 +109,11 @@ tidal, seasonal). · word: `entrainment` · feeds: **Civic Tome** (anticipation 
 phase-locked genomes out-compete non-locked under periodic pressure, reproducibly. (Chronobiology-anchored;
 was queue item 2.)
 
-**B4 — `diversity-reserve` v7 / founding-diversity.** Does *founding* diversity (stop seeding a
-monoculture) + a targeted floor reach the stable-adaptive "three-mechanism" regime? · word:
-`founding-diversity` (load-bearing) · feeds: **"Diversity Before Crisis"** principle + UCF · receipt:
-founding-diverse + targeted-floor stays adaptive where monoculture-founded doesn't. **Reuses B2's
-threshold-floor.**
+**B4 — `founding-diversity`.** ✅ **DONE (CONFIRMED, Rust 10-seed, reproduces Exp 8b).** diverse+targeted
+survives 8/10 (adapt low) vs mono+targeted 5/10 (adapt high — predator specializes despite the floor).
+Founding diversity is load-bearing; the floor maintains a reserve but can't reliably create one late
+(boundary: occasionally bootstraps). **Word `founding-diversity` confirmed**; feeds "Diversity Before
+Crisis". See CONSTELLA_TO_EXPERIMENTS.md. **→ next is B3 (entrainment, standalone build).**
 
 *Banked out of this batch (return later): interface→diversity (needs neutral-tag redesign),
 cultural-transmission re-test, Penumbra dissolution mechanic.*

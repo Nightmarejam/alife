@@ -64,6 +64,23 @@ Words the sandbox can already produce, with their current tier:
   The UCF tension, quantified: **survival** uncond(10) > targeted(8) > none(7); **adaptiveness**
   targeted ≫ none > uncond. Only the *targeted* floor reaches the stable-ADAPTIVE regime (alive AND
   adaptive). → feeds `ucf.md` (evidence-bridge update pending).
+  **B4 CONFIRMATION (founding diversity, 2026-07-09, Rust, 10 seeds) — reproduces Python Exp 8b.**
+  Word schema entry:
+  - **word:** `founding-diversity` (load-bearing)
+  - **claim:** strategic diversity must be present *at founding*; a floor can *preserve* a reserve but
+    cannot reliably *create* one after an adaptive adversary has begun specializing.
+  - **tier:** confirmed (Rust, 10-seed).
+  - **holds when:** adaptive adversary. **diverse-founded + targeted floor survives 8/10, adapt mostly
+    low** (≤0.43 in 6/8); **mono-founded + same floor survives only 5/10, adapt mostly high** (≥1.2 —
+    predator specialized despite the floor). Diversity present early → the floor holds the adaptive
+    regime; absent → it usually can't.
+  - **fails when (boundary):** the floor *can occasionally* bootstrap late diversity from mutation
+    (e.g. seed 2026) — so diversity is **load-bearing, not strictly required.** Late diversity usually
+    (not always) arrives too late.
+  - **receipt:** `alife-core b2 <seed> 20000 FOUND=diverse|mono FLOOR=targeted|none`.
+  Pairs with `targeted-floor`: the floor is the *maintenance* mechanism, founding diversity is the
+  *substrate* it maintains — you need both (the March "three-mechanism system"). → feeds
+  core_framework.md "Diversity Before Crisis".
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk
