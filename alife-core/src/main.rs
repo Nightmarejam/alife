@@ -352,7 +352,13 @@ fn main() {
         // wins its half → the reserve is load-bearing) where the intensity cycle CONVERGED? The
         // disfavored group bleeds DIRP energy/tick (reuses the directional-shock penalty machinery).
         let flip: bool = std::env::var("FLIP").ok().map_or(false, |v| v == "1" || v == "true");
+        // RANDFLIP: the crux manipulation. Same mean flip rate as periodic FLIP (mean interval = half),
+        // but UNPREDICTABLE timing (per-tick flip probability 1/half). Isolates predictability with the
+        // rate of change held equal. A dedicated RNG keeps flip timing from perturbing the sim stream.
+        let randflip: bool = std::env::var("RANDFLIP").ok().map_or(false, |v| v == "1" || v == "true");
+        let flip = flip || randflip;
         let dirp: i32 = std::env::var("DIRP").ok().and_then(|v| v.parse().ok()).unwrap_or(3);
+        let mut flip_rng = PyRandom::seed(seed ^ 0x5eed_5eed);
         let mut s = Simulation::new(seed);
         s.world.initialize_light_gradient();
         s.world.season_amp = amp;
@@ -369,7 +375,7 @@ fn main() {
         s.initialize_population(100, true);
         println!("=== SEASONS {}{} (seed {}, {} ticks | amp {} period {} cap {} div {}) ===",
             floor.map_or("baseline".into(), |f| format!("FLOOR={}", f)),
-            if flip { format!(" +FLIP(dirp {})", dirp) } else { String::new() },
+            if randflip { format!(" +RANDFLIP(dirp {})", dirp) } else if flip { format!(" +FLIP(dirp {})", dirp) } else { String::new() },
             seed, ticks, amp, period, cap, div);
         println!("    deep-winter drain ~{:.1}/tick vs summer 0 | passive gain ≤5, baseline 1", amp);
         let sample_start = (ticks as u64).saturating_sub(4 * period);
@@ -381,7 +387,11 @@ fn main() {
         let half = (period / 2).max(1);
         for t in 0..ticks {
             let tt = t as u64;
-            if flip && tt > 0 && tt % half == 0 { s.world.regime ^= 1; } // seasonal direction flip
+            if flip { // regime flip: periodic (predictable) or random-timing (unpredictable), matched mean
+                let do_flip = if randflip { flip_rng.random() < 1.0 / half as f64 }
+                              else { tt > 0 && tt % half == 0 };
+                if do_flip { s.world.regime ^= 1; }
+            }
             s.apply_thermal_drain_all();
             s.cleanup_dead();
             s.tick();
