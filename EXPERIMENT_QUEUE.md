@@ -18,6 +18,13 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   episodic). See `CONSTELLA_TO_EXPERIMENTS.md`.
 - **`metabolic-thrift`** — NEW refinement (seasons Step 1): cyclical stress selects *cheap* regulation;
   the active-"torpor" op is purged for costing more than it saves.
+- **`metronome-vs-reprieve`** — NEW candidate (crux test, `SYNTHESIS.md`): a *predictable relentless*
+  stressor can be **deadlier** than a *random* one of equal mean intensity — unpredictability's sign
+  flips with intensity (mild→random worse; harsh→random better). Needs its own confirmation run.
+- **The predictability law** (`SYNTHESIS.md`, tier *asserted*): spine **supported** (shifting pressure →
+  floor pays, now shown for cyclical flips too — floor took survival to 14/14 in every arm); the specific
+  *monotonic* crux **refuted** for survival (→ metronome-vs-reprieve). Diversity half still **untested**
+  (no symmetric genome locus available — genome is 3-bit).
 
 **Experiments COMPLETE (closed, documented):**
 - **exp3 anticipation** (V1 local / V2 global / V3 open reactions) → `CONSTELLA_TO_EXPERIMENTS.md`.
