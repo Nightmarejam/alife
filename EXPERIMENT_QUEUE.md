@@ -42,8 +42,35 @@ organizer.md` (the deeper amphiphile/self-assembly part is banked as beyond-tool
 **Everything speculative → `research-notes/`** (the holding pen), tier-tagged. Do not let it leak into
 confirmed reasoning.
 
-**To continue, pick one:** (a) interface→diversity kernel [closes Step 4]; (b) diversity-reserve v7;
-(c) entrainment (item 2 below); (d) cultural-transmission re-test.
+**To continue, pick one:** (0) ★ metronome-vs-reprieve confirmation [teed up below]; (a) interface→
+diversity kernel [closes Step 4]; (b) diversity-reserve v7; (c) entrainment (item 2 below);
+(d) cultural-transmission re-test.
+
+---
+
+## ★ NEXT (teed up): confirm `metronome-vs-reprieve`
+*From the crux run (`SYNTHESIS.md`): a predictable *relentless* stressor was deadlier than a random one
+of equal mean intensity, and the sign flipped with intensity. Candidate word — needs its own clean
+confirmation, on a design that removes the crux run's caveats.*
+
+- **Claim:** for a stressor harsh enough that a *continuous bout* is lethal but *intermittent* exposure
+  is survivable, **higher-variance (random) timing yields higher survival than periodic timing at equal
+  mean intensity** — and this **reverses at mild intensity**. I.e. predictability's survival effect is
+  **non-monotonic in stressor intensity** (mild → random worse; harsh → random better).
+- **Clean design (kills the caveats):** drop the directional groups entirely — test a **single global
+  pulsed stressor** (a "drought/frost" pulse: thermal drain = `L` when ON, 0 when OFF), fixed **duty
+  cycle**, no genome-group asymmetry. Two timing regimes at matched duty + mean bout length:
+  **PERIODIC** (regular on/off) vs **RANDOM** (geometric on/off), plus one **intermediate-variance**
+  arm to show monotonicity in variance. Sweep intensity `L` × timing, ≥12 seeds.
+- **Receipt (what confirms it):** `survival(random) − survival(periodic)` **crosses zero** as `L` rises
+  (negative at mild `L`, positive at harsh `L`), reproducibly across seeds. Bonus: survival rises
+  monotonically with interval-variance at harsh `L`.
+- **Null / refutation:** no sign-flip (random uniformly ≥ or ≤ periodic) → it's a plain variance effect,
+  not the intensity-dependent `metronome-vs-reprieve` mechanism → candidate refuted.
+- **Build cost:** small — add a pulsed-drain mode to `seasons` (drain `L` when on; periodic vs random
+  on/off via the existing `flip_rng`). No new core mechanics; base hash stays `a2bb005395f79766`.
+- **If confirmed:** first clean **word #3** since `anticipation` — and a non-obvious one (regularity of
+  adversity, not just its amount, sets lethality).
 
 ---
 
