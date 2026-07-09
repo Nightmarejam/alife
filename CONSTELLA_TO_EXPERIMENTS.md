@@ -44,6 +44,26 @@ Words the sandbox can already produce, with their current tier:
   reliably helps. → the floor protects against adversity that **removes variation**, but is
   marginal-to-harmful against adversity that **starves a crowd.** `seasonal-floor` refuted as a clean
   positive; the artifact is the boundary. (SEASONS_EXPERIMENT_SPEC.md, Step 3.)
+  **B2 CONFIRMATION (adaptive adversary, 2026-07-09, Rust bit-exact, 10 seeds) — reproduces Python Exp 9.**
+  Ported the adaptive predator (specializes against the dominant defense `genome[6]&7`, `adapt` 0→1.5)
+  + a diversity-maintenance floor. First entry in the WORD SCHEMA:
+  - **word:** `targeted-floor` (→ stable-adaptive regime)
+  - **claim:** a floor that preserves only MINORITY strategies keeps an adaptive adversary from ever
+    specializing (adapt stays low) → the system stays both ALIVE and ADAPTIVE.
+  - **tier:** confirmed (Rust, 10-seed).
+  - **holds when:** an adaptive/co-evolving adversary + founding diversity. Targeted arm: adapt LOW
+    (6/10 seeds ≤0.13; median ~0.12) and survives 8/10.
+  - **fails when:** a non-adaptive stressor (nothing to keep from specializing); and it is not
+    bulletproof — 2/10 seeds still extinct.
+  - **receipt:** `alife-core b2 <seed> 20000` with `FLOOR=targeted`; adapt table in the B2 log.
+  Paired negatives, both RECONFIRMED in Rust here:
+  - `unconditional-floor → stasis`: adapt maxes to **1.50 in 10/10 seeds** — survives (10/10) but only
+    as life-support; the adversary fully specializes → never adaptive. Buys survival at the cost of
+    adaptiveness.
+  - `no-floor → gamble`: unreliable — adapt ranges 0.10–1.50, **extinct 3/10.**
+  The UCF tension, quantified: **survival** uncond(10) > targeted(8) > none(7); **adaptiveness**
+  targeted ≫ none > uncond. Only the *targeted* floor reaches the stable-ADAPTIVE regime (alive AND
+  adaptive). → feeds `ucf.md` (evidence-bridge update pending).
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

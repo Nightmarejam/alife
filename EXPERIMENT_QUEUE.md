@@ -24,6 +24,10 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
 - **`unpredictability is structure-dependent`** — NEW asserted principle (B1 + flip crux): variance helps
   only when a differentially-exposed *reservoir* survives each bout; uniform stress → variance only hurts.
   Sub-finding *regularity-buffers-uniform-stress* is clean (14-seed monotonic).
+- **`targeted-floor` → stable-adaptive regime** — CONFIRMED (B2, Rust 10-seed, reproduces Python Exp 9):
+  a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
+  survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
+  and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
 - **The predictability law** (`SYNTHESIS.md`, tier *asserted*): spine **supported** (shifting pressure →
   floor pays, now shown for cyclical flips too — floor took survival to 14/14 in every arm); the specific
   *monotonic* crux **refuted** for survival (→ metronome-vs-reprieve). Diversity half still **untested**
@@ -88,12 +92,11 @@ crossover. The effect is **structure-dependent** (needs a differentially-exposed
 uniform stress. Yielded the asserted principle *unpredictability's value is structure-dependent* +
 clean sub-finding *regularity-buffers-uniform-stress*. See `SYNTHESIS.md` B1. **→ next is B2.**
 
-**B2 — Targeted-floor direct test (the v4 the bridge itself flagged).** Add an **adaptive adversary** +
-a **threshold-activated (Exp 9-style) floor** to the Rust sim; test the *targeted* floor directly against
-the two extremes (unconditional / none). · word: `targeted-floor` → stable-adaptive regime ·
-feeds: **UCF (the core mechanism)** — turns the March Python Exp 9 result into a bit-exact Rust receipt ·
-receipt: targeted arm survives + retains diversity + adversary de-adapts where both extremes fail,
-multi-seed. **Highest constitutional value.** (New mechanic: adaptive adversary.)
+**B2 — Targeted-floor direct test.** ✅ **DONE (CONFIRMED, Rust 10-seed).** Built the adaptive adversary +
+diversity-maintenance floor; `targeted` uniquely holds the stable-adaptive regime (adapt LOW, survives
+8/10) where `uncond` maxes adapt 1.50 (10/10, life-support/stasis) and `none` is a gamble (extinct 3/10).
+Reproduces Python Exp 9 in bit-exact Rust → **word `targeted-floor` confirmed**; feeds UCF. First
+word-schema entry. See CONSTELLA_TO_EXPERIMENTS.md. **→ next is B4 (reuses this floor code).**
 
 **B3 — `entrainment` / rhythm-lock.** Does a *periodic* environment select traits that phase-lock to its
 rhythm (lower cost / higher fitness than non-locked)? Generalizes `anticipation` beyond waves (light/dark,
