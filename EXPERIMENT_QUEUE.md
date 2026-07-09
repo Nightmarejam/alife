@@ -59,9 +59,9 @@ organizer.md` (the deeper amphiphile/self-assembly part is banked as beyond-tool
 **Everything speculative → `research-notes/`** (the holding pen), tier-tagged. Do not let it leak into
 confirmed reasoning.
 
-**To continue, pick one:** (0) ★ metronome-vs-reprieve confirmation [teed up below]; (a) interface→
-diversity kernel [closes Step 4]; (b) diversity-reserve v7; (c) entrainment (item 2 below);
-(d) cultural-transmission re-test.
+**To continue:** Batch B1–B4 ✅ COMPLETE (metronome→structure-dependence, targeted-floor, entrainment,
+founding-diversity). Both Constella word-sync PRs (#62, #63) merged. **Next: BATCH C1–C4** (see below) —
+start with **C1 `adaptation-speed-limit`** (cheapest; a pure `RISE` sweep on the built b2 adversary).
 
 ---
 
@@ -134,6 +134,43 @@ Crisis". See CONSTELLA_TO_EXPERIMENTS.md. **→ next is B3 (entrainment, standal
 
 *Banked out of this batch (return later): interface→diversity (needs neutral-tag redesign),
 cultural-transmission re-test, Penumbra dissolution mechanic.*
+
+---
+
+## 🎯 NEXT BATCH C1–C4 (toward 20) — set up 2026-07-09
+*Strategy: **reuse the B2 adaptive adversary** (built) to cheaply mine two un-covered Constella
+mechanisms — Astris and Penumbra — then take on two fresh builds. Each: hypothesis · candidate word ·
+Constella mechanic · receipt · cost. Order = cheapest/most-likely-to-confirm first.*
+
+**C1 — `adaptation-speed-limit` (Astris/Auctor · reproduces Exp 5).** Sweep the adversary's specialization
+RATE (b2's `RISE` knob) against the agents' adaptation speed (mutation/reproduction). · hypothesis: below
+a threshold rate the population survives (keeps escaping); above it, **collapse regardless of resources** —
+a *speed* limit, not a resource limit. · word: `adaptation-speed-limit` · feeds: **Astris decay-rate**
+(decay must scale ≤ participant adaptation) · receipt: a reproducible collapse threshold in `RISE` across
+seeds. **Cheapest — `RISE` is already an env knob; a pure sweep.**
+
+**C2 — `strategic-dissolution` (Penumbra Accord · reproduces Exp 7).** Reuse b2's adversary; add a
+DISSOLUTION arm — when `adapt` is high the population can abandon the contested defense (go "naked") so the
+adversary has nothing to specialize against → `adapt` decays → restore later. · hypothesis: dissolve-and-
+restore drives `adapt`→0 and **out-survives persistence in a losing defense** (Exp 7's de-adapt-to-0). ·
+word: `strategic-dissolution` · feeds: **Penumbra Accord** (formal dissolution pathway) · receipt:
+dissolution arm drives adapt→0 + survives where the persist arm collapses, multi-seed. **Reuses b2 (small
+add).**
+
+**C3 — `cultural-transmission` (honest re-test of Exp 8 · failed 2/4 in Python).** Fresh mechanic: agents
+horizontally copy a successful neighbor's strategy (not only genetic inheritance). · hypothesis:
+transmission accelerates adaptation / raises survival vs pure inheritance. · word: `cultural-transmission`
+(confirm **or** honest refute) · feeds: a knowledge-sharing mechanic (Civic Tome memory family) · receipt:
+faster adapt / better survival reproducibly — or a clean null. **Fresh build (moderate).**
+
+**C4 — `interface → diversity` (the amphiphile kernel).** The spatial-niche / neutral-tag redesign to test
+the **untested diversity-half of the predictability law**: does a persistent spatial interface *maintain*
+the diversity a uniform cycle destroys? · word: `interface-diversity` (completes diversify-vs-converge) ·
+feeds: the predictability law + core_framework · receipt: interface arm holds diversity where the uniform
+flip converges. **Hardest build — the amphiphile seed's testable core.**
+
+*Deferred: diversity-reserve v7 (largely covered by B4/`founding-diversity`); Astris funded-floor variants;
+Penumbra gamer-lifecycle (transitional-scaffolding).*
 
 ---
 
