@@ -81,6 +81,24 @@ Words the sandbox can already produce, with their current tier:
   Pairs with `targeted-floor`: the floor is the *maintenance* mechanism, founding diversity is the
   *substrate* it maintains — you need both (the March "three-mechanism system"). → feeds
   core_framework.md "Diversity Before Crisis".
+  **B3 CONFIRMATION (entrainment, 2026-07-09, Rust, 8 seeds).** Word schema entry:
+  - **word:** `entrainment` (an endogenous rhythm phase-locks to an exogenous periodic one)
+  - **claim:** under a predictable periodic resource rhythm, a population's internal clock **locks to the
+    environment's period and tracks it**; phase alignment is driven mainly by **nurture** (environmental
+    calibration) with **nature** (heritable phase) adding on top.
+  - **tier:** confirmed (Rust, 8-seed).
+  - **holds when:** the periodic pulse is a *meaningful* fitness factor (short-enough period that the base
+    economy can't substitute). P=40 & P=60 → 100% period-lock in 15/16 runs, and genome[3] **follows P**.
+    Nature/nurture phase-alignment gradient (harvest/agent/pulse): **neither 0.64 < nature 0.84 < nurture
+    0.97 < both 1.02** — always both, at a *nurture-dominant* ratio.
+  - **fails when (boundaries):** long period / gentle economy (P≥80–100 → the pulse becomes optional, the
+    economy sustains agents without it → nothing selects for locking → entrainment ~0–24%); and harsh
+    drain (starve before the pulse). *Entrainment needs the rhythm to matter.*
+  - **receipt:** `alife-core b3 <seed> 20000` with `P=/HARVEST=/BGDRAIN=/CALIB=/INHERIT=`.
+  Grounds Jonathan's *"nature vs nurture is always both, in different ratios"* empirically, and links to
+  the predictability law (`SYNTHESIS.md`): entrainment is the endogenous strategy a **predictable**
+  environment enables — when the rhythm is regular, nature (the internal clock) can take over. → feeds
+  Civic Tome (anticipation family: reflexive `anticipation` → rhythmic `entrainment`).
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

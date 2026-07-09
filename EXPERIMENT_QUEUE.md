@@ -28,6 +28,11 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`entrainment`** — CONFIRMED (B3, Rust 8-seed): an endogenous clock locks to an exogenous periodic
+  rhythm and TRACKS it (100% period-lock, 15/16 at P=40/60). Phase alignment is nurture-dominant
+  (calibration 0.64→0.97) + nature adds on top (heritable phase →1.02) = *always both, in a ratio*.
+  Boundary: fails when the rhythm is optional (long period/gentle economy → no selection). Grounds the
+  nature/nurture framing; extends `anticipation` (reflexive → rhythmic). See CONSTELLA_TO_EXPERIMENTS.md.
 - **`founding-diversity` (load-bearing)** — CONFIRMED (B4, Rust 10-seed, reproduces Python Exp 8b):
   diverse-founded + targeted floor survives 8/10 (adapt low); mono-founded + same floor only 5/10 (adapt
   high — predator specializes despite the floor). Diversity must be present at founding; a floor
@@ -115,6 +120,11 @@ for next session:** (a) make the periodic event a **RESOURCE pulse to harvest** 
 missing it lowers fitness *gradually* (no lethality, no newborn massacre → clean gradient selection);
 and/or (b) **inherit phase** (`child.clock = parent.clock`) so entrained lineages stay aligned. · word:
 `entrainment` (candidate, unearned) · feeds: **Civic Tome**.
+  ✅ **DONE (CONFIRMED, 2026-07-09, Rust 8-seed).** The resource-harvest redesign worked: internal period
+  locks to the environment and tracks it (100% at P=40/60, 15/16). Nature/nurture gradient robust
+  (neither 0.64 < nature 0.84 < nurture 0.97 < both 1.02 harvest/agent/pulse). Boundary: fails when the
+  rhythm is optional (P≥80). **Word `entrainment` confirmed** — third schema entry. **→ BATCH B1–B4
+  COMPLETE.**
 
 **B4 — `founding-diversity`.** ✅ **DONE (CONFIRMED, Rust 10-seed, reproduces Exp 8b).** diverse+targeted
 survives 8/10 (adapt low) vs mono+targeted 5/10 (adapt high — predator specializes despite the floor).
