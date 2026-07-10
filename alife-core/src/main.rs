@@ -758,7 +758,12 @@ fn main() {
         let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(30000);
         let zones = std::env::var("ZONES").unwrap_or_else(|_| "split".into());
         let pen: f64 = std::env::var("PEN").ok().and_then(|v| v.parse().ok()).unwrap_or(3.0);
+        // DENS: density-penalty onset. The diagnosis: a shared GLOBAL carrying cap lets whichever strategy
+        // drifts ahead fill it first and suppress the other zone's reproduction. Setting DENS high removes
+        // the global cap → each zone is limited by its own FOOD (per-zone carrying capacity) = a real niche.
+        let dens: i32 = std::env::var("DENS").ok().and_then(|v| v.parse().ok()).unwrap_or(150);
         let mut s = Simulation::new(seed);
+        s.density_onset = dens;
         s.world.initialize_light_gradient();
         s.initialize_population(150, true);
         let (def_l, def_r) = (0x03usize, 0x07usize); // left=shield, right=flee
