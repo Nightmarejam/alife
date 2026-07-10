@@ -28,6 +28,10 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`niche-maintains-diversity`** — CONFIRMED (C4, Rust 8-seed; the amphiphile kernel): a persistent spatial
+  niche with INDEPENDENT per-zone capacity maintains diversity that a uniform world converges away (split
+  6/8 both-defenses vs uniform 0/8). Closes the diversify-vs-converge arc + the predictability law's
+  diversity half: diversification needs a *place for the reserve to live*, not just unpredictability.
 - **`transmission-trades-diversity`** — CONFIRMED (C3, Rust 10-seed; resolves Exp 8's 2/4): cultural
   transmission / precedent-following is *bounded & double-edged* — survival is a hump-with-cliff (moderate
   0.005→10/10 via coordinated dodging; high 0.05→0/10) while diversity collapses monotonically (7.1→0).
@@ -182,10 +186,12 @@ mismatch pays `PEN` drain/tick; `ZONES=split` vs `uniform`. **Result: split does
 one defense floods *both* zones (seed-dependent winner: shield on 42/1, flee on 7/123/999), and it holds
 even at near-lethal `PEN=100`. **Diagnosis (Gause's competitive-exclusion principle):** a *penalty-defined*
 zone is not a real niche — the numerically-dominant strategy invades the refuge via reproduction spillover
-+ drift faster than the penalty culls it. **Redesign for next session:** coexistence needs true **resource
-partitioning** — a *separate per-zone carrying capacity* (each zone its own food/density cap so neither can
-flood the other), not just a spatial penalty. That is the ecologically-correct niche model, and the real
-test of "a persistent interface maintains diversity." · word: `interface-diversity` (candidate, unearned).
++ drift faster than the penalty culls it. **Redesign:** coexistence needs true **resource
+partitioning** — independent per-zone capacity. ✅ **DONE (CONFIRMED, Rust 8-seed).** The fix was to remove
+the shared GLOBAL density cap (`DENS` high) so each zone is food-limited independently — then SPLIT
+maintains both defenses (6/8, 100% sorted) where UNIFORM converges (0/8). **Word `niche-maintains-diversity`
+confirmed** → closes the diversify-vs-converge arc + the predictability law's diversity half. **→ BATCH
+C1–C4 COMPLETE.** See CONSTELLA_TO_EXPERIMENTS.md.
 
 *Deferred: diversity-reserve v7 (largely covered by B4/`founding-diversity`); Astris funded-floor variants;
 Penumbra gamer-lifecycle (transitional-scaffolding).*

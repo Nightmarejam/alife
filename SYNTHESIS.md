@@ -94,7 +94,12 @@ monotonically tune survival. No clean **word #3**.
 - **CAVEAT (bounds the whole test):** no truly symmetric group locus exists (genome is 3-bit — no free
   neutral tag), so this measured **survival / floor-value**, not a clean **diversity-maintenance** signal.
   The pure *diversify-vs-converge* half of the law remains **untested**; the interface→diversity or a
-  neutral-tag redesign would be needed to reach it.
+  neutral-tag redesign would be needed to reach it. → **RESOLVED 2026-07-10 (C4 `niche-maintains-diversity`,
+  see CONSTELLA_TO_EXPERIMENTS.md):** a persistent spatial niche with independent per-zone capacity
+  MAINTAINS diversity (split 6/8) where a uniform world CONVERGES (0/8). The diversify half holds — but with
+  a **sharpened condition:** diversification needs *a place for the reserve to live* (an actual niche), not
+  merely unpredictability. This is why the Step-4 uniform flip converged (no niche) and the interface
+  diversifies. The law's diversify-half is now **supported**.
 
 **Re-tier:** law *spine* (shifting → floor pays) = **supported** (now shown for cyclical flips too);
 *specific crux* (monotonic predictability tuning / floor-volatility coupling) = **refuted for survival**,

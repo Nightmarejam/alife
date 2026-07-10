@@ -153,6 +153,28 @@ Words the sandbox can already produce, with their current tier:
   - **feeds `civic_tome.md` (Precedents):** precedent-following coordinates the community fast but
     homogenizes → erodes the diversity reserve → brittleness. **Precedent must be bounded** and balanced
     with preserved dissent/diversity. (A cleaner Civic-Tome receipt than the anticipation soft-match.)
+  **C4 CONFIRMATION (interface → diversity, 2026-07-10, Rust, 8-seed) — the amphiphile kernel; closes the
+  predictability law's untested diversity-half.** Word schema entry:
+  - **word:** `niche-maintains-diversity` (a persistent spatial interface preserves diversity)
+  - **claim:** a persistent **spatial niche structure** (distinct zones favoring different strategies, each
+    with **independent carrying capacity**) MAINTAINS the strategic diversity a **uniform** environment
+    converges away.
+  - **tier:** confirmed (Rust, 8-seed).
+  - **holds when:** per-zone *independent* capacity (each zone food-limited, not a shared global cap).
+    SPLIT (two zones) maintains **both** strategies, 100% spatially sorted — **6/8 seeds** (diversity 2 in
+    7/8) — where UNIFORM **converges** (0/8, one strategy takes the whole grid).
+  - **fails when (boundary — the first design's negative, now understood):** a **shared global carrying
+    cap** defeats it — whichever strategy drifts ahead fills the cap and starves the other zone's specialist
+    (competitive exclusion / **Gause's principle**); a penalty-defined zone alone is *not* a niche. Also
+    early drift can still collapse a zone before it establishes (2/8). The niche needs *independent
+    capacity* + enough founding population to survive the transient.
+  - **receipt:** `alife-core iface <seed> 15000` with `ZONES=split|uniform DENS=5000 PEN=10`.
+  - **completes the diversify-vs-converge arc:** uniform/predictable pressure → **converge** (seasons, the
+    Step-4 flip); a **persistent niche** → **diversify**. This is *why* the Step-4 uniform flip converged
+    (no niche for the reserve to occupy) and the interface diversifies (a niche exists). Refines the
+    **predictability law**: diversification under shifting conditions requires a *place for the reserve to
+    live* — not just unpredictability. The amphiphile lives at the persistent boundary. → feeds
+    core_framework "Diversity Before Crisis" + the predictability law (`SYNTHESIS.md`).
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk
