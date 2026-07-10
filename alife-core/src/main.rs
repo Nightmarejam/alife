@@ -533,9 +533,11 @@ fn main() {
         let thresh: f64 = std::env::var("THRESH").ok().and_then(|v| v.parse().ok()).unwrap_or(0.15);
         let floor_e: f64 = std::env::var("FLOORE").ok().and_then(|v| v.parse().ok()).unwrap_or(30.0);
         let mut_scale: f64 = std::env::var("MUT").ok().and_then(|v| v.parse().ok()).unwrap_or(1.0); // C1: agent adaptation speed
+        let transmit: f64 = std::env::var("TRANSMIT").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0); // C3: cultural copy rate/tick
         const ADAPT_MAX: f64 = 1.5;
         let mut s = Simulation::new(seed);
         s.mut_scale = mut_scale;
+        let mut prng = PyRandom::seed(seed ^ 0xc0_17e); // C3 transmission draws (separate from sim rng)
         s.world.initialize_light_gradient();
         s.initialize_population(150, true);
         // B4: FOUND=diverse (spread across 4 defenses) vs mono (all shield). Tests whether the
@@ -563,6 +565,14 @@ fn main() {
             // 2. adapt update
             if dom == target { adapt = (adapt + rise).min(ADAPT_MAX); }
             else { adapt -= fall; if adapt <= 0.0 { adapt = 0.0; target = dom; } }
+            // 2.5 CULTURAL TRANSMISSION (C3) — agents copy the CURRENT-BEST agent's defense (horizontal,
+            // within-lifetime "precedent"). Spreads what's working fast, but HOMOGENIZES — which the
+            // adaptive adversary punishes. TRANSMIT=0 = pure genetic inheritance (control).
+            if transmit > 0.0 && n > 0 {
+                let best = (0..n).max_by(|&i, &j| s.agents[i].energy.partial_cmp(&s.agents[j].energy).unwrap()).unwrap();
+                let model = s.agents[best].genome[6];
+                for a in s.agents.iter_mut() { if a.alive && prng.random() < transmit { a.genome[6] = model; } }
+            }
             // 3. MAINTENANCE FLOOR (arm) — keep the diversity reserve alive BEFORE the pressures hit.
             //    none: off | uncond: top up every low agent | targeted: only minority defenses (< THRESH)
             if arm != "none" {
