@@ -132,6 +132,27 @@ Words the sandbox can already produce, with their current tier:
   - **receipt:** `alife-core pen <seed> 30000` with `RESP=none|punitive|restorative HARM=/GAIN=/DETECT=`.
   - **feeds `Penumbra_Accord.md`** (restorative-over-punitive; reintegration returns participants to full
     standing) — the doc's central claim, now with a sandbox receipt. First activation of the dormant `toxin`.
+  **C3 CONFIRMATION (cultural transmission, 2026-07-09, Rust, 10-seed) — resolves Exp 8's mixed 2/4.**
+  Word schema entry:
+  - **word:** `transmission-trades-diversity` (cultural transmission / precedent-following is a *bounded,
+    double-edged* mechanism)
+  - **claim:** horizontal copying of the currently-successful strategy coordinates the community and can
+    improve survival in a **narrow band**, but it **monotonically erodes standing diversity** and past a
+    threshold causes **brittle collapse**. The effect is rate-dependent, not simply good or bad.
+  - **tier:** confirmed (Rust, 10-seed).
+  - **holds when:** adaptive adversary + targeted floor. Survival is a **hump with a cliff**: TRANSMIT
+    0→0.005 lifts survival 8/10→**10/10** (coordinated "dodge" — everyone copies the current-safe defense
+    so the adversary can't lock on, adapt stays ~0), then 0.01→0.02→0.05 falls 8→6→**0/10**. Diversity
+    **collapses monotonically** (7.1→2.0→0) — even the beneficial band is a near-monoculture *in motion*.
+  - **fails when (boundary):** high transmission (≥~0.05) → instant homogenization → adversary maxes →
+    extinction. The "benefit" is survival-via-coordination, purchased with the diversity reserve — so it
+    is fragile to any pressure that later needs that reserve.
+  - **explains:** Exp 8's **2/4** Python result = rate/context-dependent (moderate helps, high kills) — not
+    a flaky experiment, a genuinely double-edged mechanism.
+  - **receipt:** `alife-core b2 <seed> 30000` with `TRANSMIT=/FLOOR=targeted FOUND=diverse`.
+  - **feeds `civic_tome.md` (Precedents):** precedent-following coordinates the community fast but
+    homogenizes → erodes the diversity reserve → brittleness. **Precedent must be bounded** and balanced
+    with preserved dissent/diversity. (A cleaner Civic-Tome receipt than the anticipation soft-match.)
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

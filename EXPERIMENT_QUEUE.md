@@ -28,6 +28,10 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`transmission-trades-diversity`** — CONFIRMED (C3, Rust 10-seed; resolves Exp 8's 2/4): cultural
+  transmission / precedent-following is *bounded & double-edged* — survival is a hump-with-cliff (moderate
+  0.005→10/10 via coordinated dodging; high 0.05→0/10) while diversity collapses monotonically (7.1→0).
+  Trades the diversity reserve for coordination speed. Feeds `civic_tome.md`: precedent must be bounded.
 - **`reintegration-over-exclusion`** — CONFIRMED (C2, Rust 10-seed; first agent-vs-agent test): harm must be
   addressed (none survives 1/10) and RESTORATIVE (repair+rehabilitate+keep) beats PUNITIVE (exclude)
   decisively — restorative 10/10 pop 836 diversity 32.7 vs punitive 7/10 pop 350 diversity 12.4. Advantage
@@ -165,11 +169,12 @@ fatal if ignored) < punitive 7/10 (pop 350, div 12.4) < **restorative 10/10 (pop
 transmission).** *(Original strategic-dissolution/Exp 7 re-banked as a crisis-response finding, not
 Penumbra.)*
 
-**C3 — `cultural-transmission` (honest re-test of Exp 8 · failed 2/4 in Python).** Fresh mechanic: agents
-horizontally copy a successful neighbor's strategy (not only genetic inheritance). · hypothesis:
-transmission accelerates adaptation / raises survival vs pure inheritance. · word: `cultural-transmission`
-(confirm **or** honest refute) · feeds: a knowledge-sharing mechanic (Civic Tome memory family) · receipt:
-faster adapt / better survival reproducibly — or a clean null. **Fresh build (moderate).**
+**C3 — cultural transmission.** ✅ **DONE (CONFIRMED nuanced, Rust 10-seed).** Added `TRANSMIT` to b2
+(horizontal copying of the best defense). **Double-edged & rate-dependent** — survival hump-with-cliff
+(0.005→10/10 coordinated dodge; 0.05→0/10), diversity monotonically traded away (7.1→0). **Word
+`transmission-trades-diversity` confirmed**; *resolves Exp 8's 2/4* (rate-dependent). Grounded on Civic
+Tome Precedents → "precedent must be bounded." See CONSTELLA_TO_EXPERIMENTS.md. **→ next is C4
+(interface→diversity, the amphiphile kernel — hardest).**
 
 **C4 — `interface → diversity` (the amphiphile kernel).** The spatial-niche / neutral-tag redesign to test
 the **untested diversity-half of the predictability law**: does a persistent spatial interface *maintain*
