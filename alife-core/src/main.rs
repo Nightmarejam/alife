@@ -746,6 +746,54 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "iface") {
+        // C4 — interface → diversity (the amphiphile kernel). Tests the UNTESTED diversity-half of the
+        // predictability law: does a persistent SPATIAL NICHE STRUCTURE maintain the diversity a UNIFORM
+        // environment converges away? Two zones — left favors defense L=shield, right favors R=flee; an
+        // agent whose defense mismatches its zone pays PEN drain/tick. ZONES=split (two niches) vs uniform
+        // (whole grid favors L). Prediction: split MAINTAINS both defenses (each dominant in its zone) →
+        // diversify; uniform CONVERGES to one. Completes diversify-vs-converge (uniform→converge / niche→
+        // diversify) — the amphiphile lives at the persistent boundary.
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(30000);
+        let zones = std::env::var("ZONES").unwrap_or_else(|_| "split".into());
+        let pen: f64 = std::env::var("PEN").ok().and_then(|v| v.parse().ok()).unwrap_or(3.0);
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.initialize_population(150, true);
+        let (def_l, def_r) = (0x03usize, 0x07usize); // left=shield, right=flee
+        for (i, a) in s.agents.iter_mut().enumerate() { a.genome[6] = if i % 2 == 0 { def_l as u8 } else { def_r as u8 }; }
+        let w = s.world.width;
+        let defense = |g: &[u8; 8]| (g[6] & 7) as usize;
+        println!("=== C4 iface — interface→diversity [ZONES={}] (seed {}, {} ticks | pen {}) ===", zones, seed, ticks, pen);
+        let mut extinct_at: Option<u64> = None;
+        for t in 0..ticks {
+            for a in s.agents.iter_mut() {
+                if !a.alive { continue; }
+                let favored = if zones == "uniform" { def_l } else if a.x < w / 2 { def_l } else { def_r };
+                if defense(&a.genome) != favored { a.apply_drain(pen); } // zone-mismatch penalty
+            }
+            s.cleanup_dead();
+            s.tick();
+            if s.agents.is_empty() { extinct_at = Some(t as u64); break; }
+        }
+        let mut c = [0usize; 8];
+        for a in &s.agents { c[defense(&a.genome)] += 1; }
+        let ddiv = (0..8).filter(|&d| c[d] > 0).count();
+        let (mut ll, mut lt, mut rr, mut rt) = (0u32, 0u32, 0u32, 0u32);
+        for a in &s.agents {
+            if a.x < w / 2 { lt += 1; if defense(&a.genome) == def_l { ll += 1; } }
+            else { rt += 1; if defense(&a.genome) == def_r { rr += 1; } }
+        }
+        match extinct_at {
+            Some(t) => println!("💀 EXTINCT at tick {}", t),
+            None => println!("survived pop={} | defense-diversity={} | shield={} flee={} | left-match={:.0}% right-match={:.0}%",
+                s.agents.len(), ddiv, c[def_l], c[def_r],
+                if lt > 0 { ll as f64 / lt as f64 * 100.0 } else { 0.0 },
+                if rt > 0 { rr as f64 / rt as f64 * 100.0 } else { 0.0 }),
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);

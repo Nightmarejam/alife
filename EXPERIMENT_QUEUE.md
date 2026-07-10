@@ -176,11 +176,16 @@ Penumbra.)*
 Tome Precedents → "precedent must be bounded." See CONSTELLA_TO_EXPERIMENTS.md. **→ next is C4
 (interface→diversity, the amphiphile kernel — hardest).**
 
-**C4 — `interface → diversity` (the amphiphile kernel).** The spatial-niche / neutral-tag redesign to test
-the **untested diversity-half of the predictability law**: does a persistent spatial interface *maintain*
-the diversity a uniform cycle destroys? · word: `interface-diversity` (completes diversify-vs-converge) ·
-feeds: the predictability law + core_framework · receipt: interface arm holds diversity where the uniform
-flip converges. **Hardest build — the amphiphile seed's testable core.**
+**C4 — `interface → diversity` (the amphiphile kernel).** 🔧 **IN PROGRESS (first design banked — honest
+negative + diagnosis).** Built `iface` mode: two spatial zones (left favors shield, right favors flee),
+mismatch pays `PEN` drain/tick; `ZONES=split` vs `uniform`. **Result: split does NOT maintain diversity** —
+one defense floods *both* zones (seed-dependent winner: shield on 42/1, flee on 7/123/999), and it holds
+even at near-lethal `PEN=100`. **Diagnosis (Gause's competitive-exclusion principle):** a *penalty-defined*
+zone is not a real niche — the numerically-dominant strategy invades the refuge via reproduction spillover
++ drift faster than the penalty culls it. **Redesign for next session:** coexistence needs true **resource
+partitioning** — a *separate per-zone carrying capacity* (each zone its own food/density cap so neither can
+flood the other), not just a spatial penalty. That is the ecologically-correct niche model, and the real
+test of "a persistent interface maintains diversity." · word: `interface-diversity` (candidate, unearned).
 
 *Deferred: diversity-reserve v7 (largely covered by B4/`founding-diversity`); Astris funded-floor variants;
 Penumbra gamer-lifecycle (transitional-scaffolding).*
