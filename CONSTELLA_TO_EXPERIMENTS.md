@@ -113,6 +113,25 @@ Words the sandbox can already produce, with their current tier:
   - **receipt:** `alife-core b2 <seed> 20000` with `RISE=/MUT=/FLOOR=targeted`; 3×5 ratio grid.
   - **feeds `tokens_astris_auctor.md`:** Astris decay / governance-complexity must scale **at most as fast
     as participant adaptation** — else collapse regardless of resource level. Exp 5, now bit-exact Rust.
+  **C2 CONFIRMATION (Penumbra restorative justice, 2026-07-09, Rust, 10-seed) — first agent-vs-agent test.**
+  Realigned from the mis-mapped "strategic-dissolution" to the *actual* `Penumbra_Accord.md` mechanism
+  (restorative justice) after an AUDIT survey (see `AUDIT.md`). Activated the dormant TOXIN op as
+  intra-population HARM. Word schema entry:
+  - **word:** `reintegration-over-exclusion` (restorative response beats punitive)
+  - **claim:** harm must be addressed (ignoring it collapses the community), and a **restorative** response
+    (repair the victim + rehabilitate & keep the harm-doer) preserves the community's diversity that a
+    **punitive** response (exclusion) erodes.
+  - **tier:** confirmed (Rust, 10-seed).
+  - **holds when:** harm is fatal-if-ignored + recurs (imperfect detection). At HARM=40/DETECT=0.1: **none
+    survives 1/10** (unaddressed harm → collapse); **punitive 7/10, pop 350, diversity 12.4**; **restorative
+    10/10, pop 836, diversity 32.7.** Restorative wins on survival, population, AND diversity — decisively.
+  - **fails when (boundary):** if harm is *survivable* (HARM≤~15), laissez-faire (`none`) scores fine on raw
+    metrics and any intervention costs some diversity — so the claim needs harm that actually threatens the
+    community. The restorative advantage **scales with recurrence**: the punitive/restorative diversity gap
+    widens as detection worsens (30/35 at DETECT=1.0 → 22/33 at 0.1) — exclusion's cost is *cumulative*.
+  - **receipt:** `alife-core pen <seed> 30000` with `RESP=none|punitive|restorative HARM=/GAIN=/DETECT=`.
+  - **feeds `Penumbra_Accord.md`** (restorative-over-punitive; reintegration returns participants to full
+    standing) — the doc's central claim, now with a sandbox receipt. First activation of the dormant `toxin`.
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

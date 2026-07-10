@@ -28,6 +28,11 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`reintegration-over-exclusion`** — CONFIRMED (C2, Rust 10-seed; first agent-vs-agent test): harm must be
+  addressed (none survives 1/10) and RESTORATIVE (repair+rehabilitate+keep) beats PUNITIVE (exclude)
+  decisively — restorative 10/10 pop 836 diversity 32.7 vs punitive 7/10 pop 350 diversity 12.4. Advantage
+  scales with recurrence. Realigned onto the real `Penumbra_Accord.md` (restorative justice) after an AUDIT
+  catch. Activated the dormant `toxin` op. See ledger + AUDIT.md.
 - **`adaptation-speed-limit`** — CONFIRMED (C1, Rust 12-seed ratio grid, reproduces Exp 5): collapse under
   an adaptive adversary is set by the adversary/agent speed **ratio**, not absolute resources — the
   survival threshold `RISE` scales with agent mutation rate. Feeds Astris decay-rate. See ledger.
@@ -152,13 +157,13 @@ adversary/agent speed **ratio**, not the absolute rate. Added a tunable `MUT` (m
 preserved). **Word `adaptation-speed-limit` confirmed** → feeds `tokens_astris_auctor.md`. See
 CONSTELLA_TO_EXPERIMENTS.md. **→ next is C2 (strategic-dissolution).**
 
-**C2 — `strategic-dissolution` (Penumbra Accord · reproduces Exp 7).** Reuse b2's adversary; add a
-DISSOLUTION arm — when `adapt` is high the population can abandon the contested defense (go "naked") so the
-adversary has nothing to specialize against → `adapt` decays → restore later. · hypothesis: dissolve-and-
-restore drives `adapt`→0 and **out-survives persistence in a losing defense** (Exp 7's de-adapt-to-0). ·
-word: `strategic-dissolution` · feeds: **Penumbra Accord** (formal dissolution pathway) · receipt:
-dissolution arm drives adapt→0 + survives where the persist arm collapses, multi-seed. **Reuses b2 (small
-add).**
+**C2 — Penumbra restorative justice.** ✅ **DONE (CONFIRMED, Rust 10-seed).** *Realigned* from
+`strategic-dissolution` (which didn't match the doc) to the real `Penumbra_Accord.md` mechanism after an
+AUDIT survey. First agent-vs-agent experiment (`pen` mode, activated dormant `toxin`): none 1/10 (harm
+fatal if ignored) < punitive 7/10 (pop 350, div 12.4) < **restorative 10/10 (pop 836, div 32.7)**. **Word
+`reintegration-over-exclusion` confirmed** → feeds `Penumbra_Accord.md`. **→ next is C3 (cultural-
+transmission).** *(Original strategic-dissolution/Exp 7 re-banked as a crisis-response finding, not
+Penumbra.)*
 
 **C3 — `cultural-transmission` (honest re-test of Exp 8 · failed 2/4 in Python).** Fresh mechanic: agents
 horizontally copy a successful neighbor's strategy (not only genetic inheritance). · hypothesis:

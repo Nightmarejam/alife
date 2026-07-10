@@ -9,7 +9,7 @@ Legend — **status:** open / done / skipped (low reward) · **reward:** ⭐ (ni
 ## Word → mechanism mappings (does each earned word match the *actual* Constella doc?)
 | location | issue | status | reward |
 |---|---|---|---|
-| `Penumbra_Accord.md` vs evidence-bridge Penumbra section | **MISMATCH found.** The doc is *restorative justice* (Declare Harm→Mediation→Repair→Reintegration); the bridge attached Exp 7 "strategic-dissolution" + Exp 9 diversity to it. `strategic-dissolution` ≠ Penumbra. → building the *real* Penumbra experiment (toxin-harm + restorative-vs-punitive) instead. | open (in progress) | ⭐⭐⭐ |
+| `Penumbra_Accord.md` vs evidence-bridge Penumbra section | **RESOLVED.** Doc is *restorative justice*, not the "strategic-dissolution" the bridge attached. Built the real experiment (C2, `pen` mode) → confirmed `reintegration-over-exclusion` (restorative 10/10 vs punitive 7/10, 3× the diversity). Ledger updated; bridge Penumbra section still needs the swap (next sync PR). | done (bridge sync pending) | ⭐⭐⭐ |
 | `tokens_astris_auctor.md` vs `adaptation-speed-limit` (C1) | Verify the doc actually frames Astris *decay-rate ≤ participant adaptation*; the bridge claims it. Check before leaning on it. | open | ⭐⭐ |
 | `civic_tome.md` vs `anticipation` + `entrainment` | Bridge maps these to "pattern memory / amendment history." Confirm the doc's mechanism matches (esp. now that entrainment ≠ reflexive anticipation). | open | ⭐⭐ |
 | `ucf.md` vs `targeted-floor` + the seasons boundary | The March "unconditional floor 'regardless of contribution'" wording vs the *targeted/pulsed* evidence — flagged in the bridge as "Jonathan's call, not applied." The dignity-floor vs diversity-floor split still isn't in `ucf.md`. | open | ⭐⭐⭐ |
