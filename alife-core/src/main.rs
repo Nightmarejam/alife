@@ -674,6 +674,68 @@ fn main() {
         }
         return;
     }
+    if let Some(pos) = args.iter().position(|a| a == "pen") {
+        // C2 (realigned) — Penumbra Accord = restorative justice. The FIRST agent-vs-agent experiment:
+        // activates the dormant TOXIN op as intra-population HARM (a harm-doer, genome[6]==0x06, drains a
+        // random other agent by HARM/tick, keeping GAIN = parasitic). Response arms (RESP), mapping the
+        // Accord's flow (Declare Harm→Mediation→Repair→Reintegration):
+        //   none        — harm unaddressed (parasites spread)
+        //   punitive    — EXCLUDE the harm-doer (kill) → harm stops, but the agent + its other genes are lost
+        //   restorative — REPAIR the victim (+REPAIR energy) + REHABILITATE the harm-doer (toxin→idle) + keep
+        // Q: does restorative yield a healthier community (pop / energy / diversity) than exclusion? — the
+        // Penumbra claim that reintegration beats exclusion.
+        let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
+        let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(30000);
+        let resp = std::env::var("RESP").unwrap_or_else(|_| "none".into());
+        let harm: f64 = std::env::var("HARM").ok().and_then(|v| v.parse().ok()).unwrap_or(15.0);
+        let gain: i32 = std::env::var("GAIN").ok().and_then(|v| v.parse().ok()).unwrap_or(8);
+        let repair: i32 = std::env::var("REPAIR").ok().and_then(|v| v.parse().ok()).unwrap_or(15);
+        // DETECT: probability a harm event is actually addressed (1.0 = perfect detection). <1 lets harm
+        // persist/recur, so exclusion's cumulative cost (lost members + diversity) can accrue.
+        let detect: f64 = std::env::var("DETECT").ok().and_then(|v| v.parse().ok()).unwrap_or(1.0);
+        let mut s = Simulation::new(seed);
+        s.world.initialize_light_gradient();
+        s.initialize_population(150, true);
+        for (i, a) in s.agents.iter_mut().enumerate() { a.genome[6] = if i % 3 == 0 { 0x06 } else { 0x00 }; }
+        let mut prng = PyRandom::seed(seed ^ 0x9e_b7a);
+        println!("=== PENUMBRA restorative-vs-punitive [RESP={}] (seed {}, {} ticks | harm {} gain {} repair {}) ===",
+            resp, seed, ticks, harm, gain, repair);
+        let (mut harm_events, mut exclusions, mut repairs) = (0u64, 0u64, 0u64);
+        let mut extinct_at: Option<u64> = None;
+        for t in 0..ticks {
+            let tt = t as u64;
+            let alive: Vec<usize> = (0..s.agents.len()).filter(|&i| s.agents[i].alive).collect();
+            if alive.len() > 1 {
+                let doers: Vec<usize> = alive.iter().cloned().filter(|&i| (s.agents[i].genome[6] & 7) == 6).collect();
+                for d in doers {
+                    if !s.agents[d].alive { continue; }
+                    let v = alive[prng.randbelow(alive.len() as u32) as usize];
+                    if v == d || !s.agents[v].alive { continue; }
+                    s.agents[v].apply_drain(harm);   // Declare Harm
+                    s.agents[d].add_energy(gain);
+                    harm_events += 1;
+                    if prng.random() >= detect { continue; } // harm went undetected — no response
+                    match resp.as_str() {
+                        "punitive" => { s.agents[d].alive = false; exclusions += 1; }
+                        "restorative" => { s.agents[v].add_energy(repair); s.agents[d].genome[6] = 0x00; repairs += 1; }
+                        _ => {}
+                    }
+                }
+                s.cleanup_dead();
+            }
+            s.tick();
+            if s.agents.is_empty() { extinct_at = Some(tt); break; }
+        }
+        let pop = s.agents.len();
+        let doers_now = s.agents.iter().filter(|a| (a.genome[6] & 7) == 6).count();
+        let mean_e = if pop > 0 { s.agents.iter().map(|a| a.energy).sum::<f64>() / pop as f64 } else { 0.0 };
+        match extinct_at {
+            Some(t) => println!("💀 EXTINCT at tick {} | harm={} excl={} repairs={}", t, harm_events, exclusions, repairs),
+            None => println!("survived pop={} | harm-doers now={} | meanE={:.0} | diversity={} | harm-events={} excl={} repairs={}",
+                pop, doers_now, mean_e, s.genome_diversity(), harm_events, exclusions, repairs),
+        }
+        return;
+    }
     if std::env::args().any(|a| a == "wavedamagetest") {
         // Stage 2: deterministic damage-logic check. 4 agents at x=100, wave front reaches 100 at t=100.
         let mut s = Simulation::new(42);
