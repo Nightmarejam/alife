@@ -532,8 +532,10 @@ fn main() {
         let fall: f64 = std::env::var("FALL").ok().and_then(|v| v.parse().ok()).unwrap_or(0.02);
         let thresh: f64 = std::env::var("THRESH").ok().and_then(|v| v.parse().ok()).unwrap_or(0.15);
         let floor_e: f64 = std::env::var("FLOORE").ok().and_then(|v| v.parse().ok()).unwrap_or(30.0);
+        let mut_scale: f64 = std::env::var("MUT").ok().and_then(|v| v.parse().ok()).unwrap_or(1.0); // C1: agent adaptation speed
         const ADAPT_MAX: f64 = 1.5;
         let mut s = Simulation::new(seed);
+        s.mut_scale = mut_scale;
         s.world.initialize_light_gradient();
         s.initialize_population(150, true);
         // B4: FOUND=diverse (spread across 4 defenses) vs mono (all shield). Tests whether the

@@ -99,6 +99,20 @@ Words the sandbox can already produce, with their current tier:
   the predictability law (`SYNTHESIS.md`): entrainment is the endogenous strategy a **predictable**
   environment enables — when the rhythm is regular, nature (the internal clock) can take over. → feeds
   Civic Tome (anticipation family: reflexive `anticipation` → rhythmic `entrainment`).
+  **C1 CONFIRMATION (adaptation-speed-limit, 2026-07-09, Rust, 12-seed ratio grid) — reproduces Exp 5.**
+  Word schema entry:
+  - **word:** `adaptation-speed-limit` (collapse is a *speed* limit, not a resource limit)
+  - **claim:** under an adaptive adversary, collapse is governed by the **ratio** of the adversary's
+    specialization speed to the agents' adaptation speed — not by absolute resources.
+  - **tier:** confirmed (Rust, 12-seed, ratio demonstrated).
+  - **holds when:** adaptive adversary + targeted floor. Survival falls as adversary `RISE` climbs (10/14
+    → 6/14 above RISE≈0.015) AND rises as agent mutation rate `MUT` climbs; the ~50%-survival threshold
+    `RISE` **scales with `MUT`** (0.5→≈0.01, 1.0→≈0.02, 2.0→≈0.05) — so it's the ratio, not the rate.
+  - **fails when (boundary):** at extreme adversary speed even fast agents fail (RISE=0.1); and very high
+    `MUT` can *destabilize* (too much mutation loses good genomes) — the ratio law holds in a mid-range.
+  - **receipt:** `alife-core b2 <seed> 20000` with `RISE=/MUT=/FLOOR=targeted`; 3×5 ratio grid.
+  - **feeds `tokens_astris_auctor.md`:** Astris decay / governance-complexity must scale **at most as fast
+    as participant adaptation** — else collapse regardless of resource level. Exp 5, now bit-exact Rust.
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

@@ -28,6 +28,9 @@ dir_locus) defaults to base-identical — verify these two hashes after any core
   a floor preserving only MINORITY strategies keeps an adaptive adversary from specializing (adapt LOW,
   survives 8/10). Reconfirms `unconditional-floor → stasis` (adapt maxes 1.50 in 10/10 — life-support)
   and `no-floor → gamble` (extinct 3/10). First entry in the WORD SCHEMA (see CONSTELLA_TO_EXPERIMENTS.md).
+- **`adaptation-speed-limit`** — CONFIRMED (C1, Rust 12-seed ratio grid, reproduces Exp 5): collapse under
+  an adaptive adversary is set by the adversary/agent speed **ratio**, not absolute resources — the
+  survival threshold `RISE` scales with agent mutation rate. Feeds Astris decay-rate. See ledger.
 - **`entrainment`** — CONFIRMED (B3, Rust 8-seed): an endogenous clock locks to an exogenous periodic
   rhythm and TRACKS it (100% period-lock, 15/16 at P=40/60). Phase alignment is nurture-dominant
   (calibration 0.64→0.97) + nature adds on top (heritable phase →1.02) = *always both, in a ratio*.
@@ -142,12 +145,12 @@ cultural-transmission re-test, Penumbra dissolution mechanic.*
 mechanisms — Astris and Penumbra — then take on two fresh builds. Each: hypothesis · candidate word ·
 Constella mechanic · receipt · cost. Order = cheapest/most-likely-to-confirm first.*
 
-**C1 — `adaptation-speed-limit` (Astris/Auctor · reproduces Exp 5).** Sweep the adversary's specialization
-RATE (b2's `RISE` knob) against the agents' adaptation speed (mutation/reproduction). · hypothesis: below
-a threshold rate the population survives (keeps escaping); above it, **collapse regardless of resources** —
-a *speed* limit, not a resource limit. · word: `adaptation-speed-limit` · feeds: **Astris decay-rate**
-(decay must scale ≤ participant adaptation) · receipt: a reproducible collapse threshold in `RISE` across
-seeds. **Cheapest — `RISE` is already an env knob; a pure sweep.**
+**C1 — `adaptation-speed-limit` (Astris/Auctor · reproduces Exp 5).** ✅ **DONE (CONFIRMED, Rust 12-seed
+ratio grid).** Survival falls with adversary `RISE` (10/14→6/14 above ≈0.015) AND rises with agent `MUT`;
+the ~50%-survival threshold `RISE` **scales with `MUT`** (0.5→0.01, 1.0→0.02, 2.0→0.05) → collapse is the
+adversary/agent speed **ratio**, not the absolute rate. Added a tunable `MUT` (mut_scale; base hash
+preserved). **Word `adaptation-speed-limit` confirmed** → feeds `tokens_astris_auctor.md`. See
+CONSTELLA_TO_EXPERIMENTS.md. **→ next is C2 (strategic-dissolution).**
 
 **C2 — `strategic-dissolution` (Penumbra Accord · reproduces Exp 7).** Reuse b2's adversary; add a
 DISSOLUTION arm — when `adapt` is high the population can abandon the contested defense (go "naked") so the

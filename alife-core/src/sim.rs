@@ -41,6 +41,7 @@ pub struct Simulation {
     pub density_div: i32,            // density-penalty steepness divisor (5 = base; lower = harder cap)
     pub dir_locus: usize,            // genome slot the directional split reads (7=regulate, base; 0=neutral sense)
     pub inherit_clock: bool,         // B3: child inherits parent's endogenous clock phase (default false)
+    pub mut_scale: f64,              // C1: multiplier on mutation rates = agent adaptation speed (1.0 base)
 }
 
 impl Simulation {
@@ -52,7 +53,7 @@ impl Simulation {
                      floor_energy: None, shock_interval: None, floor_rescues: 0,
                      directional: false, pulse_threshold: None, cap_threshold: None,
                      dir_penalty: DIRECTIONAL_PENALTY, density_onset: 150, density_div: 5, dir_locus: 7,
-                     inherit_clock: false }
+                     inherit_clock: false, mut_scale: 1.0 }
     }
 
     /// Distinct-genome count — the diversity metric (the "reserve" the floor preserves).
@@ -253,7 +254,7 @@ impl Simulation {
             let (px, py) = (self.agents[pidx].x, self.agents[pidx].y);
             let spawn = find_empty_nearby(&self.world, px, py, 3, &mut self.rng);
             let (cx, cy) = match spawn { Some(p) => p, None => continue };
-            let child_genome = mutate_genome(&self.agents[pidx].genome, &mut self.rng);
+            let child_genome = mutate_genome(&self.agents[pidx].genome, &mut self.rng, self.mut_scale);
             // create_child: child energy = REPRODUCTION_COST, parent loses it, gen+1
             self.next_id += 1;
             let cid = self.next_id;
@@ -389,14 +390,14 @@ fn execute_genome(a: &mut Agent, w: &mut World) -> bool {
     requested_repro
 }
 
-fn mutate_genome(genome: &[u8; 8], rng: &mut PyRandom) -> [u8; 8] {
+fn mutate_genome(genome: &[u8; 8], rng: &mut PyRandom, mut_scale: f64) -> [u8; 8] {
     let mut g = *genome;
     for i in 0..8 {
-        if rng.random() < SLOT_MUTATION_RATES[i] {
+        if rng.random() < SLOT_MUTATION_RATES[i] * mut_scale {
             g[i] = rng.randbelow(8) as u8;
         }
     }
-    if rng.random() < BYTE_SWAP_RATE {
+    if rng.random() < BYTE_SWAP_RATE * mut_scale {
         let pairs = [(0usize, 1usize), (2, 3), (5, 6)];
         let pair = pairs[rng.randbelow(pairs.len() as u32) as usize];
         g.swap(pair.0, pair.1);
