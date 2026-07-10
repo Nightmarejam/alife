@@ -14,14 +14,14 @@ Legend — **status:** open / done / skipped (low reward) · **reward:** ⭐ (ni
 | `civic_tome.md` vs `anticipation` | **SOFT MATCH (defensible).** Tome = versioned record of protocols/precedents/rulings; "precedents guide future decisions" ≈ pattern-memory-for-anticipation. Interpretive but fair. | done | ⭐ |
 | `civic_tome.md` vs `entrainment` | **MISMATCH (2nd catch).** `entrainment` = rhythmic phase-locking to a *periodic* environment; the Tome is a records system, not a cadence. Entrainment has **no home** in the current docs — it points to a *missing* mechanism: **governance cadence / rhythm** (scheduled cycles a community phase-locks to). Re-home before syncing entrainment into a mechanic doc. | open | ⭐⭐ |
 | `core_framework.md` "three-mechanism system" | **CHECKED — no action.** The claim lives only in the evidence bridge, not `core_framework.md` (which frames UCF as "voluntary baseline dignity" = the *dignity* floor — consistent with the dignity-vs-diversity split). No boundary caveat needed there. | done | — |
-| `ucf.md` vs `targeted-floor` + the seasons boundary | The March "unconditional floor 'regardless of contribution'" wording vs the *targeted/pulsed* evidence — flagged in the bridge as "Jonathan's call, not applied." The dignity-floor vs diversity-floor split still isn't in `ucf.md`. | open | ⭐⭐⭐ |
+| `ucf.md` dignity-vs-diversity split | **DONE (already in the doc — audit note was stale).** `ucf.md` has a "Two floors under one name" section separating the Dignity Floor (unconditional-by-right, funded & bounded) from the Diversity-Maintenance Pulse (targeted, threshold-activated), citing Exp 6/9 + the Rust 787/43 result. *Optional add:* the seasons boundary (the diversity-pulse is context-dependent — helps vs adversity that removes variation, marginal vs cyclical drain that starves a crowd). | done (opt. refinement) | ⭐⭐⭐ |
 | `core_framework.md` "three-mechanism system" | Still stated as clean; the seasons work added a **boundary** (floor is context-dependent). Does the framing need the caveat? | open | ⭐⭐ |
 
 ## Stale claims / figures (attestation integrity)
 | location | issue | status | reward |
 |---|---|---|---|
 | Exp 3 "89.2%" in the evidence bridge | REFUTED → corrected in place (PR #62). | done | ⭐⭐⭐ |
-| Other hard numbers in governance docs (compliance_overlay, founding_hypothesis) | Not yet checked for unbacked figures like the 89.2% was. | open | ⭐⭐ |
+| Other hard numbers in governance docs (compliance_overlay, founding_hypothesis, PoL, map_of_intent) | **DONE — CLEAN.** Swept 2026-07-10: no unbacked empirical figures like the 89.2%. The proof_of_life_consensus percentages are *design weights* (scoring formula, sum 100%), not empirical claims. Attestation integrity holds. | done | ⭐⭐ |
 
 ## Sandbox / receipts
 | location | issue | status | reward |
@@ -32,5 +32,5 @@ Legend — **status:** open / done / skipped (low reward) · **reward:** ⭐ (ni
 ## Infrastructure / process
 | location | issue | status | reward |
 |---|---|---|---|
-| Word-schema not yet formalized | Agreed to formalize once ~10 words exist — we're there. A single schema doc would let the ledger + training dataset share one shape. | open | ⭐⭐ |
+| Word-schema not yet formalized | **DONE.** Created `alife/WORD_SCHEMA.md` — the canonical shape (word/claim/tier/holds-when/fails-when/receipt/feeds) + tier defs + roster. Shared by the ledger, the constitution bridge, and the eventual training dataset. | done | ⭐⭐ |
 | Two ledgers to keep in sync | `alife/CONSTELLA_TO_EXPERIMENTS.md` (working) + `constella/.../alife_evidence_mapping.md` (constitution). Manual sync each batch (PRs #62, #63). Fine for now; revisit if it gets heavy. | open | ⭐ |
