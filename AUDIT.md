@@ -28,6 +28,7 @@ Legend — **status:** open / done / skipped (low reward) · **reward:** ⭐ (ni
 |---|---|---|---|
 | Dormant ops `signal` / `toxin` (`SIGNAL_ACTIVE`/`TOXIN_ACTIVE=false`, "exp5") | Built but never exercised; no Rust receipt. The Penumbra experiment will finally use `toxin`. Is "exp5" documented anywhere? | open | ⭐ |
 | Confirmed words without a linked reproducible receipt command | Spot-check each ledger entry has a runnable `alife-core …` line. | open | ⭐ |
+| Penumbra **gamer-lifecycle** claim (Exp 9) is Python-asserted, un-received | Tried a Rust receipt (b2 floor-dependent fraction, 2026-07-11) — **did NOT reproduce** (4/8, no correlation with stabilization). The b2 mechanic doesn't replicate Exp 9's NAKED/DEFENDER + founding-window dynamic. A dedicated Exp-8b/9 replica would be needed. Until then the bridge's gamer-lifecycle text should stay *asserted*, not claimed as Rust-confirmed. | open (bounded) | ⭐⭐ |
 
 ## Infrastructure / process
 | location | issue | status | reward |

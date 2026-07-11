@@ -175,6 +175,16 @@ Words the sandbox can already produce, with their current tier:
     **predictability law**: diversification under shifting conditions requires a *place for the reserve to
     live* — not just unpredictability. The amphiphile lives at the persistent boundary. → feeds
     core_framework "Diversity Before Crisis" + the predictability law (`SYNTHESIS.md`).
+  **`transitional-scaffolding` — ATTEMPTED, NOT REPRODUCED (2026-07-11, Rust b2, 10-seed). Honest negative.**
+  Tried to give the Penumbra *gamer-lifecycle* claim (Exp 9: minimum-compliance "gamers" peak in founding
+  fragility, fade at stability) a Rust receipt by tracking the floor-dependent fraction over 8 windows.
+  Result: peak-then-fade in only **4/8 survivors** (others flat or *growing*: seed 1 5%→10%, seed 5 14%→20%),
+  and it does **not** correlate with stabilization (seeds 1 & 5 stabilized — adapt 0.06–0.09 — yet gamers
+  grew). **Diagnosis:** the "gamer" proxy (floor-topped-up minority-defense agents) is small/noisy, and the
+  b2 mechanic (adaptive adversary on the defense repertoire) does **not** replicate Exp 9's specific
+  NAKED/DEFENDER + founding-window dynamic that produced the 80% gamer peak. **Status:** the gamer-lifecycle
+  stays **Python-asserted, un-received** — a proper test needs a dedicated Exp-8b/9 NAKED/DEFENDER replica
+  (banked). *The discipline held: no faked receipt; the constitution should not over-claim this one yet.*
 - **CONFIRMED (anticipation — earned 2026-07, Rust, conditional on global pressure):**
   *anticipation* — functional foresight (shield BEFORE a wave is sensable) arises UNSEEDED and fires
   reproducibly (**5/5 seeds under GLOBAL waves**; V2). Caveats: episodic/boom-bust, extinction risk

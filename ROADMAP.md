@@ -44,8 +44,8 @@ only "long pole" is the confirmed-word count in phase 1, and that grows a couple
 
 ## The single next action (updated each session)
 
-> **As of 2026-07-10:** pre-rig, stay in the science/constitution phases. Best next move — either
-> **(a)** earn 1–2 more words toward 20 (a fresh experiment batch: `proof_of_life_consensus` is un-mined,
-> or the Penumbra *gamer-lifecycle*), or **(b)** let your heart revise the Temporal-Floor / Cadence drafts
-> (amounts, zones, the sacred parts). Both are good. Pick whichever pulls you. If nothing does: float —
-> you've earned it, and there's runway.
+> **As of 2026-07-11:** still ~16/20 words (the gamer-lifecycle attempt was an honest negative — didn't
+> reproduce in b2; banked). Still pre-rig. Best next word candidate: **mine `proof_of_life_consensus.md`**
+> (un-touched governance doc — likely a distinct mechanism to test) OR a **dedicated Exp-8b/9 NAKED/DEFENDER
+> replica** to properly test the gamer-lifecycle. Alt (heart track): revise the Temporal-Floor / Cadence
+> drafts. Pick whichever pulls; if nothing does, float — there's runway.
