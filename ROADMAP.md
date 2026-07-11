@@ -35,6 +35,10 @@ only "long pole" is the confirmed-word count in phase 1, and that grows a couple
 - Phase 5 (real model) waits on ~20 words. Phase 4 (pilot) does **not** — you can prove the pipeline early.
 - Nothing is blocked by *you* right now. The work is accumulating on schedule.
 
+## Banked bigger projects (future, when they call)
+- **Comparative world-policy deep-dive** — real harm/repair policies from around the world: what each did, the outcomes, how resolution was delegated/resolved. Grounds `harm_and_repair.md` in evidence, not intuition. Big; not urgent.
+- **Exp-8b/9 NAKED/DEFENDER replica** — proper test of the gamer-lifecycle (b2 attempt was an honest negative).
+
 ## When you float back — start here
 
 1. Read the **RESUME POINT** at the top of `EXPERIMENT_QUEUE.md` — it names the exact next experiment.
