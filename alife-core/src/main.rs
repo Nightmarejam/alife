@@ -555,6 +555,7 @@ fn main() {
         let mut min_pop = 150usize;
         let mut extinct_at: Option<u64> = None;
         let mut rescues = 0u64;
+        let (mut wgam, mut wpop) = ([0u64; 8], [0u64; 8]); // gamer-lifecycle windows (Penumbra)
         for t in 0..ticks {
             let tt = t as u64;
             // 1. defense counts + dominant
@@ -575,14 +576,19 @@ fn main() {
             }
             // 3. MAINTENANCE FLOOR (arm) — keep the diversity reserve alive BEFORE the pressures hit.
             //    none: off | uncond: top up every low agent | targeted: only minority defenses (< THRESH)
+            let mut gam = 0u64; // "gamers" this tick = floor-dependent (minimum-compliance) agents
             if arm != "none" {
                 for a in s.agents.iter_mut() {
                     if !a.alive { continue; }
                     let share = cnt[defense(&a.genome)] as f64 / n.max(1) as f64;
                     let protect = arm == "uncond" || share < thresh;
-                    if protect && a.energy < floor_e { a.energy = floor_e; rescues += 1; }
+                    if protect && a.energy < floor_e { a.energy = floor_e; rescues += 1; gam += 1; }
                 }
             }
+            // GAMER LIFECYCLE (Penumbra transitional-scaffolding): bucket the floor-dependent fraction
+            // over 8 time windows — does it PEAK during founding fragility and FADE as stability sets in?
+            let win = (tt as usize * 8 / ticks.max(1)).min(7);
+            wgam[win] += gam; wpop[win] += n as u64;
             // 4. adaptive predation — drains the adapt-target defense; other defenses are safe
             let dmg = pred * adapt;
             if dmg > 0.0 {
@@ -600,8 +606,19 @@ fn main() {
             (0..8).filter(|&d| c[d] > 0).count() };
         match extinct_at {
             Some(t) => println!("💀 EXTINCT at tick {} | final adapt {:.2} rescues {}", t, adapt, rescues),
-            None => println!("survived | final pop={} min={} | adapt {:.2} | defense-diversity {}/8 | rescues {}",
-                s.agents.len(), min_pop, adapt, ddiv, rescues),
+            None => {
+                println!("survived | final pop={} min={} | adapt {:.2} | defense-diversity {}/8 | rescues {}",
+                    s.agents.len(), min_pop, adapt, ddiv, rescues);
+                let f = |w: usize| if wpop[w] > 0 { wgam[w] as f64 / wpop[w] as f64 } else { 0.0 };
+                print!("GAMER-fraction by window (early→late):");
+                for w in 0..8 { print!(" {:.0}%", f(w) * 100.0); }
+                println!();
+                let (early, late) = ((f(0) + f(1)) / 2.0, (f(6) + f(7)) / 2.0);
+                println!("  transitional-scaffolding? early {:.0}% → late {:.0}% : {}",
+                    early * 100.0, late * 100.0,
+                    if early > late * 1.3 && early > 0.02 { "YES — gamers peak in fragility, fade at stability" }
+                    else if early > 0.0 || late > 0.0 { "flat/persistent (not transitional)" } else { "no gamers" });
+            }
         }
         return;
     }
