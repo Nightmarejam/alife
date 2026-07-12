@@ -48,8 +48,4 @@ only "long pole" is the confirmed-word count in phase 1, and that grows a couple
 
 ## The single next action (updated each session)
 
-> **As of 2026-07-11:** still ~16/20 words (the gamer-lifecycle attempt was an honest negative — didn't
-> reproduce in b2; banked). Still pre-rig. Best next word candidate: **mine `proof_of_life_consensus.md`**
-> (un-touched governance doc — likely a distinct mechanism to test) OR a **dedicated Exp-8b/9 NAKED/DEFENDER
-> replica** to properly test the gamer-lifecycle. Alt (heart track): revise the Temporal-Floor / Cadence
-> drafts. Pick whichever pulls; if nothing does, float — there's runway.
+> **As of 2026-07-11 (later):** the constitution's *structural* work reached a natural completeness this session — **Temporal Floor, Governance Cadence, Harm & Repair, Observability Layer, and the Civic Tome entry format** now form a coherent heart + record layer. Per your own call, the value-boundaries (privacy dial, harm gradient) now genuinely **wait on real data** (Tome entries, real cases) — not more heart-drafting. So the next *real* advances are gated: the **dataset** (rig ~Jul 16) or the **comparative world-policy deep-dive** (the big banked project). **Merge pending PRs #69 + #70.** Otherwise this is a strong pause point — rest is legit; there's runway.
