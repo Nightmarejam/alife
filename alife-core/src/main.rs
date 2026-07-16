@@ -1,4 +1,13 @@
-// Validation harness for the RNG port — prove Rust matches Python bit-for-bit.
+// alife-core — the governance testing zone.
+//
+// Every mode below is a FALSIFIABLE test. Governance experiments either earn a `confirmed`
+// word (a behavior that reproduces across seeds) or an honest negative — nothing is asserted
+// without a receipt. Determinism probes prove this Rust port matches the Python reference
+// bit-for-bit, so every result is reproducible on any machine.
+//
+// Run `alife-core help` for the full catalog. Anchors (seed 42):
+//   state_hash a2bb005395f79766   population_hash 2f59d3550af7cf2f
+// — both re-verified after every change to the engine (agent.rs / world.rs / ops.rs / sim.rs).
 mod rng;
 mod world;
 mod agent;
@@ -10,6 +19,10 @@ use sim::Simulation;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    if args.iter().any(|a| a == "help" || a == "--help" || a == "list") {
+        print_catalog();
+        return;
+    }
     if let Some(pos) = args.iter().position(|a| a == "run") {
         let seed: u32 = args.get(pos + 1).and_then(|s| s.parse().ok()).unwrap_or(42);
         let ticks: usize = args.get(pos + 2).and_then(|s| s.parse().ok()).unwrap_or(1);
@@ -908,4 +921,31 @@ fn main() {
     // Python: [3, 17, 5, 49, 26, 17, 6, 2]
     assert_eq!(vals, vec![3, 17, 5, 49, 26, 17, 6, 2], "RNG MISMATCH — port is broken");
     println!("\n✅ all RNG checks pass — Rust matches Python bit-for-bit");
+}
+
+/// The testing-zone catalog — printed by `help` / `--help` / `list`.
+/// Keep this in sync when adding a mode: a governance testing zone should announce itself.
+fn print_catalog() {
+    println!("alife-core — governance testing zone\n");
+    println!("Usage:  alife-core <mode> [seed] [ticks] [flags]     (defaults: seed 42)\n");
+    println!("GOVERNANCE EXPERIMENTS  (each earns a `confirmed` word or an honest negative)");
+    println!("  run      base tick + fossil receipt — the canonical determinism run    -> determinism spine");
+    println!("  ucf      dignity floor: does a survival floor help pop / diversity?     -> ucf.md (civic-floor)");
+    println!("  mech     is the diversity reserve load-bearing after a shock?           -> founding-diversity");
+    println!("  dmech    directional shock — arms: [nofloor | pulse | capped]           -> ucf two-floors + accountability cap");
+    println!("  exp3     does anticipation (predict-before-sense) emerge unseeded?      -> anticipation");
+    println!("  seasons  cyclical drain — FLIP / RANDFLIP test the predictability law   -> governance_cadence");
+    println!("  pulse    metronome-vs-reprieve: does stressor timing-variance matter?   -> temporal_floor");
+    println!("  b2       targeted floor vs adaptive adversary — MUT / TRANSMIT knobs    -> targeted-floor, adaptation-speed-limit");
+    println!("  b3       entrainment: does an endogenous clock phase-lock to the env?   -> governance_cadence (entrainment)");
+    println!("  pen      Penumbra: restorative vs punitive response to harm             -> penumbra_accord (reintegration)");
+    println!("  iface    interface -> diversity: do zoned niches maintain a reserve?    -> niche-maintains-diversity");
+    println!();
+    println!("DETERMINISM PROBES  (prove the Rust port matches Python bit-for-bit)");
+    println!("  pop, world, shuffle, gausstest, gradienttest, wavetest,");
+    println!("  wavedamagetest, gaptest, predicttest");
+    println!("  (no recognized mode)  RNG self-check — random() / randrange() asserted vs Python");
+    println!();
+    println!("Anchors (seed 42):  state_hash a2bb005395f79766   population_hash 2f59d3550af7cf2f");
+    println!("Words -> Constella evidence bridge: docs/governance/alife_evidence_mapping.md");
 }
